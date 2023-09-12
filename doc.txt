@@ -1,0 +1,9 @@
+This package is based on the work of Lehmann, 2004 "An algorithm for the determination of all significant pathways in chemical reaction systems"
+
+It works as follow:
+
+1.
+2.
+3.
+4.
+5.
