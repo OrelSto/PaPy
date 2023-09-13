@@ -1,5 +1,21 @@
 This package is based on the work of Lehmann, 2004 "An algorithm for the determination of all significant pathways in chemical reaction systems"
 
+Hort description of sub-packages:
+
+i__user_model:
+    It's the packages responsible of treating the model input provided by the user.
+    It means:
+        - The chemical reaction system
+        - The reaction rates
+        - The concentration of each chemical species
+        - Threshold minimum rate of chemical reaction to discard pathways Rmin
+
+o__cpa_output:
+    This sub-package format the output of the Chemical Pathways Analysis Package in a readible way.
+    Outputs are:
+        - All pathways > Rmin in a text based format (JSON ?, specific?, ideas folks?)
+        - Saving informational plots (Pie charts and stuffs?)
+
 It works as follow:
 
 1.

@@ -1,0 +1,71 @@
+[
+  {
+    "reactants": [
+      {
+        "compound": "SO3",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "H2O",
+        "stoichiometry": 2
+      }
+    ],
+    "products": [
+      {
+        "compound": "H2SO4",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "H2O",
+        "stoichiometry": 1
+      }
+    ],
+    "rate": 7e-05
+  },
+  {
+    "reactants": [
+      {
+        "compound": "O2",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "hv",
+        "stoichiometry": 1
+      }
+    ],
+    "products": [
+      {
+        "compound": "O",
+        "stoichiometry": 2
+      }
+    ],
+    "rate": 8e-12
+  },
+  {
+    "reactants": [
+      {
+        "compound": "SO",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "O",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "M",
+        "stoichiometry": 1
+      }
+    ],
+    "products": [
+      {
+        "compound": "SO2",
+        "stoichiometry": 1
+      },
+      {
+        "compound": "M",
+        "stoichiometry": 1
+      }
+    ],
+    "rate": 4e-10
+  }
+]
