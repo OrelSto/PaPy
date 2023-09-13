@@ -199,4 +199,4 @@ cython_debug/
 #.idea/
 
 # specific file of CPAP to ignore
-chemical_reaction.json
+.json

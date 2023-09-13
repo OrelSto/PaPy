@@ -111,7 +111,7 @@ def convert_chemical_reaction_file():
             chemical_system.append(format_line(reaction_equation))
 
     # Write the JSON data to an output file
-    with open('chemical_reaction.json', 'w') as output_file:
+    with open('chemical_reaction_system.json', 'w') as output_file:
         json.dump(chemical_system, output_file, indent=2)
 
     print("Conversion to JSON format complete.")
