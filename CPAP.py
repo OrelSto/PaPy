@@ -32,6 +32,7 @@ Note:
 """
 
 def main():
+    # first test is to convert a given text file into a workable JSON dataset
     i.convert_chemical_reaction_file()
 
 if __name__=='__main__':
