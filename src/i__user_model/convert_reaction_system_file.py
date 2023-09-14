@@ -1,6 +1,3 @@
-import json
-import re
-
 """
 Module Name
 convert_reaction_system_file
@@ -33,9 +30,26 @@ Note:
 
 """
 
+import json
+import re
+
 # Function to extract the compound and stoichiometry from a term
-def extract_compound_and_stoichiometry(term):
-    
+def extract_compound_and_stoichiometry(term:str):
+    """extract_compound_and_stoichiometry _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    term : str
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+
     # Define a regular expression pattern to match stoichiometry numbers
     stoichiometry_pattern = re.compile(r'(\d*)\s*(\w+)')
 
@@ -47,25 +61,41 @@ def extract_compound_and_stoichiometry(term):
     else:
         return None
 
-def format_line(reaction_equation):
+def format_line(reaction_equation:str):
+    """format_line _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    reaction_equation : str
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+
     # Split the reaction equation into reactants and products
     reactants, products = reaction_equation.split(' => ')
-    products, rate = products.split(' R ',1)
+    products, rate = products.split(' k ',1)
 
     # Split reactants and products into individual compounds
     reactants = reactants.split(' + ')
     products = products.split(' + ')
 
-    # Create a list to store reactant, product data
+    # Create a list to store reactant, product and result data
     reactant_data = []
     product_data = []
+    result_data = []
 
     # Process and merge reactant terms
     for term in reactants:
         compound_data = extract_compound_and_stoichiometry(term.strip())
         if compound_data:
             # Check if the compound already exists in reactant_data
-            existing_compound = next((c for c in reactant_data if c["compound"] == compound_data["compound"]), None)
+            existing_compound = next((c for c in reactant_data if c["compound"] == compound_data["compound"]), False)
             if existing_compound:
                 # If the compound exists, add its stoichiometry
                 existing_compound["stoichiometry"] += compound_data["stoichiometry"]
@@ -78,7 +108,7 @@ def format_line(reaction_equation):
         compound_data = extract_compound_and_stoichiometry(term.strip())
         if compound_data:
             # Check if the compound already exists in reactant_data
-            existing_compound = next((c for c in product_data if c["compound"] == compound_data["compound"]), None)
+            existing_compound = next((c for c in product_data if c["compound"] == compound_data["compound"]), False)
             if existing_compound:
                 # If the compound exists, add its stoichiometry
                 existing_compound["stoichiometry"] += compound_data["stoichiometry"]
@@ -86,15 +116,53 @@ def format_line(reaction_equation):
                 # If the compound does not exist, add it to product_data
                 product_data.append(compound_data)
     
+    # Process the results
+    # First do the reactants
+    for reactant in reactant_data:
+        # Check if the compound already exists in product_data
+        exist_in_products = next((c for c in product_data if c["compound"] == reactant["compound"]), False)
+        print('exist cond',exist_in_products)
+        if exist_in_products:
+            # If the compound exists, add its stoichiometry
+            reactant["stoichiometry"] = -reactant["stoichiometry"] + exist_in_products["stoichiometry"]
+        else:
+            # If the compound does not exist, just the reactant stoichiometry
+            reactant["stoichiometry"] = -reactant["stoichiometry"]
+        # Appending to the results
+        result_data.append(reactant)
+
+    # Second do the products
+    for product in product_data:
+        # Check if the compound already exists in product_data
+        exist_in_reactants = next((c for c in reactant_data if c["compound"] == product["compound"]), False)
+        print('exist cond',exist_in_reactants)
+        if exist_in_reactants:
+            # If the compound exists,do nothing
+            pass
+        else:
+            # If it does not exist, appending to the results
+            result_data.append(product)
+
+
     # Create a JSON structure
     reaction_data = {
         "reactants": reactant_data,
         "products": product_data,
-        "rate": float(rate)
+        "rate": float(rate),
+        "results": result_data
     }
     return reaction_data
 
-def convert_chemical_reaction_file():
+def convert_chemical_reaction_file(filename:str):
+    """convert_chemical_reaction_file _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    filename : str
+        _description_
+    """
 
     # # Read the content of the input text file
     # with open('user_model_example.txt', 'r') as file:
@@ -104,7 +172,7 @@ def convert_chemical_reaction_file():
     chemical_system = []
     
     # Read the content of the input text file line by line
-    with open('user_model_example.txt', 'r') as file:
+    with open(filename, 'r') as file:
         while line := file.readline():
             reaction_equation = line.rstrip()
 

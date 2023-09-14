@@ -8,7 +8,7 @@ version = "0.0.1"
 authors = [
   { name="Aurélien Stolzenbach", email="aurelien.stolzenbach@gmail.com" },
 ]
-description = "A small example package"
+description = "A chemical pathways analysis package"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [

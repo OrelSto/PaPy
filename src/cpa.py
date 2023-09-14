@@ -1,5 +1,3 @@
-from .i__user_model import convert_reaction_system_file
-
 """
 Module Name
 read_reaction_system
@@ -32,11 +30,15 @@ Note:
 
 """
 
-def main():
+from i__user_model import convert_reaction_system_file as i_convert
+from p__initialization import init_pathways as p_init
+
+def cpa() -> None:
     # first test is to convert a given text file into a workable JSON dataset
-    convert_reaction_system_file()
+    i_convert.convert_chemical_reaction_file(filename='user_model_example.txt')
 
     # 2. We run the initialization
+    p_init.init()
 
 if __name__=='__main__':
-    main()
+    cpa()

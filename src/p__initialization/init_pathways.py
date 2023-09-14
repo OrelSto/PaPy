@@ -31,4 +31,8 @@ Note:
 """
 
 def init():
+    """init _summary_
+
+    _extended_summary_
+    """
     pass
