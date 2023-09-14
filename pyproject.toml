@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chemical_pathways_analysis"
+version = "0.0.1"
+authors = [
+  { name="Aurélien Stolzenbach", email="aurelien.stolzenbach@gmail.com" },
+]
+description = "A small example package"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU-GPL v3 License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/OrelSto/chem_pathway_analysis"
+"Bug Tracker" = "https://github.com/OrelSto/chem_pathway_analysis/issues"
