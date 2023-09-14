@@ -1,4 +1,5 @@
-import i__user_model.convert_reaction_system_file as i
+from .i__user_model import convert_reaction_system_file
+
 """
 Module Name
 read_reaction_system
@@ -33,7 +34,9 @@ Note:
 
 def main():
     # first test is to convert a given text file into a workable JSON dataset
-    i.convert_chemical_reaction_file()
+    convert_reaction_system_file()
+
+    # 2. We run the initialization
 
 if __name__=='__main__':
     main()
