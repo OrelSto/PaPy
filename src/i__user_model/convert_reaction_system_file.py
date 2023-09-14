@@ -143,7 +143,6 @@ def format_line(reaction_equation:str):
             # If it does not exist, appending to the results
             result_data.append(product)
 
-
     # Create a JSON structure
     reaction_data = {
         "reactants": reactant_data,
@@ -151,6 +150,7 @@ def format_line(reaction_equation:str):
         "rate": float(rate),
         "results": result_data
     }
+    
     return reaction_data
 
 def convert_chemical_reaction_file(filename:str):
