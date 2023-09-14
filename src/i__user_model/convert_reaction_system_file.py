@@ -26,7 +26,7 @@ License:
 
 Note:
 - Include any important notes, warnings, or considerations.
-- This module is part of the sub-package i__user_model from CPAP
+- This module is part of the sub-package i__user_model from CPA
 
 """
 
@@ -119,23 +119,23 @@ def format_line(reaction_equation:str):
     # Process the results
     # First do the reactants
     for reactant in reactant_data:
+        result = {}
+        result["compound"] = reactant["compound"]
         # Check if the compound already exists in product_data
         exist_in_products = next((c for c in product_data if c["compound"] == reactant["compound"]), False)
-        print('exist cond',exist_in_products)
         if exist_in_products:
             # If the compound exists, add its stoichiometry
-            reactant["stoichiometry"] = -reactant["stoichiometry"] + exist_in_products["stoichiometry"]
+            result["stoichiometry"] = -reactant["stoichiometry"] + exist_in_products["stoichiometry"]
         else:
             # If the compound does not exist, just the reactant stoichiometry
-            reactant["stoichiometry"] = -reactant["stoichiometry"]
+            result["stoichiometry"] = -reactant["stoichiometry"]
         # Appending to the results
-        result_data.append(reactant)
+        result_data.append(result)
 
     # Second do the products
     for product in product_data:
         # Check if the compound already exists in product_data
         exist_in_reactants = next((c for c in reactant_data if c["compound"] == product["compound"]), False)
-        print('exist cond',exist_in_reactants)
         if exist_in_reactants:
             # If the compound exists,do nothing
             pass
@@ -150,7 +150,7 @@ def format_line(reaction_equation:str):
         "rate": float(rate),
         "results": result_data
     }
-    
+
     return reaction_data
 
 def convert_chemical_reaction_file(filename:str):
