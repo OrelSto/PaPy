@@ -78,7 +78,7 @@ def format_line(reaction_equation:str):
     """
     
     # list of string that can be present in a chemical reaction but does not represent an actual chemical species of interest, or with stoichiometry = 0, or hv
-    exluded_str =["M","hv"]
+    exluded_str =["M","hv","e","e-"]
 
     # Split the reaction equation into reactants and products
     reactants, products = reaction_equation.split(' => ')
