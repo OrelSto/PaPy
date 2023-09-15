@@ -1,4 +1,4 @@
 O3 + hv => O + O2 k 80e-9
 O2 + hv => O + O k 10e-9
 O + O2 + M => O3 + M k 99e-9
-O + O3 => O2 + O2 + O k 1e-9
+O + O3 => O2 + O2 k 1e-9

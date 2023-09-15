@@ -76,6 +76,9 @@ def format_line(reaction_equation:str):
     _type_
         _description_
     """
+    
+    # list of string that can be present in a chemical reaction but does not represent an actual chemical species of interest, or with stoichiometry = 0, or hv
+    exluded_str =["M","hv"]
 
     # Split the reaction equation into reactants and products
     reactants, products = reaction_equation.split(' => ')
@@ -129,8 +132,9 @@ def format_line(reaction_equation:str):
         else:
             # If the compound does not exist, just the reactant stoichiometry
             result["stoichiometry"] = -reactant["stoichiometry"]
-        # Appending to the results
-        result_data.append(result)
+        # Appending to the results if this is an actual chemical species
+        if not (result["compound"] in exluded_str):
+            result_data.append(result)
 
     # Second do the products
     for product in product_data:
@@ -141,7 +145,8 @@ def format_line(reaction_equation:str):
             pass
         else:
             # If it does not exist, appending to the results
-            result_data.append(product)
+            if not (result["compound"] in exluded_str):
+                result_data.append(product)
 
     # Create a JSON structure
     reaction_data = {
