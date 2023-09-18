@@ -30,15 +30,27 @@ Note:
 
 """
 
-from i__user_model import convert_reaction_system_file as i_convert
+from i__user_model import convert_reaction_system_file as i_system
+from i__user_model import convert_concentration_file as i_concentration
 from p__initialization import init_pathways as p_init
 
-def cpa() -> None:
+def cpa(timestep:float,rate_threshold:float) -> None:
     # first test is to convert a given text file into a workable JSON dataset
-    i_convert.convert_chemical_reaction_file(filename='user_model_example.txt')
+    print('######################')
+    print('User Inputs Processing')
+    print('######################')
+    print()
+    i_system.convert_chemical_reaction_file(filename='user_model_example.txt')
+    i_concentration.convert_concentration_file(filename='user_concentration_example.txt')
 
     # 2. We run the initialization
-    p_init.init()
+    print()
+    print('######################')
+    print('Pathways Initiaziation')
+    print('######################')
+    print()
+    p_init.init_pathways(json_filename="chemical_reaction_system.json")
 
 if __name__=='__main__':
-    cpa()
+    # this is a stupid way to test the package and stupid values for inputs
+    cpa(timestep=10.0,rate_threshold=10.0)

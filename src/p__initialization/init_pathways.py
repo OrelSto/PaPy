@@ -30,9 +30,50 @@ Note:
 
 """
 
-def init():
-    """init _summary_
+import json
 
-    _extended_summary_
-    """
-    pass
+def read_chemical_system(json_filename:str):
+    # Open the JSON file and read its contents
+    with open(json_filename, 'r') as json_file:
+        # Parse the JSON data and store it in a variable
+        json_data = json.load(json_file)
+    
+    return json_data
+
+def format_first_pathway(reaction:list,index:int):
+    pathway_data = {
+        "index":index,
+        "reactions":[{
+            "index":reaction["index"],
+            "multiplicity":1}],
+        "branching points":[reaction["results"]],
+        "rate":reaction["rate"]
+    }
+    return pathway_data
+
+def init_pathways(json_filename:str):
+
+    # Empty list of active pathways
+    active_pathways = []
+
+    # We save the JSON stucture into a dict
+    chemical_system = read_chemical_system(json_filename=json_filename)
+
+    # Then, we go through the chemical system and save the initial reactions as pathways
+    ind=1
+    for reaction in chemical_system:
+        active_pathways.append(format_first_pathway(reaction=reaction,index=ind))
+        ind += 1
+    
+    # Write the JSON data to an output file
+    with open('active_pathways.json', 'w') as output_file:
+        json.dump(active_pathways, output_file, indent=2)
+    
+    # Write the JSON data to an output file
+    with open('deleted_pathways.json', 'w') as output_file:
+        json.dump([], output_file, indent=2)
+
+    print("Initialization of Active Pathways saved as active_pathways.json")
+    print("Initialization of Deleted Pathways saved as deleted_pathways.json")
+
+    

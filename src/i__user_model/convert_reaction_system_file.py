@@ -61,7 +61,7 @@ def extract_compound_and_stoichiometry(term:str):
     else:
         return None
 
-def format_line(reaction_equation:str):
+def format_line(reaction_equation:str,index=int):
     """format_line _summary_
 
     _extended_summary_
@@ -145,11 +145,12 @@ def format_line(reaction_equation:str):
             pass
         else:
             # If it does not exist, appending to the results
-            if not (result["compound"] in exluded_str):
+            if not (product["compound"] in exluded_str):
                 result_data.append(product)
 
     # Create a JSON structure
     reaction_data = {
+        "index":index,
         "reactants": reactant_data,
         "products": product_data,
         "rate": float(rate),
@@ -169,23 +170,20 @@ def convert_chemical_reaction_file(filename:str):
         _description_
     """
 
-    # # Read the content of the input text file
-    # with open('user_model_example.txt', 'r') as file:
-    #     reaction_equation = file.read()
-
     # Empty list of all reactions
     chemical_system = []
     
     # Read the content of the input text file line by line
     with open(filename, 'r') as file:
+        ind=1
         while line := file.readline():
             reaction_equation = line.rstrip()
-
-            chemical_system.append(format_line(reaction_equation))
+            chemical_system.append(format_line(reaction_equation,index=ind))
+            ind += 1
 
     # Write the JSON data to an output file
     with open('chemical_reaction_system.json', 'w') as output_file:
         json.dump(chemical_system, output_file, indent=2)
 
-    print("Conversion to JSON format complete.")
+    print("Conversion of",filename,"to JSON chemical system format complete.")
 
