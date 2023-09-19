@@ -42,11 +42,10 @@ def read_chemical_system(json_filename:str):
 
 def format_first_pathway(reaction:list,index:int):
     pathway_data = {
-        "index":index,
         "reactions":[{
-            "index":reaction["index"],
+            "index":index,
             "multiplicity":1}],
-        "branching points":[reaction["results"]],
+        "branching points":reaction["results"],
         "rate":reaction["rate"]
     }
     return pathway_data
@@ -60,20 +59,15 @@ def init_pathways(json_filename:str):
     chemical_system = read_chemical_system(json_filename=json_filename)
 
     # Then, we go through the chemical system and save the initial reactions as pathways
-    ind=1
     for reaction in chemical_system:
-        active_pathways.append(format_first_pathway(reaction=reaction,index=ind))
-        ind += 1
+        active_pathways.append(format_first_pathway(reaction=reaction,index=chemical_system.index(reaction)))
     
     # Write the JSON data to an output file
     with open('active_pathways.json', 'w') as output_file:
         json.dump(active_pathways, output_file, indent=2)
+    print("Initialization of Active Pathways saved as active_pathways.json")
     
     # Write the JSON data to an output file
     with open('deleted_pathways.json', 'w') as output_file:
         json.dump([], output_file, indent=2)
-
-    print("Initialization of Active Pathways saved as active_pathways.json")
     print("Initialization of Deleted Pathways saved as deleted_pathways.json")
-
-    

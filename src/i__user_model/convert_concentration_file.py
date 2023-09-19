@@ -32,7 +32,7 @@ Note:
 
 import json
 
-def format_line(reaction_equation:str):
+def format_line(reaction_equation:str,reaction_system:list,timestep:float):
     """format_line _summary_
 
     _extended_summary_
@@ -47,18 +47,36 @@ def format_line(reaction_equation:str):
     _type_
         _description_
     """
+
     # Split the reaction equation into compound and concentration
     compound, concentration = reaction_equation.split(' = ')
+
+    # adding all the prod/destruction rates to evaluate the change in concentration of the compound
+    D_conc = 0.0
+    for item in reaction_system:
+        for r in item["results"]:
+            if compound == r["compound"]:
+                D_conc += r["stoichiometry"] * item["rate"] * timestep
 
     # Create a JSON structure
     chemical_species_data = {
         "name": compound,
         "concentration": float(concentration),
+        "production rate":{
+            "active pathways":0.0,
+            "deleted pathways":0.0,
+            },
+        "destruction rate":{
+            "active pathways":0.0,
+            "deleted pathways":0.0,
+            },
+        "lifetime":0.0,
+        "Delta concentration":D_conc
     }
 
     return chemical_species_data
 
-def convert_concentration_file(filename:str):
+def convert_concentration_file(filename:str,timestep:float):
     """convert_concentration_file _summary_
 
     _extended_summary_
@@ -68,18 +86,24 @@ def convert_concentration_file(filename:str):
     filename : str
         _description_
     """
+    # Opening JSON file
+    reactions = open('chemical_reaction_system.json')
+
+    # returns JSON object as a dictionary
+    reaction_system = json.load(reactions)
+
     # Empty list of all reactions
-    chemical_system = []
+    chemical_species = []
     
     # Read the content of the input text file line by line
     with open(filename, 'r') as file:
         while line := file.readline():
             reaction_equation = line.rstrip()
 
-            chemical_system.append(format_line(reaction_equation))
+            chemical_species.append(format_line(reaction_equation,reaction_system,timestep))
 
     # Write the JSON data to an output file
     with open('chemical_species.json', 'w') as output_file:
-        json.dump(chemical_system, output_file, indent=2)
+        json.dump(chemical_species, output_file, indent=2)
 
     print("Conversion of",filename,"to JSON chemical species format complete.")

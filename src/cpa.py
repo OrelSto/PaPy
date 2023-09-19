@@ -33,15 +33,18 @@ Note:
 from i__user_model import convert_reaction_system_file as i_system
 from i__user_model import convert_concentration_file as i_concentration
 from p__initialization import init_pathways as p_init
+from p__data_management import data_update as up
+from p__pathways_analysis import branching_points as bp
+from p__pathways_analysis import main_loop as ml
 
-def cpa(timestep:float,rate_threshold:float) -> None:
+def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
     # first test is to convert a given text file into a workable JSON dataset
     print('######################')
     print('User Inputs Processing')
     print('######################')
     print()
     i_system.convert_chemical_reaction_file(filename='user_model_example.txt')
-    i_concentration.convert_concentration_file(filename='user_concentration_example.txt')
+    i_concentration.convert_concentration_file(filename='user_concentration_example.txt',timestep=timestep)
 
     # 2. We run the initialization
     print()
@@ -50,7 +53,18 @@ def cpa(timestep:float,rate_threshold:float) -> None:
     print('######################')
     print()
     p_init.init_pathways(json_filename="chemical_reaction_system.json")
+    print()
+    print('Updating prod/destr rates for chemical species')
+    up.update_rates_chemical_species()
+    print()
+
+    # 3. We run the main loop
+    print('#################')
+    print('Pathways Analysis')
+    print('#################')
+    print()
+    ml.main_loop(t_min=t_min)
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    cpa(timestep=10.0,rate_threshold=10.0)
+    cpa(timestep=100.0,rate_threshold=10.0,t_min=100.0)
