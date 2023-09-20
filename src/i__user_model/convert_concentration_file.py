@@ -53,10 +53,12 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
 
     # adding all the prod/destruction rates to evaluate the change in concentration of the compound
     D_conc = 0.0
+    d_compound = 0.0
     for item in reaction_system:
         for r in item["results"]:
             if compound == r["compound"]:
                 D_conc += r["stoichiometry"] * item["rate"] * timestep
+                d_compound += r["stoichiometry"] * item["rate"]
 
     # Create a JSON structure
     chemical_species_data = {
@@ -71,7 +73,8 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
             "deleted pathways":0.0,
             },
         "lifetime":0.0,
-        "Delta concentration":D_conc
+        "Delta concentration":D_conc,
+        "delta":d_compound
     }
 
     return chemical_species_data

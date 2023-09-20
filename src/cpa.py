@@ -63,8 +63,15 @@ def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
     print('Pathways Analysis')
     print('#################')
     print()
-    ml.main_loop(t_min=t_min)
+    ml.main_loop(t_min=t_min,f_min=rate_threshold)
+
+    # 4. main loop done. Outputs time!!!
+    print('##################')
+    print('Outputs formatting')
+    print('##################')
+    print()
+
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    cpa(timestep=100.0,rate_threshold=10.0,t_min=100.0)
+    cpa(timestep=100.0,rate_threshold=1e-12,t_min=100.0)
