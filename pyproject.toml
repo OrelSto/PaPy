@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "chemical_pathways_analysis"
-version = "0.0.9"
+version = "0.3.0"
 authors = [
   { name="Aurélien Stolzenbach", email="aurelien.stolzenbach@gmail.com" },
 ]

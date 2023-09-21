@@ -71,7 +71,6 @@ def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
     print('##################')
     print()
 
-
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    cpa(timestep=100.0,rate_threshold=1e-12,t_min=100.0)
+    cpa(timestep=100.0,rate_threshold=1e-15,t_min=1.0e4)

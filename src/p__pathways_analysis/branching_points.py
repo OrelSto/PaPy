@@ -53,52 +53,88 @@ def connecting_pathways(active_pathways:list,species:str):
         else:
             mask.append(False)
 
-    print()
-    print('Here are the list of pathways for', species)
-    print('Productive pathways:',list_pathways_prod)
-    print('destructive pathways:',list_pathways_destroy)
-    print()
-
     # Now that we have our lists, we can update active_pathways
     # Basically we have the untouched pathways active_pathways - (lists)
     # And a new list of merged pathways
     pathways_non_affected = list(compress(active_pathways, mask))
 
+    print()
+    print('Here are the list of pathways for', species)
+    print('Productive pathways:',list_pathways_prod)
+    print('destructive pathways:',list_pathways_destroy)
+    print('unaffected pathways:',pathways_non_affected)
+    print()
+
     # New list of new pathways
     new_pathways = []
     new_pathways_Dbp = []
 
-    # We connect each prod pathway to each destroy pathway
-    for p_from in list_pathways_prod:
-        for p_to in list_pathways_destroy:
-            print('connecting', p_from, 'to', p_to)
-            new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species))
-    
-    # Now we have new_pathways. We need the same pathways that end up explaining the contribution of Delta concentration of branching poing species
-    species_dict = d_tools.get_compound_dict(species)
-    if species_dict["Delta concentration"] > 0:
-        # we have the productive case
-        for p_prod in list_pathways_prod:
-            new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species))
+    # we checked if one of the list is not empty
+    # if so, the species, even if "short-lived" according to t_min is flagged
+    # This prevent the case where some species are stil long-term but the user setup a very large t_min that do not math the destruction rate of species.
+    # In that case, if there is no available pathways to produce ... nothing to do
+    # And the main_loop can go forever
+    flagged_species = False
+    if list_pathways_prod:
+        cond_prod = True
     else:
-        # we have the destructive case
-        for p_destruct in list_pathways_destroy:
-            new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species))
+        cond_prod = False
+    if list_pathways_destroy:
+        cond_destroy = True
+    else:
+        cond_destroy = False
+    
+    print('Condition Prod/Destroy:',cond_prod,cond_destroy)
 
-    return pathways_non_affected + new_pathways + new_pathways_Dbp
+    if (cond_prod and cond_destroy):
+        # We connect each prod pathway to each destroy pathway
+        for p_from in list_pathways_prod:
+            for p_to in list_pathways_destroy:
+                n_from = [n["index"] for n in active_pathways[p_from]["reactions"]]
+                n_to = [n["index"] for n in active_pathways[p_to]["reactions"]]
+                print('connecting', str(n_from), 'to', str(n_to))
+                new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species))
+                print('with rate of:',new_pathways[-1]["rate"])
 
-def cleaning_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
+        # Now we have new_pathways. We need the same pathways that end up explaining the contribution of Delta concentration of branching poing species
+        species_dict = d_tools.get_compound_dict(species)
+        if species_dict["Delta concentration"] > 0:
+            # we have the productive case
+            for p_prod in list_pathways_prod:
+                n_from = [n["index"] for n in active_pathways[p_prod]["reactions"]]
+                print('connecting prod',n_from,' to D[',species,']')
+                new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species,flag_update='production'))
+                print('with rate of:',new_pathways_Dbp[-1]["rate"])
+        else:
+            # we have the destructive case
+            for p_destruct in list_pathways_destroy:
+                n_to = [n["index"] for n in active_pathways[p_destruct]["reactions"]]
+                print('connecting destr',n_to,' to D[',species,']')
+                new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
+                print('with rate of:',new_pathways_Dbp[-1]["rate"])
+
+        # We return the unaffected + new pathways . It means that the old productive and destructive pathways of species are deleted from active_p
+        return flagged_species, pathways_non_affected + new_pathways + new_pathways_Dbp
+    else:
+        flagged_species = True
+
+        return flagged_species, active_pathways
+
+
+def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
     # we iterate through active pathways to check if rate < f_min
     list_to_remove = []
     for item in active_pathways:
-        print('item rate:',item["rate"],'f_min:',f_min)
+        # print('item rate:',item["rate"],'f_min:',f_min)
         if item["rate"] < f_min:
             deleted_pathways.append(item)
-            print("item deleted",item)
+            # print("item deleted",item)
             list_to_remove.append(item)
     
     for item in list_to_remove:
         active_pathways.remove(item)
+    
+    # Now we have to update the rates.
     
     return active_pathways,deleted_pathways
 

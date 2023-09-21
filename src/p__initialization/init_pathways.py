@@ -46,7 +46,6 @@ def format_first_pathway(reaction:list,index:int):
             "index":index,
             "multiplicity":1}],
         "branching points":reaction["results"],
-        "pathway multiplicity":1,
         "rate":reaction["rate"]
     }
     return pathway_data
