@@ -153,6 +153,16 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     # We can clean for redundancy in the reactions
     new_pathway = clean_reactions(new_pathway)
     new_pathway = clean_multiplicity(new_pathway)
+    # You might think that cleaning the redundancy of reactions is bad practice since we will look at
+    # sub-pathways later on. BUT IT'S NOT !!!
+    # Sub-pathways are constructed starting with each individual reactions!
+    # it does not start with the actual suit of event of the pathway like:
+    # R1 => R3 => R0
+    # So, a suit of event like R0 => R3 => R1 => R3 => R7
+    # might be deconstructed in R0 => R3 => R7 and R3 <=> R1
+    # it does not matters if in the pathway reactions are listed as R0, R1, R3, R7.
+    # Because it is the connection between Branching points and Reactions that is important here
+    # So, we clean here, better sooner than later where it can be messy ^^
 
     return new_pathway
 
@@ -300,29 +310,6 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
                 r["multiplicity"] = int(new_multiplicty) * r["multiplicity"]
             for bp in pathway_destroy["branching points"]:
                 bp["stoichiometry"] = int(new_multiplicty) * bp["stoichiometry"]
-    
-    # NOT USEFULL HERE ... I GUESS
-    # # Now we're looking for a common divisor
-    # list_multiplicity = []
-    # for r in pathway_prod["reactions"]:
-    #     list_multiplicity.append(r["multiplicity"])
-    # for r in pathway_destroy["reactions"]:
-    #     list_multiplicity.append(r["multiplicity"])
-    # common_divisor = np.gcd.reduce(list_multiplicity)
-
-    # # Updating the reactions if necessary
-    # if common_divisor > 1:
-    #     print('There is a common divisor')
-    #     pathway_prod["rate"] = pathway_prod["rate"] * float(common_divisor)
-    #     pathway_destroy["rate"] = pathway_destroy["rate"] * float(common_divisor)
-    #     for r in pathway_prod["reactions"]:
-    #         r["multiplicity"] = r["multiplicity"] / common_divisor
-    #     for bp in pathway_prod["branching points"]:
-    #         bp["stoichiometry"] = bp["stoichiometry"] / common_divisor
-    #     for r in pathway_destroy["reactions"]:
-    #         r["multiplicity"] = r["multiplicity"] / common_divisor
-    #     for bp in pathway_destroy["branching points"]:
-    #         bp["stoichiometry"] = bp["stoichiometry"] / common_divisor
     
     # We return the two pathways updated so that merged together the species stoichiometry = 0
     # Last we check again where we have the branching point species with the updated pathways

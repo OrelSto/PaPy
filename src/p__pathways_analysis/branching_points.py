@@ -32,31 +32,7 @@ def list_next_branching_points(t_min:float):
 def connecting_pathways(active_pathways:list,species:str):
     # we connect pathways that are producing species to pathways that are consuming species
     # list of pathways that produce species
-    list_pathways_prod = []
-    list_pathways_destroy = []
-    mask = []
-    for item in active_pathways:
-        no_compound = True
-        for bp in item["branching points"]:
-            # checking if species is in the pathway
-            if bp["compound"] == species:
-                if bp["stoichiometry"] > 0:
-                    # adding the index number of the pathway to the list
-                    list_pathways_prod.append(active_pathways.index(item))
-                    no_compound = False
-                elif bp["stoichiometry"] < 0:
-                    # adding the index number of the pathway to the list
-                    list_pathways_destroy.append(active_pathways.index(item))
-                    no_compound = False
-        if no_compound:
-            mask.append(True)
-        else:
-            mask.append(False)
-
-    # Now that we have our lists, we can update active_pathways
-    # Basically we have the untouched pathways active_pathways - (lists)
-    # And a new list of merged pathways
-    pathways_non_affected = list(compress(active_pathways, mask))
+    list_pathways_prod,list_pathways_destroy,pathways_non_affected = d_tools.list_connecting_pathways(set_of_pathways=active_pathways,species=species)
 
     print()
     print('Here are the list of pathways for', species)
@@ -71,7 +47,7 @@ def connecting_pathways(active_pathways:list,species:str):
 
     # we checked if one of the list is not empty
     # if so, the species, even if "short-lived" according to t_min is flagged
-    # This prevent the case where some species are stil long-term but the user setup a very large t_min that do not math the destruction rate of species.
+    # This prevent the case where some species are stil long-term but the user setup a very large t_min that do not match the destruction rate of species.
     # In that case, if there is no available pathways to produce ... nothing to do
     # And the main_loop can go forever
     flagged_species = False

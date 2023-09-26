@@ -14,4 +14,4 @@ def main_subpathways():
     
     for pathway in active_pathways_data:
         # for each pathway we run the subpathway analysis
-        sub.subpathway_analysis(pathway=pathway)
+        sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data)

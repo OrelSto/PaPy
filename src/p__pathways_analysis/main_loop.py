@@ -43,8 +43,21 @@ def main_loop(t_min:float,f_min:float):
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 
-            # After saving, SUB-PATHWAYS ANALYSIS !!
+            # Printing
+            print()
+            print('##############################')
+            print("Sub Pathways analysis starting")
+            print('##############################')
+            print()
+            # After saving, SUB-PATHWAYS analysis !!
             sub_main.main_subpathways()
+
+            # Printing
+            print()
+            print('##########################')
+            print("Sub Pathways analysis done")
+            print('##########################')
+            print()
 
             # Maybe some checking for conservation properties?
             # Like the distribution of the chemical reaction rates onto the pathways (active & deleted)
@@ -63,10 +76,10 @@ def main_loop(t_min:float,f_min:float):
 
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)
-        print('This is list_bp: ',list_bp)
+        # print('This is list_bp: ',list_bp)
         list_bp = list(compress(list_bp, flagged_species))
-        print('This is flagged_species: ',flagged_species)
-        print('This is not flagged_species: ',[not c for c in flagged_species])
-        print('This is list_bp after flagged: ',list_bp)
+        # print('This is flagged_species: ',flagged_species)
+        # print('This is not flagged_species: ',[not c for c in flagged_species])
+        # print('This is list_bp after flagged: ',list_bp)
         
 
