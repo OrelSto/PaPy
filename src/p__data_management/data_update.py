@@ -124,6 +124,9 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     # we want ones with modified multiplicity to construct a new one
     pathway_prod_tmp = copy.deepcopy(pathway_prod)
     pathway_destr_tmp = copy.deepcopy(pathway_destr)
+    list_bp_used = pathway_prod_tmp["list branching points used"] + pathway_destr_tmp["list branching points used"]
+    list_bp_used.append(species)
+    list_bp_used = list(set(list_bp_used))
 
     bp_stoichiometry,pathway_prod_tmp,pathway_destr_tmp = update_pathway_multiplicity(pathway_prod_tmp,pathway_destr_tmp,species)
     # print('pathway_prod_tmp',pathway_prod_tmp)
@@ -143,6 +146,7 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     # 3. Merging the pathways into a new one
     new_pathway = {"reactions":pathway_prod_tmp["reactions"] + pathway_destr_tmp["reactions"],
         "branching points":clean_branching_points(pathway_prod_tmp["branching points"],pathway_destr_tmp["branching points"]),
+        "list branching points used":list_bp_used,
         "rate":bp_stoichiometry * (pathway_prod_tmp["rate"] * pathway_destr_tmp["rate"]) / d_tools.D_compound(d_tools.get_compound_dict(species))
     }
     
@@ -219,6 +223,9 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
     # I means we merge two pathways that are connected via a species that the one produce and the latter destroys
     pathway_tmp = copy.deepcopy(pathway)
     species_dict = d_tools.get_compound_dict(species)
+    list_bp_used = pathway_tmp["list branching points used"]
+    list_bp_used.append(species)
+    list_bp_used = list(set(list_bp_used))
 
     match flag_update:
         case 'production':
@@ -231,6 +238,7 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
     # Updating the pathway into a new one
     new_pathway = {"reactions":pathway_tmp["reactions"] ,
         "branching points":pathway_tmp["branching points"],
+        "list branching points used":list_bp_used,
         "rate":(pathway_tmp["rate"] * abs(species_dict["delta"])) / d_tools.D_compound(species_dict)
     }
 

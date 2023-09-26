@@ -40,3 +40,10 @@ def get_compound_dict(compound:str):
     for s in chemical_species:
         if s["name"] == compound:
             return s
+
+def format_pseudo_reaction():
+    # this is used in sub_pathway analysis.
+    # when a pathway is not a steady-state for any branching point species
+    # we need to add some pseudo-reaction to enforce it!
+
+    return

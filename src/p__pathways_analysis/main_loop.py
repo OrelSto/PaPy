@@ -4,6 +4,7 @@ from itertools import compress
 from . import branching_points as bp
 from p__data_management import data_tools as d_tools
 from p__data_management import data_update as up
+from p__sub_pathways import subpathways_main as sub_main
 
 def main_loop(t_min:float,f_min:float):
     # main loop for connecting pathways and stuffs
@@ -36,10 +37,14 @@ def main_loop(t_min:float,f_min:float):
             # cleaning pathways that are too slow. Keeping your pathway house tight and clean. if flagged, no cleaning necessary
             if not flag:
                 active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
+            
 
             # saving
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
+
+            # After saving, SUB-PATHWAYS ANALYSIS !!
+            sub_main.main_subpathways()
 
             # Maybe some checking for conservation properties?
             # Like the distribution of the chemical reaction rates onto the pathways (active & deleted)
