@@ -175,13 +175,13 @@ def clean_multiplicity(pathway:dict):
 
     # Updating the reactions if necessary
     if common_divisor > 1:
-        print('There is a common divisor')
-        print('previous rate:',pathway["rate"])
+        # print('There is a common divisor')
+        # print('previous rate:',pathway["rate"])
         pathway["rate"] = pathway["rate"] * float(common_divisor)
         for r in pathway["reactions"]:
-            r["multiplicity"] = r["multiplicity"] / common_divisor
+            r["multiplicity"] = int(r["multiplicity"] / common_divisor)
         for bp in pathway["branching points"]:
-            bp["stoichiometry"] = bp["stoichiometry"] / common_divisor
+            bp["stoichiometry"] = int(bp["stoichiometry"] / common_divisor)
 
     return pathway
 
@@ -190,7 +190,7 @@ def clean_reactions(pathway:dict):
     reactions = pathway["reactions"]
     new_reactions = []
     list_ind_r = [r["index"] for r in reactions]
-    print('we clean the list of reactions', list_ind_r)
+    # print('we clean the list of reactions', list_ind_r)
 
     # Create a dictionary to store indexes of values
     index_dict = {}
@@ -209,17 +209,17 @@ def clean_reactions(pathway:dict):
 
     # duplicate reactions
     total_multiplicity = 0
-    print('duplicates:',duplicates)
+    # print('duplicates:',duplicates)
     # Print the indexes of the duplicates
     for value, indexes in duplicates.items():
-        print(f"Value {value} appears at indexes: {indexes}")
+        # print(f"Value {value} appears at indexes: {indexes}")
         for i in indexes:
             total_multiplicity += reactions[i]["multiplicity"]
         new_reactions.append({"index":value,"multiplicity":total_multiplicity})
 
     # same loop but we remove the old duplicates
     for value, indexes in not_duplicates.items():
-        print(f"Value {value} appears at indexes: {indexes}")
+        # print(f"Value {value} appears at indexes: {indexes}")
         for i in indexes:
             new_reactions.append({"index":value,"multiplicity":reactions[i]["multiplicity"]})
     
@@ -292,19 +292,19 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
     # We check if the multiplicity are different
     if bp_prod_m != bp_dest_m:
         new_multiplicty = max(bp_prod_m,bp_dest_m)
-        print('new multiplicity:', new_multiplicty,'for species:',species)
-        print('with:', bp_prod_m,'and :',bp_dest_m)
+        # print('new multiplicity:', new_multiplicty,'for species:',species)
+        # print('with:', bp_prod_m,'and :',bp_dest_m)
         
         # Third, updating the pathway prod or pathway destroy
         if bp_prod_m < bp_dest_m:
-            print('updating bp_prod_m', bp_prod_m, 'to',new_multiplicty)
+            # print('updating bp_prod_m', bp_prod_m, 'to',new_multiplicty)
             pathway_prod["rate"] = pathway_prod["rate"] / new_multiplicty
             for r in pathway_prod["reactions"]:
                 r["multiplicity"] = int(new_multiplicty) * r["multiplicity"]
             for bp in pathway_prod["branching points"]:
                 bp["stoichiometry"] = int(new_multiplicty) * bp["stoichiometry"]
         else:
-            print('updating bp_dest_m', bp_dest_m, 'to',new_multiplicty)
+            # print('updating bp_dest_m', bp_dest_m, 'to',new_multiplicty)
             pathway_destroy["rate"] = pathway_destroy["rate"] /new_multiplicty
             for r in pathway_destroy["reactions"]:
                 r["multiplicity"] = int(new_multiplicty) * r["multiplicity"]
@@ -316,7 +316,7 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
     bp_tmp = pathway_prod["branching points"] + pathway_destroy["branching points"]
     ind_prod,ind_destroy=d_tools.find_compound_in_merged_list(bp_tmp,species)
     # We return the correct stoichiometry coeff with the pathways
-    print('the stoichiometry for',species,'is:',bp_tmp[ind_prod]["stoichiometry"])
+    # print('the stoichiometry for',species,'is:',bp_tmp[ind_prod]["stoichiometry"])
     return bp_tmp[ind_prod]["stoichiometry"],pathway_prod,pathway_destroy
 
 def update_chemical_system(f_prod:float,p_prod:dict,f_destr:float,p_destr:dict):

@@ -16,8 +16,13 @@ def main_loop(t_min:float,f_min:float):
     # The goal is to have an empty list_bp, meaning no more chemical species with a lifetime < t_min.
     # No more branching points, no more pathways to define.
     # Time to be happy and do some Science!
-
+    
+    loop_number = 1
     while list_bp:
+        print()
+        print('WE ARE AT LOOP NUMBER',loop_number)
+        print()
+        loop_number += 1
     # for i in range(10):
         # Opening JSON file
         ap = open('active_pathways.json')
@@ -30,18 +35,17 @@ def main_loop(t_min:float,f_min:float):
         # Connecting pathways
         # setting up the flag list for species with no new pathways option
         flagged_species = []
+        # for the sub_pathways
+        species_done = []
         for species in list_bp:
+            species_done.append(species)
             # looking for each species from the shortest lived to the longest
             flag,active_p = bp.connecting_pathways(active_pathways=active_p,species=species)
             flagged_species.append(flag)
             # cleaning pathways that are too slow. Keeping your pathway house tight and clean. if flagged, no cleaning necessary
             if not flag:
                 active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
-            
 
-            # saving
-            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
-            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 
             # Printing
             print()
@@ -49,8 +53,14 @@ def main_loop(t_min:float,f_min:float):
             print("Sub Pathways analysis starting")
             print('##############################')
             print()
+            
             # After saving, SUB-PATHWAYS analysis !!
-            sub_main.main_subpathways()
+            active_p = sub_main.main_subpathways(pathways=active_p,species_done=species_done)
+
+            # saving
+            # saving
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
+            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 
             # Printing
             print()

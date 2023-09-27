@@ -36,6 +36,7 @@ from p__initialization import init_pathways as p_init
 from p__data_management import data_update as up
 from p__pathways_analysis import branching_points as bp
 from p__pathways_analysis import main_loop as ml
+from o__cpap_output import output_moche as out
 
 def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
     # first test is to convert a given text file into a workable JSON dataset
@@ -70,6 +71,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
     print('Outputs formatting')
     print('##################')
     print()
+    out.moche()
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
