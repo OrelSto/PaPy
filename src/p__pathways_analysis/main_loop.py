@@ -46,7 +46,6 @@ def main_loop(t_min:float,f_min:float):
             if not flag:
                 active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
-
             # Printing
             print()
             print('##############################')
@@ -58,7 +57,7 @@ def main_loop(t_min:float,f_min:float):
             active_p = sub_main.main_subpathways(pathways=active_p,species_done=species_done)
 
             # saving
-            # saving
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+str(loop_number-1)+'_'+species+'_'+'.json')
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 

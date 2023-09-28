@@ -6,13 +6,35 @@ def moche():
         # Parse the JSON data and store it in a variable
         active_pathways_data = json.load(active_pathways_file)
 
+    with open('deleted_pathways.json', 'r') as deleted_pathways_file:
+        # Parse the JSON data and store it in a variable
+        deleted_pathways_data = json.load(deleted_pathways_file)
+
     with open('chemical_reaction_system.json', 'r') as chem_system_file:
         # Parse the JSON data and store it in a variable
         chem_system_data = json.load(chem_system_file)
 
     with open('output_moche.txt', 'w') as output_moche_file:
+        output_moche_file.write('**************************')
+        output_moche_file.write('\n')
+
+        rate_sum = 0.0
+        for pathway in active_pathways_data:
+            rate_sum += pathway["rate"]
+        rate_deleted = 0.0
+        for pathway in deleted_pathways_data:
+            rate_sum += pathway["rate"]
+            rate_deleted += pathway["rate"]
+        
         for pathway in active_pathways_data:
             for r in pathway["reactions"]:
+                mult = []
+                if r["multiplicity"] > 1:
+                    mult.append(r["multiplicity"])
+                    output_moche_file.write('(')
+                else:
+                    output_moche_file.write(' ')
+
                 list_reactant = chem_system_data[r["index"]]["reactants"]
                 list_product = chem_system_data[r["index"]]["products"]
                 for reactant in list_reactant:
@@ -31,35 +53,58 @@ def moche():
                     else:
                         output_moche_file.write(product["compound"])
                     if (list_product.index(product) + 1) == len(list_product):
+                        if mult:
+                            output_moche_file.write(') x '+str(mult[0]))
                         output_moche_file.write(' \n')
                     else:
                         output_moche_file.write(' + ')
+                
+
 
             output_moche_file.write('------------------')
             output_moche_file.write('\n')
             
             mask = []
             saving_prod = []
+            saving_react = []
             for bp in pathway["branching points"]:
-                if bp["stoichiometry"] > 1:
+                if bp["stoichiometry"] > 0:
                     mask.append(False)
-                    output_moche_file.write(str(bp["stoichiometry"])+ ' ' +bp["compound"])
+                    if bp["stoichiometry"] > 1:
+                        saving_prod.append(str(bp["stoichiometry"])+ ' ' +bp["compound"])
+                    else:
+                        saving_prod.append(bp["compound"])
                 elif bp["stoichiometry"] == 0:
                     mask.append(True)
                 elif bp["stoichiometry"] < 0:
                     mask.append(False)
                     if -bp["stoichiometry"] > 1:
-                        saving_prod.append(str(-bp["stoichiometry"])+ ' ' +bp["compound"])
+                        saving_react.append(str(-bp["stoichiometry"])+ ' ' +bp["compound"])
                     else:
-                        saving_prod.append(bp["compound"])
-                if (pathway["branching points"].index(bp) + 1) == len(pathway["branching points"]):
-                    if saving_prod:
-                        output_moche_file.write(' => ' + saving_prod[0])
-                    output_moche_file.write(' \n')
-                else:
-                    if bp["stoichiometry"] != 0: 
-                        output_moche_file.write(' + ')
-                
+                        saving_react.append(bp["compound"])
+            if all(mask):
+                output_moche_file.write(' NULL ')
+                output_moche_file.write(' \n')
+            else:
+                output_moche_file.write(saving_react[0] + ' => ' + saving_prod[0])
+                output_moche_file.write(' \n')
+            
+            # Now the rate
             output_moche_file.write(' \n')
+            output_moche_file.write(' RATE  : ' + str(pathway["rate"]))
+            output_moche_file.write(' \n')
+            output_moche_file.write(' RATE %: ' + str(pathway["rate"]/rate_sum * 100))
+            output_moche_file.write(' \n')
+            
+
+            output_moche_file.write(' \n')
+            output_moche_file.write('**************************')
+            output_moche_file.write('\n')
+        
+        # Now the rate from deleted pathways
+        output_moche_file.write(' RATE DELETED  : ' + str(rate_deleted))
+        output_moche_file.write(' \n')
+        output_moche_file.write(' RATE DELETED %: ' + str(rate_deleted/rate_sum * 100))
+        output_moche_file.write(' \n')
 
 

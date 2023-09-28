@@ -49,9 +49,9 @@ def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
 
     # 2. We run the initialization
     print()
-    print('######################')
-    print('Pathways Initiaziation')
-    print('######################')
+    print('#######################')
+    print('Pathways Initialization')
+    print('#######################')
     print()
     p_init.init_pathways(json_filename="chemical_reaction_system.json")
     print()

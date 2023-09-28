@@ -28,7 +28,7 @@ def main_subpathways(pathways:list,species_done:list):
             # new list_reactions_active_pathways because we deleted some entry
             list_reactions_active_pathways = [item["reactions"] for item in pathways]
             list_reactions_SP = [item["reactions"] for item in returned_set_SP]
-            print('and we are adding/upadating:')
+            print('and we are adding/updating:')
             for sub_p in list_reactions_SP:
                 print(sub_p)
             for sub_p in list_reactions_SP:
