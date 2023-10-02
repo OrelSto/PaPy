@@ -14,6 +14,7 @@ def main_subpathways(pathways:list,species_done:list):
 
     for pathway in active_pathways_data_tmp:
         # for each pathway we run the subpathway analysis
+        print('We start the initialization for a new pathway of active_pathways')
         returned_set_SP,flag_update = sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data_tmp,ind=ind,species_done=species_done)
         # with that returned_set_SP, we have to clean the active pathways data.
         # First we remove the actual pathway since it is no longer needed

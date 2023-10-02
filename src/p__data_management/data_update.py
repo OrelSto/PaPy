@@ -105,7 +105,11 @@ def update_rates_chemical_species():
         item["destruction rate"]["deleted pathways"] = evaluate_destruction_rate_deleted_pathways(species=item["name"])
         
         # updating its lifetime
-        item["lifetime"] = item["concentration"] / (item["destruction rate"]["active pathways"] + item["destruction rate"]["deleted pathways"])
+        destruction_rate = (item["destruction rate"]["active pathways"] + item["destruction rate"]["deleted pathways"])
+        if destruction_rate == 0.0:
+            item["lifetime"] = 1e99
+        else:
+            item["lifetime"] = item["concentration"] / (item["destruction rate"]["active pathways"] + item["destruction rate"]["deleted pathways"])
 
     # Now we save it
     # Write the JSON data to an output file

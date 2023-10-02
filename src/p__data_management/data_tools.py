@@ -42,15 +42,19 @@ def get_compound_dict(compound:str):
         if s["name"] == compound:
             return s
 
-def format_pseudo_reaction(species:str,multiplicity:int,):
+def format_pseudo_reaction(species:str,multiplicity:int,flag:str):
     # this is used in sub_pathway analysis.
     # when a pathway is not a steady-state for any branching point species
     # we need to add some pseudo-reaction to enforce it!
     # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
+    if flag == 'destroy':
+        ind = -1
+    if flag == 'prod':
+        ind = -2
     return {
         "reactions":[
             {
-                "index": -1,
+                "index": ind,
                 "multiplicity": 1
             }
         ],

@@ -16,7 +16,10 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # we initliaze the set of sub-pathways to the individual reactions present in the pathway
     # set_SP_init is our base to work with the sub-pathways. We'll construct the final set of SP building combination of the initial reactions defined in set_SP_init
     set_SP_init = sub_pathway_set_init(pathway=pathway)
-    # print('we have set_SP_init',set_SP_init)
+    print('we have set_SP_init',set_SP_init)
+
+    # We can have a pathway that is a single entry R1 => Delta Sb
+    # This means that we have to check for this possibility later on
 
     # final_set_SP is the final set of elementary sub pathways
     final_set_SP = []
@@ -60,62 +63,64 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # if not in the active pathways list:
     # 2. Simplier is better! Less number of reactions is better
     # We have a list index_list_ranked which is the 
-    index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways)
-    print('We have the ranked list of index: ',index_list_ranked)
 
-    # After ranking, minimize!
-    # scipy.optimize.linprog()
-    # c is the rank (so the index of index_list_ranked) attributed to the elementary pathways
-    # so c has the length of number_elementary_pathways == len(final_set_SP)
-    c = [(index_list_ranked.index(i)+1)**2 for i in index_list_ranked]
-    # b_eq is the equality condition of our linear problem
-    # b_eq is the array of multiplicities for each chemical reaction present in the pathway
-    b_eq = [r["multiplicity"] for r in pathway["reactions"]]
-    # b_eq_reaction_ind is the index of reaction in order to build A_eq
-    b_eq_reaction_ind = [r["index"] for r in pathway["reactions"]]
-    # Building A_eq matrix
-    A_eq = []
-    print('looping over reactions:',len(b_eq_reaction_ind))
-    print('looping over Sub-Pathways:',len(index_list_ranked))
-    for r in b_eq_reaction_ind:
-        A_eq_row = []
-        for i in index_list_ranked:
-            sum_m = 0
-            for r_sp in final_set_SP[i]["reactions"]:
-                if r == r_sp["index"]:
-                    sum_m += r_sp["multiplicity"]
-                else:
-                    pass
-            A_eq_row.append(sum_m)
-        A_eq.append(A_eq_row)
+    if len(final_set_SP) > 0:
+        index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways)
+        print('We have the ranked list of index: ',index_list_ranked)
 
-    A_eq = np.array(A_eq)
-    c = np.array(c)
-    b_eq = np.array(b_eq)
-    # print('A_eq',A_eq)
-    # print('len A_eq',np.shape(A_eq))
-    # print('c',c)
-    # print('len c',len(c))
-    # print('b_eq',b_eq)
-    # print('len b_eq',len(b_eq))
+        # After ranking, minimize!
+        # scipy.optimize.linprog()
+        # c is the rank (so the index of index_list_ranked) attributed to the elementary pathways
+        # so c has the length of number_elementary_pathways == len(final_set_SP)
+        c = [(index_list_ranked.index(i)+1)**2 for i in index_list_ranked]
+        # b_eq is the equality condition of our linear problem
+        # b_eq is the array of multiplicities for each chemical reaction present in the pathway
+        b_eq = [r["multiplicity"] for r in pathway["reactions"]]
+        # b_eq_reaction_ind is the index of reaction in order to build A_eq
+        b_eq_reaction_ind = [r["index"] for r in pathway["reactions"]]
+        # Building A_eq matrix
+        A_eq = []
+        print('looping over reactions:',len(b_eq_reaction_ind))
+        print('looping over Sub-Pathways:',len(index_list_ranked))
+        for r in b_eq_reaction_ind:
+            A_eq_row = []
+            for i in index_list_ranked:
+                sum_m = 0
+                for r_sp in final_set_SP[i]["reactions"]:
+                    if r == r_sp["index"]:
+                        sum_m += r_sp["multiplicity"]
+                    else:
+                        pass
+                A_eq_row.append(sum_m)
+            A_eq.append(A_eq_row)
 
-    result = opt.linprog(c=c,b_eq=b_eq,A_eq=A_eq)
-    result = list(result.x)
-    print()
-    print('THIS IS THE RESULTS AFTER LINPROG')
-    print(result)
-    print()
+        A_eq = np.array(A_eq)
+        c = np.array(c)
+        b_eq = np.array(b_eq)
+        print('A_eq',A_eq)
+        print('len A_eq',np.shape(A_eq))
+        print('c',c)
+        print('len c',len(c))
+        print('b_eq',b_eq)
+        print('len b_eq',len(b_eq))
 
-    # Now that we have the result for each sub-pathway, we update the final set of SP
-    # by updating the rates!
-    # ind_sp is the indice for index_list_ranked where we store the actual subpathway indice
-    ind_sp = 0
-    for res in result:
-        print('res is',res,'in result.x',result,'at index',index_list_ranked[ind_sp])
-        # if we have a weight > 0.0
-        if res > 0.0:
-            final_set_SP[index_list_ranked[ind_sp]]["rate"] = pathway["rate"] * res
-        ind_sp += 1
+        result = opt.linprog(c=c,b_eq=b_eq,A_eq=A_eq)
+        result = list(result.x)
+        print()
+        print('THIS IS THE RESULTS AFTER LINPROG')
+        print(result)
+        print()
+
+        # Now that we have the result for each sub-pathway, we update the final set of SP
+        # by updating the rates!
+        # ind_sp is the indice for index_list_ranked where we store the actual subpathway indice
+        ind_sp = 0
+        for res in result:
+            print('res is',res,'in result.x',result,'at index',index_list_ranked[ind_sp])
+            # if we have a weight > 0.0
+            if res > 0.0:
+                final_set_SP[index_list_ranked[ind_sp]]["rate"] = pathway["rate"] * res
+            ind_sp += 1
     
     # saving
     save_subpathways_to_JSON(set_SP=final_set_SP,filename='subpathways_tmp_'+str(ind)+'.json')
@@ -151,6 +156,18 @@ def sub_pathway_set_init(pathway:dict):
         print('reaction index',r["index"])
         # we need to record each individual reaction into a new sub-pathway set
         sub_pathway = {}
+        
+        # Little safeguarding for pseudo-reaction use
+        if r["index"] == -1 or r["index"] == -2:
+            print('WE have still a pseudo-reaction in the pathway !')
+            print('This should not really happen right?')
+            print('The pathway is: ',pathway)
+            print('We need to ADD the cleaning of pseudo reaction in final sub-pathways!')
+            print('Prod/Destr pseudo-reaction means that the rate associated with the sub-pathway explain the Delta conc or smth like like of the species Sb')
+            print('OR')
+            print('OR we can add a file like pseudo_reaction.json where for every chemical species it would have a prod/destr pseudo reaction added with a rate of 0')
+            # exit()
+        
         sub_pathway = p_init.format_first_pathway(reaction=reaction,index=r["index"])
 
         # Now we have the sub-pathway as an individual reaction, it is the set P of Lehmann
@@ -167,12 +184,12 @@ def sub_pathway_set_init(pathway:dict):
         stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
         if stoichiometry_s < 0:
             print('adding a pseudo reaction that produce',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s)
+            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s,flag='prod')
             # adding the pseudo reaction
             set_SP.append(pseudo_rection_pathway)
         elif stoichiometry_s > 0:
             print('adding a pseudo reaction that destroy',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s)
+            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s,flag='destroy')
             # adding the pseudo reaction
             set_SP.append(pseudo_rection_pathway)
 

@@ -38,14 +38,14 @@ from p__pathways_analysis import branching_points as bp
 from p__pathways_analysis import main_loop as ml
 from o__cpap_output import output_moche as out
 
-def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
+def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filename_concentration:str) -> None:
     # first test is to convert a given text file into a workable JSON dataset
     print('######################')
     print('User Inputs Processing')
     print('######################')
     print()
-    i_system.convert_chemical_reaction_file(filename='user_model_example.txt')
-    i_concentration.convert_concentration_file(filename='user_concentration_example.txt',timestep=timestep)
+    i_system.convert_chemical_reaction_file(filename=filename_model)
+    i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
 
     # 2. We run the initialization
     print()
@@ -75,6 +75,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float) -> None:
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    cpa(timestep=100.0,rate_threshold=1e-15,t_min=1.0e4)
+    # cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_example.txt',filename_concentration='user_concentration_example.txt')
+    cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_O3destruction_example.txt',filename_concentration='user_concentration_O3destruction_example.txt')
     # test article to see if P4 is deleted!
     # cpa(timestep=100.0,rate_threshold=0.3e-9,t_min=1.0e4)
