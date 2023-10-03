@@ -42,31 +42,126 @@ def get_compound_dict(compound:str):
         if s["name"] == compound:
             return s
 
-def format_pseudo_reaction(species:str,multiplicity:int,flag:str):
+# def format_pseudo_reaction(species:str,multiplicity:int,flag:str):
+#     # this is used in sub_pathway analysis.
+#     # when a pathway is not a steady-state for any branching point species
+#     # we need to add some pseudo-reaction to enforce it!
+#     # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
+#     if flag == 'destroy':
+#         ind = -1
+#     if flag == 'prod':
+#         ind = -2
+#     return {
+#         "reactions":[
+#             {
+#                 "index": ind,
+#                 "multiplicity": 1
+#             }
+#         ],
+#         "branching points": [
+#             {
+#                 "compound": species,
+#                 "stoichiometry": multiplicity
+#             }
+#         ],
+#         "list branching points used": [],
+#         "rate": 0.0
+#     }
+
+def format_pseudo_reaction(species:str,flag:str):
     # this is used in sub_pathway analysis.
     # when a pathway is not a steady-state for any branching point species
     # we need to add some pseudo-reaction to enforce it!
     # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
     if flag == 'destroy':
-        ind = -1
+        return {
+        "reactants": [{"compound":species}],
+        "products": [{"compound":"..."}],
+        "rate": 0.0,
+        "deleted rate":0.0,
+        "results": [{"compound":species,"stoichiometry":-1}],
+        "is_pseudo":True
+        }
     if flag == 'prod':
-        ind = -2
+        return {
+        "reactants": [{"compound":"..."}],
+        "products": [{"compound":species}],
+        "rate": 0.0,
+        "deleted rate":0.0,
+        "results": [{"compound":species,"stoichiometry":1}],
+        "is_pseudo":True
+        }
+
+def format_pseudo_pathway(species:str,multiplicity:int,flag:str,chemical_system:list):
+    # we format a pathway containing the pseudo-reaction (prod or destr) of the species provided
+    # First, we have to find the reaction
+    if flag == 'prod':
+        reaction = {
+        "reactants": [
+        {
+            "compound": "..."
+        }
+        ],
+        "products": [
+        {
+            "compound": species
+        }
+        ],
+        "rate": 0.0,
+        "deleted rate": 0.0,
+        "results": [
+        {
+            "compound": species,
+            "stoichiometry": 1
+        }
+        ],
+        "is_pseudo":True
+        }
+    elif flag == 'destroy':
+        reaction = {
+        "reactants": [
+        {
+            "compound": species
+        }
+        ],
+        "products": [
+        {
+            "compound": "..."
+        }
+        ],
+        "rate": 0.0,
+        "deleted rate": 0.0,
+        "results": [
+        {
+            "compound": species,
+            "stoichiometry": -1
+        }
+        ],
+        "is_pseudo":True
+        }
+    else:
+        print('You need to set flag as prod or destroy in data_tools.py')
+        exit()
+    
+    ind = chemical_system.index(reaction)
+
     return {
-        "reactions":[
+        "reactions": [
             {
-                "index": ind,
-                "multiplicity": 1
+            "index": ind,
+            "multiplicity": multiplicity
             }
         ],
         "branching points": [
             {
-                "compound": species,
-                "stoichiometry": multiplicity
+            "compound": species,
+            "stoichiometry": multiplicity
             }
         ],
         "list branching points used": [],
-        "rate": 0.0
-    }
+        "rate":0.0
+        }
+
 
 def list_connecting_pathways(set_of_pathways:list,species:str):
     # we connect pathways that are producing species to pathways that are consuming species

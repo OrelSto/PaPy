@@ -61,7 +61,8 @@ def init_pathways(json_filename:str):
 
     # Then, we go through the chemical system and save the initial reactions as pathways
     for reaction in chemical_system:
-        active_pathways.append(format_first_pathway(reaction=reaction,index=chemical_system.index(reaction)))
+        if not reaction["is_pseudo"]:
+            active_pathways.append(format_first_pathway(reaction=reaction,index=chemical_system.index(reaction)))
     
     # Write the JSON data to an output file
     with open('active_pathways.json', 'w') as output_file:

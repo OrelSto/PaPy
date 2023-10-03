@@ -46,6 +46,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
     print()
     i_system.convert_chemical_reaction_file(filename=filename_model)
     i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
+    i_system.adding_pseudo_reactions()
 
     # 2. We run the initialization
     print()
@@ -64,7 +65,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
     print('Pathways Analysis')
     print('#################')
     print()
-    ml.main_loop(t_min=t_min,f_min=rate_threshold)
+    ml.main_loop(t_min=t_min,f_min=rate_threshold,max_iter=2)
 
     # 4. main loop done. Outputs time!!!
     print('##################')

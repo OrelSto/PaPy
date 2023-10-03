@@ -31,17 +31,20 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     for s in species_done:
         # set_SP_tmp is the temporary set of pathway, it is equivalent to P^ in Lehmann, 2004
         set_SP_tmp = []
-        print('connecting sub-pathways to',s)
         
         # We look at if we are at the first step of the loop
         if init_SP:
             print('We are at init of SP:')
+            print()
+            print('connecting sub-pathways to',s)
             # setting to False for next loop step
             init_SP = False
             # we skip the checking net zero prod because there is only single chemical reactions
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
         else:
+            print()
+            print('connecting sub-pathways to',s)
             # We check if any sub-pathway in set_SP has a zero net production of species s
             set_SP_tmp = checking_zero_net_SP(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
             
@@ -64,7 +67,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # 2. Simplier is better! Less number of reactions is better
     # We have a list index_list_ranked which is the 
 
-    if len(final_set_SP) > 0:
+    if len(final_set_SP) > 1:
         index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways)
         print('We have the ranked list of index: ',index_list_ranked)
 
@@ -72,6 +75,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         # scipy.optimize.linprog()
         # c is the rank (so the index of index_list_ranked) attributed to the elementary pathways
         # so c has the length of number_elementary_pathways == len(final_set_SP)
+        # c = [(index_list_ranked.index(i)+1)**2 for i in index_list_ranked]
         c = [(index_list_ranked.index(i)+1)**2 for i in index_list_ranked]
         # b_eq is the equality condition of our linear problem
         # b_eq is the array of multiplicities for each chemical reaction present in the pathway
@@ -105,11 +109,23 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         print('len b_eq',len(b_eq))
 
         result = opt.linprog(c=c,b_eq=b_eq,A_eq=A_eq)
-        result = list(result.x)
         print()
         print('THIS IS THE RESULTS AFTER LINPROG')
         print(result)
         print()
+        
+        # we can have moment where the result is bad
+        if not result.success:
+            print('WE FAILED DURING THE LINPROG')
+            print('The pathway is the succession of reactions')
+            for i in index_list_ranked:
+                print(pathway["reactions"][i])
+            print('The final_set_SP is')
+            for p in final_set_SP:
+                print(p["reactions"])
+            exit()
+
+        result = list(result.x)
 
         # Now that we have the result for each sub-pathway, we update the final set of SP
         # by updating the rates!
@@ -157,17 +173,6 @@ def sub_pathway_set_init(pathway:dict):
         # we need to record each individual reaction into a new sub-pathway set
         sub_pathway = {}
         
-        # Little safeguarding for pseudo-reaction use
-        if r["index"] == -1 or r["index"] == -2:
-            print('WE have still a pseudo-reaction in the pathway !')
-            print('This should not really happen right?')
-            print('The pathway is: ',pathway)
-            print('We need to ADD the cleaning of pseudo reaction in final sub-pathways!')
-            print('Prod/Destr pseudo-reaction means that the rate associated with the sub-pathway explain the Delta conc or smth like like of the species Sb')
-            print('OR')
-            print('OR we can add a file like pseudo_reaction.json where for every chemical species it would have a prod/destr pseudo reaction added with a rate of 0')
-            # exit()
-        
         sub_pathway = p_init.format_first_pathway(reaction=reaction,index=r["index"])
 
         # Now we have the sub-pathway as an individual reaction, it is the set P of Lehmann
@@ -184,14 +189,16 @@ def sub_pathway_set_init(pathway:dict):
         stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
         if stoichiometry_s < 0:
             print('adding a pseudo reaction that produce',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s,flag='prod')
+            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='prod',chemical_system=chemical_system)
             # adding the pseudo reaction
             set_SP.append(pseudo_rection_pathway)
         elif stoichiometry_s > 0:
             print('adding a pseudo reaction that destroy',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_reaction(species=species,multiplicity=-stoichiometry_s,flag='destroy')
+            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='destroy',chemical_system=chemical_system)
             # adding the pseudo reaction
             set_SP.append(pseudo_rection_pathway)
+        else:
+            print('NO pseudo reaction needed for',species)
 
     return set_SP
 
@@ -205,12 +212,16 @@ def update_subpathway(sub_pathway:dict,reaction:dict,pathway:dict):
 def checking_zero_net_SP(set_SP:list,set_SP_tmp:list,species:str):
     # checking if any pathway in set_SP has a zero net prod of species
     # If so, adding it to set_SP_tmp
+    no_net = True
     for item in set_SP:
         for bp in item["branching points"]:
             if bp["compound"] == species and bp["stoichiometry"] == 0:
                 print('We have a zero net prod pathway for',species)
                 print('SP:',item["reactions"])
+                no_net = False
                 adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=item)
+    if no_net:
+        print('NO net prod for',species)
     return set_SP_tmp
 
 def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):

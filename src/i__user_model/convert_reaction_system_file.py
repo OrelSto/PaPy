@@ -33,6 +33,8 @@ Note:
 import json
 import re
 
+from p__data_management import data_tools as d_tools
+
 # Function to extract the compound and stoichiometry from a term
 def extract_compound_and_stoichiometry(term:str):
     """extract_compound_and_stoichiometry _summary_
@@ -154,7 +156,8 @@ def format_line(reaction_equation:str):
         "products": product_data,
         "rate": float(rate),
         "deleted rate":0.0,
-        "results": result_data
+        "results": result_data,
+        "is_pseudo":False
     }
 
     return reaction_data
@@ -185,3 +188,22 @@ def convert_chemical_reaction_file(filename:str):
 
     print("Conversion of",filename,"to JSON chemical system format complete.")
 
+
+def adding_pseudo_reactions():
+    # This routine adds 2 pseudo-reactions (prod and destruction) for each species in the system
+    # Opening JSON file
+    cs = open('chemical_species.json')
+    crs = open('chemical_reaction_system.json')
+    # returns JSON object as a dictionary
+    chemical_species = json.load(cs)
+    chemical_system = json.load(crs)
+
+    chemical_pseudo_reaction_system = []
+    for item in chemical_species:
+        chemical_pseudo_reaction_system.append(d_tools.format_pseudo_reaction(species=item["name"],flag='prod'))
+        chemical_pseudo_reaction_system.append(d_tools.format_pseudo_reaction(species=item["name"],flag='destroy'))
+    
+    chemical_system = chemical_system + chemical_pseudo_reaction_system
+    # Write the JSON data to an output file
+    with open('chemical_reaction_system.json', 'w') as output_file:
+        json.dump(chemical_system, output_file, indent=2)

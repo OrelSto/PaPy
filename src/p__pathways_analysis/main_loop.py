@@ -6,7 +6,7 @@ from p__data_management import data_tools as d_tools
 from p__data_management import data_update as up
 from p__sub_pathways import subpathways_main as sub_main
 
-def main_loop(t_min:float,f_min:float):
+def main_loop(t_min:float,f_min:float,max_iter:int):
     # main loop for connecting pathways and stuffs
     print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
     list_bp = bp.list_next_branching_points(t_min=t_min)
@@ -18,7 +18,7 @@ def main_loop(t_min:float,f_min:float):
     # Time to be happy and do some Science!
     
     loop_number = 1
-    while list_bp:
+    while list_bp and loop_number < max_iter+1:
         print()
         print('WE ARE AT LOOP NUMBER',loop_number)
         print()
