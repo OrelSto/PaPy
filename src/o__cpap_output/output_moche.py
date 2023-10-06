@@ -89,22 +89,24 @@ def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_s
         if bp["stoichiometry"] > 0:
             mask.append(False)
             if bp["stoichiometry"] > 1:
-                saving_prod.append(str(bp["stoichiometry"])+ ' ' +bp["compound"])
+                saving_prod += [str(bp["stoichiometry"])+ ' ' +bp["compound"]]
             else:
-                saving_prod.append(bp["compound"])
+                saving_prod += [bp["compound"]]
         elif bp["stoichiometry"] == 0:
             mask.append(True)
         elif bp["stoichiometry"] < 0:
             mask.append(False)
-            if -bp["stoichiometry"] > 1:
-                saving_react.append(str(-bp["stoichiometry"])+ ' ' +bp["compound"])
+            if bp["stoichiometry"] < -1:
+                saving_react += [str(-bp["stoichiometry"])+ ' ' +bp["compound"]]
             else:
-                saving_react.append(bp["compound"])
+                saving_react += [bp["compound"]]
     if all(mask):
         output_moche_file.write(' NULL ')
         output_moche_file.write(' \n')
     else:
-        output_moche_file.write(saving_react[0] + ' => ' + saving_prod[0])
+        # print('We finally write the reactants:',saving_react)
+        # print('And write the products        :',saving_prod)
+        output_moche_file.write(' ' + ' + '.join(saving_react) + ' => ' + ' + '.join(saving_prod))
         output_moche_file.write(' \n')
     
     # Now the rate

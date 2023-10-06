@@ -88,12 +88,15 @@ def connecting_pathways(active_pathways:list,species:str):
                 print('connecting destr',n_to,' to D[',species,']')
                 new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
                 print('with rate of:',new_pathways_Dbp[-1]["rate"])
-
+        
         # We return the unaffected + new pathways . It means that the old productive and destructive pathways of species are deleted from active_p
-        return flagged_species, pathways_non_affected + new_pathways + new_pathways_Dbp
+        active_pathways = pathways_non_affected + new_pathways + new_pathways_Dbp
+        for p in active_pathways:
+            print(p["reactions"])
+
+        return flagged_species,active_pathways
     else:
         flagged_species = True
-
         return flagged_species, active_pathways
 
 

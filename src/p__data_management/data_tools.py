@@ -75,20 +75,22 @@ def format_pseudo_reaction(species:str,flag:str):
     # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
     if flag == 'destroy':
         return {
-        "reactants": [{"compound":species}],
-        "products": [{"compound":"..."}],
+        "reactants": [{"compound":species,"stoichiometry":1}],
+        "products": [{"compound":"...","stoichiometry":1}],
         "rate": 0.0,
         "deleted rate":0.0,
-        "results": [{"compound":species,"stoichiometry":-1}],
+        "results": [{"compound":species,"stoichiometry":-1},
+                    {"compound":"...","stoichiometry":1}],
         "is_pseudo":True
         }
     if flag == 'prod':
         return {
-        "reactants": [{"compound":"..."}],
-        "products": [{"compound":species}],
+        "reactants": [{"compound":"...","stoichiometry":1}],
+        "products": [{"compound":species,"stoichiometry":1}],
         "rate": 0.0,
         "deleted rate":0.0,
-        "results": [{"compound":species,"stoichiometry":1}],
+        "results": [{"compound":"...","stoichiometry":-1},
+                    {"compound":species,"stoichiometry":1}],
         "is_pseudo":True
         }
 
@@ -99,17 +101,23 @@ def format_pseudo_pathway(species:str,multiplicity:int,flag:str,chemical_system:
         reaction = {
         "reactants": [
         {
-            "compound": "..."
+            "compound": "...",
+            "stoichiometry": 1
         }
         ],
         "products": [
         {
-            "compound": species
+            "compound": species,
+            "stoichiometry": 1
         }
         ],
         "rate": 0.0,
         "deleted rate": 0.0,
         "results": [
+        {
+            "compound": "...",
+            "stoichiometry": -1
+        },
         {
             "compound": species,
             "stoichiometry": 1
@@ -121,12 +129,14 @@ def format_pseudo_pathway(species:str,multiplicity:int,flag:str,chemical_system:
         reaction = {
         "reactants": [
         {
-            "compound": species
+            "compound": species,
+            "stoichiometry": 1
         }
         ],
         "products": [
         {
-            "compound": "..."
+            "compound": "...",
+            "stoichiometry": 1
         }
         ],
         "rate": 0.0,
@@ -135,6 +145,10 @@ def format_pseudo_pathway(species:str,multiplicity:int,flag:str,chemical_system:
         {
             "compound": species,
             "stoichiometry": -1
+        },
+        {
+            "compound": "...",
+            "stoichiometry": 1
         }
         ],
         "is_pseudo":True
