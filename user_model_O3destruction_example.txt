@@ -3,4 +3,4 @@ O2 + hv => O + O k 10e-9
 O + O2 + M => O3 + M k 99e-9
 O + O3 => O2 + O2 k 1e-9
 Cl + O3 => ClO + O2 k 30e-9
-ClO + O => Cl + O2 k 10e-9
+ClO + O => Cl + O2 k 25e-9
