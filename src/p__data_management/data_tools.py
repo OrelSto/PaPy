@@ -207,3 +207,10 @@ def list_connecting_pathways(set_of_pathways:list,species:str):
     pathways_non_affected = list(compress(set_of_pathways, mask))
 
     return list_pathways_prod,list_pathways_destroy,pathways_non_affected
+
+def is_there_a_pseudo_reaction(pathway:list,chemical_system_data:list):
+    for r in pathway:
+        if chemical_system_data[r["index"]]["is_pseudo"]:
+            return True
+    
+    return False

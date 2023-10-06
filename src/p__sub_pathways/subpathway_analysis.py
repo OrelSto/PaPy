@@ -74,7 +74,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # We have a list index_list_ranked which is the 
 
     if len(final_set_SP) > 1:
-        index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways)
+        index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways,chemical_system_data=chemical_system_data)
         print('We have the ranked list of index: ',index_list_ranked)
 
         # After ranking, minimize!
@@ -170,6 +170,10 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     if len(returned_set_SP) == 1:
         print('the sub pathways are actually the pathway itself')
         print('DO NOTHING')
+        for p in final_set_SP:
+            if p["rate"] > 0:
+                print('Comparing unique SP with result Linear Prob. >0:', p["reactions"])
+                print('with the initial pathway', pathway["reactions"])
         flag_continue = False
     else:
         print('returned_set_SP length is',len(returned_set_SP))
@@ -203,19 +207,24 @@ def sub_pathway_set_init(pathway:dict):
     
     # We need to check if the pathway is not at steady-state for all former branching point species
     for species in pathway["list branching points used"]:
-        index = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)[0]
-        stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
-        if stoichiometry_s < 0:
-            print('adding a pseudo reaction that produce',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='prod',chemical_system=chemical_system)
-            # adding the pseudo reaction
-            set_SP.append(pseudo_rection_pathway)
-        elif stoichiometry_s > 0:
-            print('adding a pseudo reaction that destroy',species)
-            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='destroy',chemical_system=chemical_system)
-            # adding the pseudo reaction
-            set_SP.append(pseudo_rection_pathway)
+        list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+        if list_ind:
+            index = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)[0]
+            stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
+            if stoichiometry_s < 0:
+                print('adding a pseudo reaction that produce',species)
+                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='prod',chemical_system=chemical_system)
+                # adding the pseudo reaction
+                set_SP.append(pseudo_rection_pathway)
+            elif stoichiometry_s > 0:
+                print('adding a pseudo reaction that destroy',species)
+                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='destroy',chemical_system=chemical_system)
+                # adding the pseudo reaction
+                set_SP.append(pseudo_rection_pathway)
+            else:
+                print('NO pseudo reaction needed for',species)
         else:
+            print(species,' does not affect pathway')
             print('NO pseudo reaction needed for',species)
 
     return set_SP
@@ -341,12 +350,14 @@ def cond_elementary_pathway(set_SP:list,pathway_to_be_checked:dict):
     return True
 
 
-def ranked_list(final_set_SP:list,active_pathways:list):
+def ranked_list(final_set_SP:list,active_pathways:list,chemical_system_data:list):
     # what we do is to create a dictionnary where we put the sub-pathways present in active pathways
     # rank 1 is a dict {Position index in final set SP : Rate of the pathway in active patways}
     rank1_SP = {}
     # rank 2 is a dict {Position index in final set SP : Sum of reactions multiplicities}
     rank2_SP = {}
+    # rank 3 is all SP with pseudo-reaction
+    rank3_SP = {}
 
     # we check the reaction list
     active_pathways_reactions = [i["reactions"] for i in active_pathways]
@@ -362,7 +373,10 @@ def ranked_list(final_set_SP:list,active_pathways:list):
             n = 0
             for r in item:
                 n += r["multiplicity"]
-            rank2_SP.update({final_set_SP_reactions.index(item):n})
+            if d_tools.is_there_a_pseudo_reaction(pathway=item,chemical_system_data=chemical_system_data):
+                rank3_SP.update({final_set_SP_reactions.index(item):n})
+            else:
+                rank2_SP.update({final_set_SP_reactions.index(item):n})
 
     # print('ranking the SP present in active pathways: ',rank1_SP)
     # for r in rank1_SP.keys():
@@ -373,9 +387,12 @@ def ranked_list(final_set_SP:list,active_pathways:list):
     list_of_rank1_SP = sorted(rank1_SP,key=rank1_SP.get,reverse=True)
     # We sorted in a ascending order of summed multiplicities for rank 2
     list_of_rank2_SP = sorted(rank2_SP,key=rank2_SP.get)
+    # Do we move the SP containing a pseudo_reaction to the end of the list?
+    list_of_rank3_SP = sorted(rank3_SP,key=rank3_SP.get)
     # We return the merged list
-    return list_of_rank1_SP + list_of_rank2_SP
+    list_ranked_merged = list_of_rank1_SP + list_of_rank2_SP + list_of_rank3_SP
 
+    return list_ranked_merged
 
 def save_subpathways_to_JSON(set_SP:list,filename:str):
     # need a doc here?
