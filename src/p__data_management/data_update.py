@@ -348,29 +348,30 @@ def clean_branching_points(pathway_one_bp:list,pathway_two_bp:list):
     
     return new_branching_points
 
-def clean_pathway_of_pseudo_reaction(pathway:list,chemical_system_data:list):
+def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:list):
     # We need to check if there is a reaction that is a pseudo-reaction.
     # If so, remove it and update the stoichiometry
-    list_r_to_remove = []
-    for r in pathway["reactions"]:
-        reaction_data = chemical_system_data[r["index"]]
-        # If it is a pseudo-reaction CLEAN IT
-        if reaction_data["is_pseudo"]:
-            print('We are cleaning the pseudo-reaction',r["index"])
-            list_r_to_remove.append(r)
-            for s in  reaction_data["results"]:
-                if s["compound"] != '...':
-                    compound = s["compound"]
-                    stoichiometry =s["stoichiometry"]
-            # updating the branching points
-            for bp in pathway["branching points"]:
-                if bp["compound"] == compound:
-                    bp["stoichiometry"] += - stoichiometry
-                    if bp["stoichiometry"] == 0:
-                        pathway["branching points"].remove(bp)
+    for pathway in set_pathways:
+        list_r_to_remove = []
+        for r in pathway["reactions"]:
+            reaction_data = chemical_system_data[r["index"]]
+            # If it is a pseudo-reaction CLEAN IT
+            if reaction_data["is_pseudo"]:
+                print('We are cleaning the pseudo-reaction',r["index"])
+                list_r_to_remove.append(r)
+                for s in  reaction_data["results"]:
+                    if s["compound"] != '...':
+                        compound = s["compound"]
+                        stoichiometry =s["stoichiometry"]
+                # updating the branching points
+                for bp in pathway["branching points"]:
+                    if bp["compound"] == compound:
+                        bp["stoichiometry"] += - stoichiometry
+                        if bp["stoichiometry"] == 0:
+                            pathway["branching points"].remove(bp)
 
-    for r in list_r_to_remove:
-        pathway["reactions"].remove(r)
+        for r in list_r_to_remove:
+            pathway["reactions"].remove(r)
     
-    return pathway
+    return set_pathways
 

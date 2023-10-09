@@ -65,7 +65,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
     print('Pathways Analysis')
     print('#################')
     print()
-    ml.main_loop(t_min=t_min,f_min=rate_threshold,max_iter=2)
+    ml.main_loop(t_min=t_min,f_min=rate_threshold,max_iter=3)
 
     # 4. main loop done. Outputs time!!!
     print('##################')
@@ -76,7 +76,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    # cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_example.txt',filename_concentration='user_concentration_example.txt')
-    cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_O3destruction_example.txt',filename_concentration='user_concentration_O3destruction_example.txt')
+    cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_example.txt',filename_concentration='user_concentration_example.txt')
+    # cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_O3destruction_example.txt',filename_concentration='user_concentration_O3destruction_example.txt')
     # test article to see if P4 is deleted!
     # cpa(timestep=100.0,rate_threshold=0.3e-9,t_min=1.0e4)
