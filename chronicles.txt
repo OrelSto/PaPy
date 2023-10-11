@@ -552,6 +552,14 @@ We are looking at the pathway
  2 O3 => 3 O2
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+ 2 O3 => 3 O2
+
+
 No subpathways found
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -574,6 +582,14 @@ We are looking at the pathway
 ------------------
  2 O3 => 3 O2
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+(ClO + O => Cl + O2) x 2 
+(Cl + O3 => ClO + O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
 
 No subpathways found
 
@@ -694,7 +710,7 @@ leads to:
 (O + O2 + M => O3 + M) x 2 
 (Cl + O3 => ClO + O2) x 2 
 ------------------
- O2 + 2 Cl => 2 ClO
+ 2 Cl + O2 => 2 ClO
  with rate of: 1.980e-09
 
 Connecting with O3 as branching point:
@@ -929,7 +945,7 @@ We are looking at the pathway
 (O + O2 + M => O3 + M) x 2 
 (Cl + O3 => ClO + O2) x 2 
 ------------------
- O2 + 2 Cl => 2 ClO
+ 2 Cl + O2 => 2 ClO
 The pathway has at least than 3 reactions. Looking for subpathways!
 
 No subpathways found
@@ -946,6 +962,19 @@ We are looking at the pathway
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+
 We have 2 sub-pathways:
 
  O3 + hv => O + O2 
@@ -980,6 +1009,20 @@ We are looking at the pathway
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+ NULL 
+
+
 We have 2 sub-pathways:
 
  O3 + hv => O + O2 
@@ -1014,6 +1057,15 @@ We are looking at the pathway
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+ NULL 
+
 
 No subpathways found
 
@@ -1038,6 +1090,19 @@ We are looking at the pathway
  2 O => O2
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+(... => O) x 2 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+  => O2
+
+
 We have 2 sub-pathways:
 
  O3 + hv => O + O2 
@@ -1068,6 +1133,20 @@ We are looking at the pathway
 ------------------
  2 O => O2
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+(... => O) x 2 
+ O + O2 + M => O3 + M 
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+  => O2
+
 
 We have 2 sub-pathways:
 
@@ -1178,7 +1257,7 @@ Unaffected pathways :
 (O + O2 + M => O3 + M) x 2 
 (Cl + O3 => ClO + O2) x 2 
 ------------------
- O2 + 2 Cl => 2 ClO
+ 2 Cl + O2 => 2 ClO
 
  O2 + hv => 2 O 
  O + O2 + M => O3 + M 
@@ -1220,8 +1299,23 @@ We are looking at the pathway
 (O + O2 + M => O3 + M) x 2 
 (Cl + O3 => ClO + O2) x 2 
 ------------------
- O2 + 2 Cl => 2 ClO
+ 2 Cl + O2 => 2 ClO
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ Cl + O3 => ClO + O2 
+------------------
+ Cl + O3 => ClO + O2
+
+(... => Cl) x 2 
+------------------
+  => 2 Cl
+
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
 
 We have 2 sub-pathways:
 
@@ -1239,7 +1333,7 @@ explaining the pathway:
 (O + O2 + M => O3 + M) x 2 
 (Cl + O3 => ClO + O2) x 2 
 ------------------
- O2 + 2 Cl => 2 ClO
+ 2 Cl + O2 => 2 ClO
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -1252,6 +1346,22 @@ We are looking at the pathway
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ Cl + O3 => ClO + O2 
+------------------
+ Cl + O3 => ClO + O2
+
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
+ O2 + hv => 2 O 
+(ClO + O => Cl + O2) x 2 
+------------------
+ 2 ClO => 2 Cl + O2
+
 
 We have 3 sub-pathways:
 
@@ -1267,7 +1377,7 @@ We have 3 sub-pathways:
  O2 + hv => 2 O 
 (ClO + O => Cl + O2) x 2 
 ------------------
- 2 ClO => O2 + 2 Cl
+ 2 ClO => 2 Cl + O2
 
 explaining the pathway:
  O2 + hv => 2 O 
@@ -1317,6 +1427,18 @@ We are looking at the pathway
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+
 We have 2 sub-pathways:
 
  O2 + hv => 2 O 
@@ -1357,6 +1479,22 @@ We are looking at the pathway
  2 O => O2
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ Cl + O3 => ClO + O2 
+------------------
+ Cl + O3 => ClO + O2
+
+ ... => O 
+ O + O2 + M => O3 + M 
+------------------
+ O2 => O3
+
+ ... => O 
+ ClO + O => Cl + O2 
+------------------
+ ClO => Cl + O2
+
+
 We have 3 sub-pathways:
 
  Cl + O3 => ClO + O2 
@@ -1369,7 +1507,7 @@ We have 3 sub-pathways:
 
  ClO + O => Cl + O2 
 ------------------
- ClO + O => O2 + Cl
+ O + ClO => Cl + O2
 
 explaining the pathway:
  O + O2 + M => O3 + M 
@@ -1419,11 +1557,11 @@ Productive pathways :
  O2 + hv => 2 O 
 (ClO + O => Cl + O2) x 2 
 ------------------
- 2 ClO => O2 + 2 Cl
+ 2 ClO => 2 Cl + O2
 
  ClO + O => Cl + O2 
 ------------------
- ClO + O => O2 + Cl
+ O + ClO => Cl + O2
 
 Destructive pathways: 
  O + O2 + M => O3 + M 
@@ -1467,7 +1605,7 @@ Connecting with Cl as branching point:
  O2 + hv => 2 O 
 (ClO + O => Cl + O2) x 2 
 ------------------
- 2 ClO => O2 + 2 Cl
+ 2 ClO => 2 Cl + O2
  to 
  O + O2 + M => O3 + M 
  Cl + O3 => ClO + O2 
@@ -1487,7 +1625,7 @@ Connecting with Cl as branching point:
  O2 + hv => 2 O 
 (ClO + O => Cl + O2) x 2 
 ------------------
- 2 ClO => O2 + 2 Cl
+ 2 ClO => 2 Cl + O2
  to 
  Cl + O3 => ClO + O2 
 ------------------
@@ -1504,7 +1642,7 @@ leads to:
 Connecting with Cl as branching point:
  ClO + O => Cl + O2 
 ------------------
- ClO + O => O2 + Cl
+ O + ClO => Cl + O2
  to 
  O + O2 + M => O3 + M 
  Cl + O3 => ClO + O2 
@@ -1522,7 +1660,7 @@ leads to:
 Connecting with Cl as branching point:
  ClO + O => Cl + O2 
 ------------------
- ClO + O => O2 + Cl
+ O + ClO => Cl + O2
  to 
  Cl + O3 => ClO + O2 
 ------------------
@@ -1619,6 +1757,25 @@ We are looking at the pathway
  2 O => O2
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+------------------
+ O2 => 2 O
+
+ O + O2 + M => O3 + M 
+------------------
+ O + O2 => O3
+
+(... => O) x 2 
+------------------
+  => 2 O
+
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+ O3 + O => 2 O2
+
+
 We have 3 sub-pathways:
 
  O2 + hv => 2 O 
@@ -1652,6 +1809,21 @@ We are looking at the pathway
 ------------------
  2 O3 => 3 O2
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+------------------
+ O2 => 2 O
+
+(... => O3) x 2 
+------------------
+  => 2 O3
+
+ ClO + O => Cl + O2 
+ Cl + O3 => ClO + O2 
+------------------
+ O3 + O => 2 O2
+
 
 We have 2 sub-pathways:
 

@@ -87,6 +87,14 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
 
     # if len(final_set_SP) > 1:
     if len(final_set_SP) > 0:
+        # Chronicles
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('The elementary subpathways is/are:')
+            for elem_sp in final_set_SP:
+                o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=elem_sp,chem_system_data=chemical_system_data))
+                o_tools.write_line_chronicle('\n')
+        
         index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways,chemical_system_data=chemical_system_data)
         print('We have the ranked list of index: ',index_list_ranked)
 
