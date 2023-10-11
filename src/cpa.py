@@ -34,21 +34,51 @@ from i__user_model import convert_reaction_system_file as i_system
 from i__user_model import convert_concentration_file as i_concentration
 from p__initialization import init_pathways as p_init
 from p__data_management import data_update as up
+from p__data_management import global_var
 from p__pathways_analysis import branching_points as bp
 from p__pathways_analysis import main_loop as ml
 from o__cpap_output import output_moche as out
+from o__cpap_output import output_tools as o_tools
 
-def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filename_concentration:str) -> None:
+
+def init_global_var(chronicle_writing:bool):
+    global_var.chronicle_writing = chronicle_writing
+
+
+def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
+
+    # init global var
+    init_global_var(chronicle_writing=chronicle_writing)
+
     # first test is to convert a given text file into a workable JSON dataset
+
     print('######################')
     print('User Inputs Processing')
     print('######################')
     print()
+
+
+    if global_var.chronicle_writing:
+        with open('chronicles.txt', 'w') as output_file:
+            output_file.write('Start of the Chemical Pathway Analysis')
+            output_file.write('\n')
+
+        o_tools.write_line_chronicle('######################')
+        o_tools.write_line_chronicle('User Inputs Processing')
+        o_tools.write_line_chronicle('######################')
+        o_tools.write_line_chronicle('\n')
+    
     i_system.convert_chemical_reaction_file(filename=filename_model)
     i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
     i_system.adding_pseudo_reactions()
 
     # 2. We run the initialization
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('#######################')
+        o_tools.write_line_chronicle('Pathways Initialization')
+        o_tools.write_line_chronicle('#######################')
+        o_tools.write_line_chronicle('\n')
     print()
     print('#######################')
     print('Pathways Initialization')
@@ -61,6 +91,12 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
     print()
 
     # 3. We run the main loop
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('#################')
+        o_tools.write_line_chronicle('Pathways Analysis')
+        o_tools.write_line_chronicle('#################')
+        o_tools.write_line_chronicle('\n')
     print('#################')
     print('Pathways Analysis')
     print('#################')
@@ -76,7 +112,7 @@ def cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filen
 
 if __name__=='__main__':
     # this is a stupid way to test the package and stupid values for inputs
-    cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_example.txt',filename_concentration='user_concentration_example.txt')
-    # cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_O3destruction_example.txt',filename_concentration='user_concentration_O3destruction_example.txt')
+    # cpa(timestep=100.0,rate_threshold=1e-12,t_min=1.0e4,filename_model='user_model_example.txt',filename_concentration='user_concentration_example.txt',chronicle_writing=True)
+    cpa(timestep=100.0,rate_threshold=1e-10,t_min=1.0e4,filename_model='user_model_O3destruction_example.txt',filename_concentration='user_concentration_O3destruction_example.txt',chronicle_writing=True)
     # test article to see if P4 is deleted!
     # cpa(timestep=100.0,rate_threshold=0.3e-9,t_min=1.0e4)

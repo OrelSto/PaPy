@@ -32,6 +32,9 @@ Note:
 
 import json
 
+from p__data_management import global_var
+from o__cpap_output import output_tools as o_tools
+
 def format_line(reaction_equation:str,reaction_system:list,timestep:float):
     """format_line _summary_
 
@@ -98,15 +101,24 @@ def convert_concentration_file(filename:str,timestep:float):
     # Empty list of all reactions
     chemical_species = []
     
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Starting the convertion to JSON of the user chemical species concentration file')
+        o_tools.write_line_chronicle('Adding the following species')
+
     # Read the content of the input text file line by line
     with open(filename, 'r') as file:
         while line := file.readline():
             reaction_equation = line.rstrip()
-
             chemical_species.append(format_line(reaction_equation,reaction_system,timestep))
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle(chemical_species[-1]["name"])
 
     # Write the JSON data to an output file
     with open('chemical_species.json', 'w') as output_file:
         json.dump(chemical_species, output_file, indent=2)
 
     print("Conversion of",filename,"to JSON chemical species format complete.")
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Conversion of '+filename+' to JSON  chemical species format complete.')
+        o_tools.write_line_chronicle('Saved as chemical_species.json')

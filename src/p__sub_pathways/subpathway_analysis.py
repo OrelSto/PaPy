@@ -5,6 +5,8 @@ import copy
 from p__initialization import init_pathways as p_init
 from p__data_management import data_tools as d_tools
 from p__data_management import data_update as data
+from o__cpap_output import output_tools as o_tools
+from p__data_management import global_var
 
 # This is where we analyze the pathway to determine if it is a combination of subpathways
 
@@ -185,6 +187,10 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         print('DO NOTHING')
         print('Comparing unique SP at index',index_list_ranked[save_solo_index],' with result Linear Prob. >0:', final_set_SP[index_list_ranked[save_solo_index]]["reactions"])
         print('with the initial pathway', pathway["reactions"])
+        flag_continue = False
+    elif len(returned_set_SP) == 0:
+        print('the sub pathways list is empty')
+        print('DO NOTHING')
         flag_continue = False
     else:
         print('returned_set_SP length is',len(returned_set_SP))

@@ -32,6 +32,9 @@ Note:
 
 import json
 
+from p__data_management import global_var
+from o__cpap_output import output_tools as o_tools
+
 def read_chemical_system(json_filename:str):
     # Open the JSON file and read its contents
     with open(json_filename, 'r') as json_file:
@@ -59,6 +62,7 @@ def init_pathways(json_filename:str):
     # We save the JSON stucture into a dict
     chemical_system = read_chemical_system(json_filename=json_filename)
 
+    
     # Then, we go through the chemical system and save the initial reactions as pathways
     for reaction in chemical_system:
         if not reaction["is_pseudo"]:
@@ -73,3 +77,9 @@ def init_pathways(json_filename:str):
     with open('deleted_pathways.json', 'w') as output_file:
         json.dump([], output_file, indent=2)
     print("Initialization of Deleted Pathways saved as deleted_pathways.json")
+    
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('The initial active pathways are all the singular reactions in the system (not the pseudo-reactions)')
+        o_tools.write_line_chronicle('Initialization of Active Pathways saved as active_pathways.json')
+        o_tools.write_line_chronicle('The initial deleted pathways is an empty list')
+        o_tools.write_line_chronicle('Initialization of Deleted Pathways saved as deleted_pathways.json')

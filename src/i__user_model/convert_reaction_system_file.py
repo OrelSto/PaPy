@@ -34,6 +34,8 @@ import json
 import re
 
 from p__data_management import data_tools as d_tools
+from p__data_management import global_var
+from o__cpap_output import output_tools as o_tools
 
 # Function to extract the compound and stoichiometry from a term
 def extract_compound_and_stoichiometry(term:str):
@@ -173,6 +175,10 @@ def convert_chemical_reaction_file(filename:str):
         _description_
     """
 
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Starting the convertion to JSON of the user chemical reaction system file')
+        o_tools.write_line_chronicle('Adding the following reactions')
+
     # Empty list of all reactions
     chemical_system = []
     
@@ -181,15 +187,27 @@ def convert_chemical_reaction_file(filename:str):
         while line := file.readline():
             reaction_equation = line.rstrip()
             chemical_system.append(format_line(reaction_equation))
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle(o_tools.reaction_to_str(
+                    reaction={"index":chemical_system.index(chemical_system[-1]),
+                               "multiplicity":1},
+                    chem_system_data=chemical_system
+                ))
 
     # Write the JSON data to an output file
     with open('chemical_reaction_system.json', 'w') as output_file:
         json.dump(chemical_system, output_file, indent=2)
 
     print("Conversion of",filename,"to JSON chemical system format complete.")
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
+        o_tools.write_line_chronicle('Saved as chemical_reaction_system.json')
 
 
 def adding_pseudo_reactions():
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Addition of pseudo-reactions')
     # This routine adds 2 pseudo-reactions (prod and destruction) for each species in the system
     # Opening JSON file
     cs = open('chemical_species.json')
@@ -207,3 +225,6 @@ def adding_pseudo_reactions():
     # Write the JSON data to an output file
     with open('chemical_reaction_system.json', 'w') as output_file:
         json.dump(chemical_system, output_file, indent=2)
+    
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Addition complete')

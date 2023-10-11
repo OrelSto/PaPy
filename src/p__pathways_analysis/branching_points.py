@@ -2,6 +2,8 @@ import json
 from itertools import compress
 from p__data_management import data_update as data
 from p__data_management import data_tools as d_tools
+from p__data_management import global_var
+from o__cpap_output import output_tools as o_tools
 
 def list_next_branching_points(t_min:float):
     # here we determine the list of species by their lifetime
@@ -30,8 +32,13 @@ def list_next_branching_points(t_min:float):
     return sorted_keys
 
 def connecting_pathways(active_pathways:list,species:str):
+    # Opening JSON file
+    crs = open('chemical_reaction_system.json')
+    # returns JSON object as a dictionary
+    chemical_system = json.load(crs)
     # we connect pathways that are producing species to pathways that are consuming species
     # list of pathways that produce species
+
     list_pathways_prod,list_pathways_destroy,pathways_non_affected = d_tools.list_connecting_pathways(set_of_pathways=active_pathways,species=species)
 
     print()
@@ -40,6 +47,23 @@ def connecting_pathways(active_pathways:list,species:str):
     print('destructive pathways:',list_pathways_destroy)
     print('unaffected pathways:',pathways_non_affected)
     print()
+
+    # Writing some stuff in chronicles
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Here are the list of pathways for: '+species)
+        o_tools.write_line_chronicle('Productive pathways : ')
+        for i in list_pathways_prod:
+            o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=active_pathways[i],chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Destructive pathways: ')
+        for i in list_pathways_destroy:
+            o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=active_pathways[i],chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Unaffected pathways : ')
+        for p in pathways_non_affected:
+            o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=p,chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('\n')
 
     # New list of new pathways
     new_pathways = []
@@ -64,13 +88,32 @@ def connecting_pathways(active_pathways:list,species:str):
 
     if (cond_prod and cond_destroy):
         # We connect each prod pathway to each destroy pathway
+
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('Starting to connect Pathways:')
         for p_from in list_pathways_prod:
             for p_to in list_pathways_destroy:
                 n_from = [n["index"] for n in active_pathways[p_from]["reactions"]]
                 n_to = [n["index"] for n in active_pathways[p_to]["reactions"]]
                 print('connecting', str(n_from), 'to', str(n_to))
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Connecting with '+species+' as branching point:\n'+
+                                                o_tools.pathway_to_str(pathway=active_pathways[p_from],chem_system_data=chemical_system)+
+                                                '\n to \n'+
+                                                o_tools.pathway_to_str(pathway=active_pathways[p_to],chem_system_data=chemical_system))
+                    o_tools.write_line_chronicle('\n')
+
                 new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species))
                 print('with rate of:',new_pathways[-1]["rate"])
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('leads to:\n'+
+                                                o_tools.pathway_to_str(pathway=new_pathways[-1],chem_system_data=chemical_system)+
+                                                '\n with rate of: '+'{:0.3e}'.format(new_pathways[-1]["rate"]))
+
 
         # Now we have new_pathways. We need the same pathways that end up explaining the contribution of Delta concentration of branching poing species
         species_dict = d_tools.get_compound_dict(species)
@@ -79,15 +122,34 @@ def connecting_pathways(active_pathways:list,species:str):
             for p_prod in list_pathways_prod:
                 n_from = [n["index"] for n in active_pathways[p_prod]["reactions"]]
                 print('connecting prod',n_from,' to D[',species,']')
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Connecting production of '+species+' to D['+species+']:\n'+
+                                                o_tools.pathway_to_str(pathway=active_pathways[p_prod],chem_system_data=chemical_system))
+                
                 new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species,flag_update='production'))
                 print('with rate of:',new_pathways_Dbp[-1]["rate"])
+
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(new_pathways_Dbp[-1]["rate"]))
         else:
             # we have the destructive case
             for p_destruct in list_pathways_destroy:
                 n_to = [n["index"] for n in active_pathways[p_destruct]["reactions"]]
                 print('connecting destr',n_to,' to D[',species,']')
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Connecting destruction of '+species+' to D['+species+']:\n'+
+                                                o_tools.pathway_to_str(pathway=active_pathways[p_destruct],chem_system_data=chemical_system))
                 new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
                 print('with rate of:',new_pathways_Dbp[-1]["rate"])
+
+                # Chronicles
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(new_pathways_Dbp[-1]["rate"]))
         
         # We return the unaffected + new pathways . It means that the old productive and destructive pathways of species are deleted from active_p
         active_pathways = pathways_non_affected + new_pathways + new_pathways_Dbp
@@ -101,6 +163,11 @@ def connecting_pathways(active_pathways:list,species:str):
 
 
 def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
+    if global_var.chronicle_writing:
+        # Opening JSON file
+        crs = open('chemical_reaction_system.json')
+        # returns JSON object as a dictionary
+        chemical_system = json.load(crs)
     # we iterate through active pathways to check if rate < f_min
     list_to_remove = []
     for item in active_pathways:
@@ -109,6 +176,10 @@ def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:floa
             deleted_pathways.append(item)
             # print("item deleted",item)
             list_to_remove.append(item)
+            # Chronicles
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle('\n')
+                o_tools.write_line_chronicle('Deleting pathway (too slow):\n'+o_tools.pathway_to_str(pathway=item,chem_system_data=chemical_system))
     
     for item in list_to_remove:
         active_pathways.remove(item)

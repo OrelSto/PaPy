@@ -3,6 +3,8 @@ import numpy as np
 import copy
 
 from p__data_management import data_tools as d_tools
+from p__data_management import global_var
+from o__cpap_output import output_tools as o_tools
 
 def evaluate_production_rate_active_pathways(species:str):
     # Evaluates the production rate of a given species according to the active pathways
@@ -90,6 +92,13 @@ def evaluate_destruction_rate_deleted_pathways(species:str):
     return destruction_rate
 
 def update_rates_chemical_species():
+
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('**************************************')
+        o_tools.write_line_chronicle('Updating the rates of chemical species')
+        o_tools.write_line_chronicle('\n')
+
     # Opening JSON file
     cs = open('chemical_species.json')
 
@@ -99,17 +108,27 @@ def update_rates_chemical_species():
     # updating the rates
     for item in chemical_species:
         print("We are updating ",item["name"])
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('Updating:'+item["name"])
+            o_tools.write_line_chronicle('    prod:'+'{:0.3e}'.format(item["production rate"]["active pathways"])+' to '+'{:0.3e}'.format((evaluate_production_rate_active_pathways(species=item["name"]))))
+            o_tools.write_line_chronicle('   destr:'+'{:0.3e}'.format(item["destruction rate"]["active pathways"])+' to '+'{:0.3e}'.format((evaluate_destruction_rate_active_pathways(species=item["name"]))))
         item["production rate"]["active pathways"] = evaluate_production_rate_active_pathways(species=item["name"])
         item["production rate"]["deleted pathways"] = evaluate_production_rate_deleted_pathways(species=item["name"])
         item["destruction rate"]["active pathways"] = evaluate_destruction_rate_active_pathways(species=item["name"])
         item["destruction rate"]["deleted pathways"] = evaluate_destruction_rate_deleted_pathways(species=item["name"])
         
         # updating its lifetime
+        if global_var.chronicle_writing:
+            sav_lt = item["lifetime"]
+        
         destruction_rate = (item["destruction rate"]["active pathways"] + item["destruction rate"]["deleted pathways"])
         if destruction_rate == 0.0:
             item["lifetime"] = 1e99
         else:
             item["lifetime"] = item["concentration"] / (item["destruction rate"]["active pathways"] + item["destruction rate"]["deleted pathways"])
+        
+        if global_var.chronicle_writing:
+             o_tools.write_line_chronicle('lifetime:'+'{:0.3e}'.format(sav_lt)+' to '+'{:0.3e}'.format(item["lifetime"]))
 
     # Now we save it
     # Write the JSON data to an output file
@@ -117,6 +136,10 @@ def update_rates_chemical_species():
         json.dump(chemical_species, output_file, indent=2)
 
     print("Updating rates in chemical_species.json complete.")
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Updating rates in chemical_species.json complete.')
+        o_tools.write_line_chronicle('**************************************')
 
 
 def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
@@ -361,12 +384,13 @@ def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:lis
                 list_r_to_remove.append(r)
                 for s in  reaction_data["results"]:
                     if s["compound"] != '...':
+                        multiplicity = r["multiplicity"]
                         compound = s["compound"]
                         stoichiometry =s["stoichiometry"]
                 # updating the branching points
                 for bp in pathway["branching points"]:
                     if bp["compound"] == compound:
-                        bp["stoichiometry"] += - stoichiometry
+                        bp["stoichiometry"] += - stoichiometry * multiplicity
                         if bp["stoichiometry"] == 0:
                             pathway["branching points"].remove(bp)
 

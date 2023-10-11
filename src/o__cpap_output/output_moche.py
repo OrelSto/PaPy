@@ -1,5 +1,8 @@
 import json
 
+from o__cpap_output import output_tools as o_tools
+from p__data_management import global_var
+
 # we make a moche output ^^'
 def moche():
     with open('active_pathways.json', 'r') as active_pathways_file:
@@ -45,69 +48,10 @@ def moche():
         output_moche_file.write(' \n')
 
 def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_sum:float):
-    for r in pathway["reactions"]:
-        mult = []
-        if r["multiplicity"] > 1:
-            mult.append(r["multiplicity"])
-            output_moche_file.write('(')
-        else:
-            output_moche_file.write(' ')
 
-        list_reactant = chem_system_data[r["index"]]["reactants"]
-        list_product = chem_system_data[r["index"]]["products"]
-        for reactant in list_reactant:
-            if reactant["stoichiometry"] > 1:
-                output_moche_file.write(str(reactant["stoichiometry"])+ ' ' +reactant["compound"])
-            else:
-                output_moche_file.write(reactant["compound"])
-            if (list_reactant.index(reactant) + 1) == len(list_reactant):
-                output_moche_file.write(' => ')
-            else:
-                output_moche_file.write(' + ')
+    o_tools.writing_pathway(pathway=pathway,output_file=output_moche_file,chem_system_data=chem_system_data)
 
-        for product in list_product:
-            if product["stoichiometry"] > 1:
-                output_moche_file.write(str(product["stoichiometry"])+ ' ' +product["compound"])
-            else:
-                output_moche_file.write(product["compound"])
-            if (list_product.index(product) + 1) == len(list_product):
-                if mult:
-                    output_moche_file.write(') x '+str(mult[0]))
-                output_moche_file.write(' \n')
-            else:
-                output_moche_file.write(' + ')
-            
-
-
-    output_moche_file.write('------------------')
-    output_moche_file.write('\n')
-    
-    mask = []
-    saving_prod = []
-    saving_react = []
-    for bp in pathway["branching points"]:
-        if bp["stoichiometry"] > 0:
-            mask.append(False)
-            if bp["stoichiometry"] > 1:
-                saving_prod += [str(bp["stoichiometry"])+ ' ' +bp["compound"]]
-            else:
-                saving_prod += [bp["compound"]]
-        elif bp["stoichiometry"] == 0:
-            mask.append(True)
-        elif bp["stoichiometry"] < 0:
-            mask.append(False)
-            if bp["stoichiometry"] < -1:
-                saving_react += [str(-bp["stoichiometry"])+ ' ' +bp["compound"]]
-            else:
-                saving_react += [bp["compound"]]
-    if all(mask):
-        output_moche_file.write(' NULL ')
-        output_moche_file.write(' \n')
-    else:
-        # print('We finally write the reactants:',saving_react)
-        # print('And write the products        :',saving_prod)
-        output_moche_file.write(' ' + ' + '.join(saving_react) + ' => ' + ' + '.join(saving_prod))
-        output_moche_file.write(' \n')
+    output_moche_file.write(' \n')
     
     # Now the rate
     output_moche_file.write(' \n')
