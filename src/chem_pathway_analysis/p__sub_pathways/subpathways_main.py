@@ -1,9 +1,9 @@
 import json
 import copy
-from p__sub_pathways import subpathway_analysis as sub
-from p__data_management import data_tools as d_tools
-from o__cpap_output import output_tools as o_tools
-from p__data_management import global_var
+from ..p__sub_pathways import subpathway_analysis as sub
+from ..p__data_management import data_tools as d_tools
+from ..o__cpap_output import output_tools as o_tools
+from ..p__data_management import global_var
 
 # This routine is set to initialize the subpathway set for each active pathway defined early on
 # Steps:

@@ -33,9 +33,9 @@ Note:
 import json
 import re
 
-from p__data_management import data_tools as d_tools
-from p__data_management import global_var
-from o__cpap_output import output_tools as o_tools
+from ..p__data_management import data_tools as d_tools
+from ..p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
 
 # Function to extract the compound and stoichiometry from a term
 def extract_compound_and_stoichiometry(term:str):

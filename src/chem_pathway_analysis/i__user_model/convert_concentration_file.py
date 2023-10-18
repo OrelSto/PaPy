@@ -32,8 +32,8 @@ Note:
 
 import json
 
-from p__data_management import global_var
-from o__cpap_output import output_tools as o_tools
+from ..p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
 
 def format_line(reaction_equation:str,reaction_system:list,timestep:float):
     """format_line _summary_

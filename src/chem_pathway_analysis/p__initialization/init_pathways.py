@@ -32,8 +32,8 @@ Note:
 
 import json
 
-from p__data_management import global_var
-from o__cpap_output import output_tools as o_tools
+from ..p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
 
 def read_chemical_system(json_filename:str):
     # Open the JSON file and read its contents

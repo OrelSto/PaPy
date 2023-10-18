@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "chemical_pathways_analysis"
+name = "chem_pathway_analysis"
 version = "0.3.0"
 authors = [
   { name="Aurélien Stolzenbach", email="aurelien.stolzenbach@gmail.com" },

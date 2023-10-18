@@ -10,9 +10,7 @@ Adding the following reactions
  O2 + hv => 2 O
  O + O2 + M => O3 + M
  O + O3 => 2 O2
- Cl + O3 => ClO + O2
- ClO + O => Cl + O2
-Conversion of user_model_O3destruction_example.txt to JSON chemical system format complete.
+Conversion of user_model_example.txt to JSON chemical system format complete.
 Saved as chemical_reaction_system.json
 
 Starting the convertion to JSON of the user chemical species concentration file
@@ -20,9 +18,7 @@ Adding the following species
 O3
 O2
 O
-Cl
-ClO
-Conversion of user_concentration_O3destruction_example.txt to JSON  chemical species format complete.
+Conversion of user_concentration_example.txt to JSON  chemical species format complete.
 Saved as chemical_species.json
 
 Addition of pseudo-reactions
@@ -42,24 +38,16 @@ Updating the rates of chemical species
 
 Updating:O3
     prod:0.000e+00 to 9.900e-08
-   destr:0.000e+00 to 9.100e-08
-lifetime:0.000e+00 to 8.791e+01
+   destr:0.000e+00 to 8.100e-08
+lifetime:0.000e+00 to 9.877e+01
 Updating:O2
-    prod:0.000e+00 to 9.700e-08
+    prod:0.000e+00 to 8.200e-08
    destr:0.000e+00 to 1.090e-07
 lifetime:0.000e+00 to 1.835e+06
 Updating:O
     prod:0.000e+00 to 1.000e-07
-   destr:0.000e+00 to 1.050e-07
-lifetime:0.000e+00 to 1.905e+01
-Updating:Cl
-    prod:0.000e+00 to 5.000e-09
-   destr:0.000e+00 to 1.000e-08
-lifetime:0.000e+00 to 8.000e+00
-Updating:ClO
-    prod:0.000e+00 to 1.000e-08
-   destr:0.000e+00 to 5.000e-09
-lifetime:0.000e+00 to 8.000e+00
+   destr:0.000e+00 to 1.000e-07
+lifetime:0.000e+00 to 2.000e+01
 
 Updating rates in chemical_species.json complete.
 **************************************
@@ -70,280 +58,9 @@ Pathways Analysis
 
 
 Here is the sorted list by lifetime of the next species considered as branching points for a fixed minimum timescale of 1.000e+04:
-Cl ClO O O3
+O O3
 
 Starting the pathways analysis
-
-Pathways analysis for species: Cl
-
-Here are the list of pathways for: Cl
-Productive pathways : 
- ClO + O => Cl + O2 
-------------------
- ClO + O => Cl + O2
-
-Destructive pathways: 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-Unaffected pathways : 
- O3 + hv => O + O2 
-------------------
- O3 => O + O2
-
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-
-
-Starting to connect Pathways:
-
-Connecting with Cl as branching point:
- ClO + O => Cl + O2 
-------------------
- ClO + O => Cl + O2
- to 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-leads to:
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
- with rate of: 5.000e-09
-
-Connecting destruction of Cl to D[Cl]:
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-with rate of: 5.000e-09
-
-##############################
-Sub Pathways analysis starting
-##############################
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O3 + hv => O + O2 
-------------------
- O3 => O + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:9.900e-08 to 9.900e-08
-   destr:9.100e-08 to 9.100e-08
-lifetime:8.791e+01 to 8.791e+01
-Updating:O2
-    prod:9.700e-08 to 9.700e-08
-   destr:1.090e-07 to 1.090e-07
-lifetime:1.835e+06 to 1.835e+06
-Updating:O
-    prod:1.000e-07 to 1.000e-07
-   destr:1.050e-07 to 1.050e-07
-lifetime:1.905e+01 to 1.905e+01
-Updating:Cl
-    prod:5.000e-09 to 0.000e+00
-   destr:1.000e-08 to 5.000e-09
-lifetime:8.000e+00 to 1.600e+01
-Updating:ClO
-    prod:1.000e-08 to 5.000e-09
-   destr:5.000e-09 to 0.000e+00
-lifetime:8.000e+00 to 1.000e+99
-
-Updating rates in chemical_species.json complete.
-**************************************
-
-Pathways analysis for species: ClO
-
-Here are the list of pathways for: ClO
-Productive pathways : 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-Destructive pathways: 
-Unaffected pathways : 
- O3 + hv => O + O2 
-------------------
- O3 => O + O2
-
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-
-##############################
-Sub Pathways analysis starting
-##############################
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O3 + hv => O + O2 
-------------------
- O3 => O + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:9.900e-08 to 9.900e-08
-   destr:9.100e-08 to 9.100e-08
-lifetime:8.791e+01 to 8.791e+01
-Updating:O2
-    prod:9.700e-08 to 9.700e-08
-   destr:1.090e-07 to 1.090e-07
-lifetime:1.835e+06 to 1.835e+06
-Updating:O
-    prod:1.000e-07 to 1.000e-07
-   destr:1.050e-07 to 1.050e-07
-lifetime:1.905e+01 to 1.905e+01
-Updating:Cl
-    prod:0.000e+00 to 0.000e+00
-   destr:5.000e-09 to 5.000e-09
-lifetime:1.600e+01 to 1.600e+01
-Updating:ClO
-    prod:5.000e-09 to 5.000e-09
-   destr:0.000e+00 to 0.000e+00
-lifetime:1.000e+99 to 1.000e+99
-
-Updating rates in chemical_species.json complete.
-**************************************
 
 Pathways analysis for species: O
 
@@ -366,16 +83,7 @@ Destructive pathways:
 ------------------
  O + O3 => 2 O2
 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
 Unaffected pathways : 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
 
 Starting to connect Pathways:
 
@@ -393,7 +101,7 @@ leads to:
  O + O2 + M => O3 + M 
 ------------------
  NULL 
- with rate of: 7.543e-08
+ with rate of: 7.920e-08
 
 Connecting with O as branching point:
  O3 + hv => O + O2 
@@ -409,25 +117,7 @@ leads to:
  O + O3 => 2 O2 
 ------------------
  2 O3 => 3 O2
- with rate of: 7.619e-10
-
-Connecting with O as branching point:
- O3 + hv => O + O2 
-------------------
- O3 => O + O2
- to 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-leads to:
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
- with rate of: 3.810e-09
+ with rate of: 8.000e-10
 
 Connecting with O as branching point:
  O2 + hv => 2 O 
@@ -443,7 +133,7 @@ leads to:
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
- with rate of: 9.429e-09
+ with rate of: 9.900e-09
 
 Connecting with O as branching point:
  O2 + hv => 2 O 
@@ -459,50 +149,24 @@ leads to:
 (O + O3 => 2 O2) x 2 
 ------------------
  2 O3 => 3 O2
- with rate of: 9.524e-11
-
-Connecting with O as branching point:
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
- to 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-leads to:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
- with rate of: 4.762e-10
+ with rate of: 1.000e-10
 
 Connecting destruction of O to D[O]:
  O + O2 + M => O3 + M 
 ------------------
  O + O2 => O3
-with rate of: 4.714e-09
+with rate of: 4.299e-24
 
 Connecting destruction of O to D[O]:
  O + O3 => 2 O2 
 ------------------
  O + O3 => 2 O2
-with rate of: 4.762e-11
-
-Connecting destruction of O to D[O]:
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-with rate of: 2.381e-10
+with rate of: 4.343e-26
 
 Deleting pathway (too slow):
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
+ O + O2 + M => O3 + M 
 ------------------
- 2 O3 => 3 O2
+ O + O2 => O3
 
 Deleting pathway (too slow):
  O + O3 => 2 O2 
@@ -513,15 +177,6 @@ Deleting pathway (too slow):
 Sub Pathways analysis starting
 ##############################
 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 We are looking at the pathway
@@ -545,27 +200,6 @@ The pathway has less than 3 reactions. No need to look at subpathways
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 We are looking at the pathway
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
-
-
-No subpathways found
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
 ------------------
@@ -577,39 +211,9 @@ The pathway has less than 3 reactions. No need to look at subpathways
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 We are looking at the pathway
  O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
+(O + O3 => 2 O2) x 2 
 ------------------
  2 O3 => 3 O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-
-No subpathways found
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
 The pathway has less than 3 reactions. No need to look at subpathways
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -623,25 +227,17 @@ Sub Pathways analysis DONE
 Updating the rates of chemical species
 
 Updating:O3
-    prod:9.900e-08 to 2.357e-08
-   destr:9.100e-08 to 1.533e-08
-lifetime:8.791e+01 to 5.138e+02
+    prod:9.900e-08 to 1.980e-08
+   destr:8.100e-08 to 1.800e-09
+lifetime:9.877e+01 to 4.444e+03
 Updating:O2
-    prod:9.700e-08 to 2.062e-08
-   destr:1.090e-07 to 3.300e-08
-lifetime:1.835e+06 to 6.061e+06
+    prod:8.200e-08 to 2.700e-09
+   destr:1.090e-07 to 2.970e-08
+lifetime:1.835e+06 to 6.734e+06
 Updating:O
     prod:1.000e-07 to 0.000e+00
-   destr:1.050e-07 to 4.952e-09
-lifetime:1.905e+01 to 4.000e+02
-Updating:Cl
-    prod:0.000e+00 to 0.000e+00
-   destr:5.000e-09 to 5.000e-09
-lifetime:1.600e+01 to 1.600e+01
-Updating:ClO
-    prod:5.000e-09 to 5.000e-09
-   destr:0.000e+00 to 0.000e+00
-lifetime:1.000e+99 to 1.000e+99
+   destr:1.000e-07 to 0.000e+00
+lifetime:2.000e+01 to 4.605e+17
 
 Updating rates in chemical_species.json complete.
 **************************************
@@ -655,36 +251,16 @@ Productive pathways :
 ------------------
  3 O2 => 2 O3
 
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
 Destructive pathways: 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
  O3 + hv => O + O2 
  O + O3 => 2 O2 
 ------------------
  2 O3 => 3 O2
 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
-
  O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
+(O + O3 => 2 O2) x 2 
 ------------------
  2 O3 => 3 O2
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
 
 Unaffected pathways : 
  O3 + hv => O + O2 
@@ -701,24 +277,6 @@ Connecting with O3 as branching point:
 ------------------
  3 O2 => 2 O3
  to 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-leads to:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 Cl + O2 => 2 ClO
- with rate of: 1.980e-09
-
-Connecting with O3 as branching point:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
- to 
  O3 + hv => O + O2 
  O + O3 => 2 O2 
 ------------------
@@ -731,29 +289,7 @@ leads to:
  O + O3 => 2 O2 
 ------------------
  NULL 
- with rate of: 6.034e-10
-
-Connecting with O3 as branching point:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
- to 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
-
-leads to:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
- with rate of: 3.017e-09
+ with rate of: 8.000e-10
 
 Connecting with O3 as branching point:
  O2 + hv => 2 O 
@@ -762,167 +298,24 @@ Connecting with O3 as branching point:
  3 O2 => 2 O3
  to 
  O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
+(O + O3 => 2 O2) x 2 
 ------------------
  2 O3 => 3 O2
 
 leads to:
  O2 + hv => 2 O 
  O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
- with rate of: 7.542e-10
-
-Connecting with O3 as branching point:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
- to 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-leads to:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
- with rate of: 9.428e-11
-
-Connecting with O3 as branching point:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
- to 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-leads to:
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
- with rate of: 9.899e-10
-
-Connecting with O3 as branching point:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
- to 
- O3 + hv => O + O2 
  O + O3 => 2 O2 
 ------------------
- 2 O3 => 3 O2
-
-leads to:
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
- with rate of: 1.508e-10
-
-Connecting with O3 as branching point:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
- to 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O3 => 3 O2
-
-leads to:
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
- with rate of: 7.542e-10
-
-Connecting with O3 as branching point:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
- to 
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-leads to:
-(O + O2 + M => O3 + M) x 2 
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
- with rate of: 9.428e-11
-
-Connecting with O3 as branching point:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
- to 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-leads to:
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
- with rate of: 4.714e-11
+ NULL 
+ with rate of: 2.000e-10
 
 Connecting production of O3 to D[O3]:
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
-with rate of: 3.168e-09
-
-Connecting production of O3 to D[O3]:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-with rate of: 1.584e-09
-
-Deleting pathway (too slow):
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
-
-Deleting pathway (too slow):
-(O + O2 + M => O3 + M) x 2 
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
-
-Deleting pathway (too slow):
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
+with rate of: 9.000e-09
 
 ##############################
 Sub Pathways analysis starting
@@ -943,19 +336,6 @@ The pathway has less than 3 reactions. No need to look at subpathways
 We are looking at the pathway
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 Cl + O2 => 2 ClO
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-No subpathways found
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
  O3 + hv => O + O2 
  O + O3 => 2 O2 
 ------------------
@@ -1001,59 +381,8 @@ explaining the pathway:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 We are looking at the pathway
  O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O3 + hv => O + O2 
  O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-
-
-We have 2 sub-pathways:
-
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-
-explaining the pathway:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
+ O + O3 => 2 O2 
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
@@ -1061,113 +390,12 @@ The pathway has at least than 3 reactions. Looking for subpathways!
 The elementary subpathways is/are:
  O2 + hv => 2 O 
  O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
+ O + O3 => 2 O2 
 ------------------
  NULL 
 
 
 No subpathways found
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
-(... => O) x 2 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
-  => O2
-
-
-We have 2 sub-pathways:
-
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-
-explaining the pathway:
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
-(... => O) x 2 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
-  => O2
-
-
-We have 2 sub-pathways:
-
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-
-explaining the pathway:
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -1181,15 +409,6 @@ The pathway has less than 3 reactions. No need to look at subpathways
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 ##########################
 Sub Pathways analysis DONE
 ##########################
@@ -1199,709 +418,17 @@ Sub Pathways analysis DONE
 Updating the rates of chemical species
 
 Updating:O3
-    prod:2.357e-08 to 7.919e-09
-   destr:1.533e-08 to 0.000e+00
-lifetime:5.138e+02 to 3.360e+04
+    prod:1.980e-08 to 1.800e-08
+   destr:1.800e-09 to 0.000e+00
+lifetime:4.444e+03 to 1.842e+20
 Updating:O2
-    prod:2.062e-08 to 9.051e-10
-   destr:3.300e-08 to 1.307e-08
-lifetime:6.061e+06 to 1.531e+07
+    prod:2.700e-09 to 0.000e+00
+   destr:2.970e-08 to 2.700e-08
+lifetime:6.734e+06 to 7.407e+06
 Updating:O
     prod:0.000e+00 to 0.000e+00
-   destr:4.952e-09 to 4.384e-09
-lifetime:4.000e+02 to 4.079e+02
-Updating:Cl
-    prod:0.000e+00 to 0.000e+00
-   destr:5.000e-09 to 4.949e-09
-lifetime:1.600e+01 to 1.616e+01
-Updating:ClO
-    prod:5.000e-09 to 4.949e-09
    destr:0.000e+00 to 0.000e+00
-lifetime:1.000e+99 to 1.000e+99
-
-Updating rates in chemical_species.json complete.
-**************************************
-
-Pathways analysis for species: O
-
-Here are the list of pathways for: O
-Productive pathways : 
-Destructive pathways: 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-
-Unaffected pathways : 
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 Cl + O2 => 2 ClO
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-
-##############################
-Sub Pathways analysis starting
-##############################
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 Cl + O2 => 2 ClO
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-(... => Cl) x 2 
-------------------
-  => 2 Cl
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
-
-We have 2 sub-pathways:
-
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
-explaining the pathway:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 Cl + O2 => 2 ClO
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-------------------
- 2 ClO => 2 Cl + O2
-
-
-We have 3 sub-pathways:
-
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-------------------
- 2 ClO => 2 Cl + O2
-
-explaining the pathway:
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- NULL 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-
-We have 2 sub-pathways:
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-explaining the pathway:
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
- ... => O 
- O + O2 + M => O3 + M 
-------------------
- O2 => O3
-
- ... => O 
- ClO + O => Cl + O2 
-------------------
- ClO => Cl + O2
-
-
-We have 3 sub-pathways:
-
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
- O + O2 + M => O3 + M 
-------------------
- O2 + O => O3
-
- ClO + O => Cl + O2 
-------------------
- O + ClO => Cl + O2
-
-explaining the pathway:
- O + O2 + M => O3 + M 
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:7.919e-09 to 1.701e-08
-   destr:0.000e+00 to 9.088e-09
-lifetime:3.360e+04 to 8.578e+02
-Updating:O2
-    prod:9.051e-10 to 1.218e-08
-   destr:1.307e-08 to 2.434e-08
-lifetime:1.531e+07 to 8.216e+06
-Updating:O
-    prod:0.000e+00 to 0.000e+00
-   destr:4.384e-09 to 4.384e-09
-lifetime:4.079e+02 to 4.079e+02
-Updating:Cl
-    prod:0.000e+00 to 4.525e-09
-   destr:4.949e-09 to 9.475e-09
-lifetime:1.616e+01 to 8.443e+00
-Updating:ClO
-    prod:4.949e-09 to 9.475e-09
-   destr:0.000e+00 to 4.525e-09
-lifetime:1.000e+99 to 8.839e+00
-
-Updating rates in chemical_species.json complete.
-**************************************
-
-Pathways analysis for species: Cl
-
-Here are the list of pathways for: Cl
-Productive pathways : 
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-------------------
- 2 ClO => 2 Cl + O2
-
- ClO + O => Cl + O2 
-------------------
- O + ClO => Cl + O2
-
-Destructive pathways: 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-Unaffected pathways : 
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-
-Starting to connect Pathways:
-
-Connecting with Cl as branching point:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-------------------
- 2 ClO => 2 Cl + O2
- to 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-
-leads to:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
- with rate of: 1.970e-10
-
-Connecting with Cl as branching point:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-------------------
- 2 ClO => 2 Cl + O2
- to 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-leads to:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
- with rate of: 1.689e-09
-
-Connecting with Cl as branching point:
- ClO + O => Cl + O2 
-------------------
- O + ClO => Cl + O2
- to 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-
-leads to:
- ClO + O => Cl + O2 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
- with rate of: 7.880e-11
-
-Connecting with Cl as branching point:
- ClO + O => Cl + O2 
-------------------
- O + ClO => Cl + O2
- to 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-
-leads to:
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
- with rate of: 6.754e-10
-
-Connecting destruction of Cl to D[Cl]:
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-with rate of: 5.224e-10
-
-Connecting destruction of Cl to D[Cl]:
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-with rate of: 4.478e-09
-
-Deleting pathway (too slow):
- ClO + O => Cl + O2 
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- 2 O => O2
-
-##############################
-Sub Pathways analysis starting
-##############################
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- 2 O => O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
-(... => O) x 2 
-------------------
-  => 2 O
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-
-We have 3 sub-pathways:
-
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-explaining the pathway:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(O + O2 + M => O3 + M) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O => O2
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
-(... => O3) x 2 
-------------------
-  => 2 O3
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-
-We have 2 sub-pathways:
-
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-
-explaining the pathway:
- O2 + hv => 2 O 
-(ClO + O => Cl + O2) x 2 
-(Cl + O3 => ClO + O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- ClO + O => Cl + O2 
- Cl + O3 => ClO + O2 
-------------------
- O3 + O => 2 O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O + O2 + M => O3 + M 
- Cl + O3 => ClO + O2 
-------------------
- Cl + O => ClO
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- Cl + O3 => ClO + O2 
-------------------
- Cl + O3 => ClO + O2
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:1.701e-08 to 1.740e-08
-   destr:9.088e-09 to 9.527e-09
-lifetime:8.578e+02 to 8.192e+02
-Updating:O2
-    prod:1.218e-08 to 1.443e-08
-   destr:2.434e-08 to 2.662e-08
-lifetime:8.216e+06 to 7.513e+06
-Updating:O
-    prod:0.000e+00 to 3.771e-09
-   destr:4.384e-09 to 8.003e-09
-lifetime:4.079e+02 to 2.304e+02
-Updating:Cl
-    prod:4.525e-09 to 0.000e+00
-   destr:9.475e-09 to 5.000e-09
-lifetime:8.443e+00 to 1.600e+01
-Updating:ClO
-    prod:9.475e-09 to 5.000e-09
-   destr:4.525e-09 to 0.000e+00
-lifetime:8.839e+00 to 1.000e+99
+lifetime:4.605e+17 to 4.605e+17
 
 Updating rates in chemical_species.json complete.
 **************************************

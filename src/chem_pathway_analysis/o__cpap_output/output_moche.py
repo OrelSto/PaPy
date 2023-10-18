@@ -1,7 +1,7 @@
 import json
 
-from o__cpap_output import output_tools as o_tools
-from p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
+from ..p__data_management import global_var
 
 # we make a moche output ^^'
 def moche():

@@ -2,11 +2,11 @@ import json
 import scipy.optimize as opt
 import numpy as np
 import copy
-from p__initialization import init_pathways as p_init
-from p__data_management import data_tools as d_tools
-from p__data_management import data_update as data
-from o__cpap_output import output_tools as o_tools
-from p__data_management import global_var
+from ..p__initialization import init_pathways as p_init
+from ..p__data_management import data_tools as d_tools
+from ..p__data_management import data_update as data
+from ..o__cpap_output import output_tools as o_tools
+from ..p__data_management import global_var
 
 # This is where we analyze the pathway to determine if it is a combination of subpathways
 

@@ -1,9 +1,9 @@
 import json
 from itertools import compress
-from p__data_management import data_update as data
-from p__data_management import data_tools as d_tools
-from p__data_management import global_var
-from o__cpap_output import output_tools as o_tools
+from ..p__data_management import data_update as data
+from ..p__data_management import data_tools as d_tools
+from ..p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
 
 def list_next_branching_points(t_min:float):
     # here we determine the list of species by their lifetime
