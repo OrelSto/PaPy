@@ -1,15 +1,40 @@
 # Chemical Pathways analysis Package
 
 ## Introduction
+
 This is a Chemical Pathway Analysis package for Python.
 Reproduction of the method described in Lehmann, 2004.
 
 ### Basic install and running example
-At the moment, the package is not implement in a way to be install via ```pip```.
+
+At the moment, the package is not implement in a way to be installed via ```pip```.
 Nonetheless, the user can run the model via command line taking as example the test_cpa.py file.
 
 In the directory where the github repository is installed, run
+
+``` bash
+python3 -m test_cpa
 ```
-$ python3 -m test_cpa
-```
-this should run the model and provide you with results files.
+
+This should run the model and provide you with results files.
+
+Some information will be displayed in your terminal and some files will be created:
+>output_moche.txt
+
+This is the list of relevant pathways in a text format
+
+>chronicles.txt
+
+If the option ```chronicle_writing=True``` in ```run_cp()``` then _chronicles.txt_ will be created. The purpose of this file is to write down each steps of the model with much more details.
+
+## Status of the development
+
+This is still an early stage. It's not production ready.
+
+Here's a short list of functionnality:
+
+- [x] Selection of min rate threshold
+- [x] Selection of min lifetime of species (discard long-lived species as branching points)
+- [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
+- [ ] Selection of species of interest (discarding automatically species that have a longer lifetime)
+- [ ] Packaging (install via ```pip``` or ```conda```)
