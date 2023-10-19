@@ -35,6 +35,13 @@ Here's a short list of functionnality:
 
 - [x] Selection of min rate threshold
 - [x] Selection of min lifetime of species (discard long-lived species as branching points)
+- [x] Subpathways analysis implementation
+- [x] Basic visual outputs
 - [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
 - [ ] Selection of species of interest (discarding automatically species that have a longer lifetime)
 - [ ] Packaging (install via ```pip``` or ```conda```)
+- [ ] Tools for visualization (Pie charts, links, etc)
+
+### Notes
+
+There is still some work to do and the documentation is thin for the moment, hang in there!
