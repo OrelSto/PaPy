@@ -86,7 +86,7 @@ def format_line(reaction_equation:str):
 
     # Split the reaction equation into reactants and products
     reactants, products = reaction_equation.split(' => ')
-    products, rate = products.split(' k ',1)
+    products, rate = products.split(' R ',1)
 
     # Split reactants and products into individual compounds
     reactants = reactants.split(' + ')
