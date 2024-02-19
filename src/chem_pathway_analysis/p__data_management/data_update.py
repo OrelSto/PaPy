@@ -165,9 +165,9 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
 
     # 2.1 Now that we have the according rates from the deleted pathways
     # We have to update the reaction system file
-    # DO WE ??? the actual rates of the chemical reaction are uased as a conservation property
+    # DO WE ??? the actual rates of the chemical reaction are used as a conservation property
     # DO IT AT THE END OF THE WHILE IN MAIN LOOP
-    # OR NOT because we'll loose the f_del_prod,f_del_destr
+    # OR NOT because we'll loose the f_del_prod,f_del_destr from the update_pathway_rate_from_deleted_p functions
     # update_chemical_system(f_prod=f_del_prod,p_prod=pathway_prod,f_destr=f_del_destr,p_destr=pathway_destr)
 
     # 3. Merging the pathways into a new one

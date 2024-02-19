@@ -4,6 +4,7 @@ from itertools import compress
 from . import branching_points as bp
 from ..p__data_management import data_tools as d_tools
 from ..p__data_management import data_update as up
+from ..p__data_management import data_check as ch
 from ..p__sub_pathways import subpathways_main as sub_main
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
@@ -118,5 +119,8 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
         # print('This is flagged_species: ',flagged_species)
         # print('This is not flagged_species: ',[not c for c in flagged_species])
         # print('This is list_bp after flagged: ',list_bp)
-        
+    
+    # Now that the main loop is over:
+    # We check that the rates are conserved:
+    ch.check_rates(active_pathways=active_p,deleted_pathways=deleted_p,)
 
