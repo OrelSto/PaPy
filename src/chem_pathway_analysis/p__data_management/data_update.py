@@ -382,7 +382,7 @@ def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:lis
             if reaction_data["is_pseudo"]:
                 print('We are cleaning the pseudo-reaction',r["index"])
                 list_r_to_remove.append(r)
-                for s in  reaction_data["results"]:
+                for s in reaction_data["results"]:
                     if s["compound"] != '...':
                         multiplicity = r["multiplicity"]
                         compound = s["compound"]
