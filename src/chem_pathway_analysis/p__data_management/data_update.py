@@ -111,7 +111,7 @@ def eval_reaction_rate_deleted_p(reaction_index:int):
             # checking of right specie and actual destruction
             if reaction_index == r["index"]:
                 # deleted_rate is formatted positive
-                deleted_rate += item["rate"] / r["multiplicity"]
+                deleted_rate += item["rate"] * r["multiplicity"]
     
     return deleted_rate
 
