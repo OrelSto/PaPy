@@ -31,6 +31,7 @@ def list_next_branching_points(t_min:float):
     # return list(sorted(tmp_dict, key=tmp_dict.__getitem__))
     return sorted_keys
 
+
 def connecting_pathways(active_pathways:list,species:str):
     # Opening JSON file
     crs = open('chemical_reaction_system.json')
@@ -115,7 +116,7 @@ def connecting_pathways(active_pathways:list,species:str):
                                                 '\n with rate of: '+'{:0.3e}'.format(new_pathways[-1]["rate"]))
 
 
-        # Now we have new_pathways. We need the same pathways that end up explaining the contribution of Delta concentration of branching poing species
+        # Now we have new_pathways. We need the pathways (prod or destr) that end up explaining the contribution of Delta concentration of branching poing species
         species_dict = d_tools.get_compound_dict(species)
         if species_dict["Delta concentration"] > 0:
             # we have the productive case

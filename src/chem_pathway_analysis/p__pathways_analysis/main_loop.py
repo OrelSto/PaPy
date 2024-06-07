@@ -112,6 +112,11 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
             up.update_rates_chemical_species()
             print()
 
+            # Updating the chemical reaction system
+            print('Updating rates for chemical reaction system')
+            up.update_rates_reaction_system()
+            print()
+
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)
         # print('This is list_bp: ',list_bp)
