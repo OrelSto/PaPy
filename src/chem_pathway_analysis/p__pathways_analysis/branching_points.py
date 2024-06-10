@@ -106,7 +106,8 @@ def connecting_pathways(active_pathways:list,species:str):
                                                 '\n to \n'+
                                                 o_tools.pathway_to_str(pathway=active_pathways[p_to],chem_system_data=chemical_system))
                     o_tools.write_line_chronicle('\n')
-
+                
+                # we append the mew pathway
                 new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species))
                 print('with rate of:',new_pathways[-1]["rate"])
                 # Chronicles

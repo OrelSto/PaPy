@@ -256,7 +256,7 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     # Because it is the connection between Branching points and Reactions that is important here
     # So, we clean here, better sooner than later where it can be messy ^^
 
-    # 4. We check th deleted pathways if some could have connected, prod and destr
+    # 4. We check the deleted pathways if some could have connected, prod and destr
     # those deleted connected pathways must be removed from the final rate
     # of the new pathway
     new_pathway = update_pathway_rate_from_deleted_p(new_pathway,species,case_flag='new_pathway')
