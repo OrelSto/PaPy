@@ -16,6 +16,7 @@ def find_compound_in_merged_list(listing:list,compound:str):
 
     return index_found
 
+
 def save_pathways_to_JSON(pathways:list,filename:str):
     # need a doc here?
     # Write the JSON data to an output file
@@ -23,11 +24,13 @@ def save_pathways_to_JSON(pathways:list,filename:str):
         json.dump(pathways, output_file, indent=2)
     print("Pathways saved as",filename)
 
+
 def D_compound(compound:dict):
     # It's the contribution of prod or consum for the pathways of a specific compound
     p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"]
     d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"]
     return max(p,d)
+
 
 def get_compound_dict(compound:str):
     # return the dict of a specified compound
@@ -42,31 +45,6 @@ def get_compound_dict(compound:str):
         if s["name"] == compound:
             return s
 
-# def format_pseudo_reaction(species:str,multiplicity:int,flag:str):
-#     # this is used in sub_pathway analysis.
-#     # when a pathway is not a steady-state for any branching point species
-#     # we need to add some pseudo-reaction to enforce it!
-#     # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
-#     if flag == 'destroy':
-#         ind = -1
-#     if flag == 'prod':
-#         ind = -2
-#     return {
-#         "reactions":[
-#             {
-#                 "index": ind,
-#                 "multiplicity": 1
-#             }
-#         ],
-#         "branching points": [
-#             {
-#                 "compound": species,
-#                 "stoichiometry": multiplicity
-#             }
-#         ],
-#         "list branching points used": [],
-#         "rate": 0.0
-#     }
 
 def format_pseudo_reaction(species:str,flag:str):
     # this is used in sub_pathway analysis.
@@ -93,6 +71,7 @@ def format_pseudo_reaction(species:str,flag:str):
                     {"compound":species,"stoichiometry":1}],
         "is_pseudo":True
         }
+
 
 def format_pseudo_pathway(species:str,multiplicity:int,flag:str,chemical_system:list):
     # we format a pathway containing the pseudo-reaction (prod or destr) of the species provided
@@ -207,6 +186,7 @@ def list_connecting_pathways(set_of_pathways:list,species:str):
     pathways_non_affected = list(compress(set_of_pathways, mask))
 
     return list_pathways_prod,list_pathways_destroy,pathways_non_affected
+
 
 def is_there_a_pseudo_reaction(pathway:list,chemical_system_data:list):
     for r in pathway:

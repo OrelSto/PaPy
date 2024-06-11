@@ -151,33 +151,7 @@ leads to:
  2 O3 => 3 O2
  with rate of: 1.000e-10
 
-Connecting destruction of O to D[O]:
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-with rate of: 0.000e+00
-
-Connecting destruction of O to D[O]:
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-with rate of: 0.000e+00
-
-Deleting pathway (too slow):
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-Deleting pathway (too slow):
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
-Deleting pathway (too slow):
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
+No connection: to D[O] with Delta =0.000e+00
 
 ##############################
 Sub Pathways analysis starting
@@ -214,6 +188,16 @@ The pathway has less than 3 reactions. No need to look at subpathways
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+We are looking at the pathway
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+The pathway has less than 3 reactions. No need to look at subpathways
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 ##########################
 Sub Pathways analysis DONE
 ##########################
@@ -224,10 +208,10 @@ Updating the rates of chemical species
 
 Updating:O3
     prod:9.900e-08 to 1.980e-08
-   destr:8.100e-08 to 1.600e-09
+   destr:8.100e-08 to 1.800e-09
 lifetime:9.877e+01 to 4.444e+03
 Updating:O2
-    prod:8.200e-08 to 2.400e-09
+    prod:8.200e-08 to 2.700e-09
    destr:1.090e-07 to 2.970e-08
 lifetime:1.835e+06 to 6.734e+06
 Updating:O
@@ -246,13 +230,13 @@ Updating: O3 + hv => O + O2
 del rate:0.000e+00
 Updating: O2 + hv => 2 O
     rate:1.000e-08
-del rate:1.000e-10
+del rate:0.000e+00
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
 del rate:0.000e+00
 Updating: O + O3 => 2 O2
     rate:1.000e-09
-del rate:2.000e-10
+del rate:0.000e+00
 
 Updating rates in chemical_reaction_system.json complete.
 **************************************
@@ -269,6 +253,11 @@ Productive pathways :
 Destructive pathways: 
  O3 + hv => O + O2 
  O + O3 => 2 O2 
+------------------
+ 2 O3 => 3 O2
+
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
 ------------------
  2 O3 => 3 O2
 
@@ -299,14 +288,33 @@ leads to:
  O + O3 => 2 O2 
 ------------------
  NULL 
- with rate of: 7.919e-10
+ with rate of: 8.000e-10
+
+Connecting with O3 as branching point:
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+ to 
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+leads to:
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+ with rate of: 2.000e-10
 
 Connecting production of O3 to D[O3]:
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
-with rate of: 8.909e-09
+with rate of: 9.000e-09
 
 ##############################
 Sub Pathways analysis starting
@@ -332,3 +340,113 @@ We are looking at the pathway
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+
+We have 2 sub-pathways:
+
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+explaining the pathway:
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+ O3 + hv => O + O2 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+We are looking at the pathway
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+The pathway has at least than 3 reactions. Looking for subpathways!
+
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+
+No subpathways found
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+We are looking at the pathway
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+The pathway has less than 3 reactions. No need to look at subpathways
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+##########################
+Sub Pathways analysis DONE
+##########################
+
+
+**************************************
+Updating the rates of chemical species
+
+Updating:O3
+    prod:1.980e-08 to 1.800e-08
+   destr:1.800e-09 to 0.000e+00
+lifetime:4.444e+03 to 1.000e+99
+Updating:O2
+    prod:2.700e-09 to 0.000e+00
+   destr:2.970e-08 to 2.700e-08
+lifetime:6.734e+06 to 7.407e+06
+Updating:O
+    prod:0.000e+00 to 0.000e+00
+   destr:0.000e+00 to 0.000e+00
+lifetime:1.000e+99 to 1.000e+99
+
+Updating rates in chemical_species.json complete.
+**************************************
+
+**************************************
+Updating the rates of reaction system
+
+Updating: O3 + hv => O + O2
+    rate:8.000e-08
+del rate:0.000e+00
+Updating: O2 + hv => 2 O
+    rate:1.000e-08
+del rate:0.000e+00
+Updating: O + O2 + M => O3 + M
+    rate:9.900e-08
+del rate:0.000e+00
+Updating: O + O3 => 2 O2
+    rate:1.000e-09
+del rate:0.000e+00
+
+Updating rates in chemical_reaction_system.json complete.
+**************************************

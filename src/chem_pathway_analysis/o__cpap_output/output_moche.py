@@ -2,6 +2,7 @@ import json
 
 from ..o__cpap_output import output_tools as o_tools
 from ..p__data_management import global_var
+from ..p__data_management import data_tools as d_tools
 
 # we make a moche output ^^'
 def moche(target_specie:str) -> None:
@@ -51,7 +52,9 @@ def moche(target_specie:str) -> None:
         if target_specie != 'None':
             moche_target_specie_output(target_specie)
 
-def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_sum:float) -> None:
+
+def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
+    # stoich_coeff is used when you want an output for a target specie
 
     o_tools.writing_pathway(pathway=pathway,output_file=output_moche_file,chem_system_data=chem_system_data)
 
@@ -60,9 +63,9 @@ def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_s
     # Now the rate
     output_moche_file.write(' \n')
     # output_moche_file.write(' RATE  : ' + str(round(pathway["rate"],3)))
-    output_moche_file.write(' RATE  : ' + '{:0.3e}'.format(pathway["rate"]))
+    output_moche_file.write(' RATE  : ' + '{:0.3e}'.format(pathway["rate"]*stoich_coeff))
     output_moche_file.write(' \n')
-    output_moche_file.write(' RATE %: ' + '{:0.3f}'.format(pathway["rate"]/rate_sum * 100))
+    output_moche_file.write(' RATE %: ' + '{:0.3f}'.format(pathway["rate"]*stoich_coeff/rate_sum * 100))
     output_moche_file.write(' \n')
     
 
@@ -78,38 +81,57 @@ def moche_target_specie_output(target_specie:str) -> None:
     with open('active_pathways.json', 'r') as active_pathways_file:
         # Parse the JSON data and store it in a variable
         active_pathways_data = json.load(active_pathways_file)
+    # We set up the list of pathways acting on target_specie
+    act_pathways_data_t_specie = []
+    for pathway in active_pathways_data:
+        for species in pathway["list branching points used"]:
+            list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+        
+        if list_ind:
+            act_pathways_data_t_specie.append(pathway)
 
     with open('deleted_pathways.json', 'r') as deleted_pathways_file:
         # Parse the JSON data and store it in a variable
         deleted_pathways_data = json.load(deleted_pathways_file)
+    # We set up the list of pathways acting on target_specie
+    del_pathways_data_t_specie = []
+    for pathway in deleted_pathways_data:
+        for species in pathway["list branching points used"]:
+            list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+            if list_ind:
+                del_pathways_data_t_specie.append(pathway)
 
     with open('chemical_reaction_system.json', 'r') as chem_system_file:
         # Parse the JSON data and store it in a variable
         chem_system_data = json.load(chem_system_file)
     
+    t_species = d_tools.get_compound_dict(compound=target_specie)
+    
     with open('output_moche_'+target_specie+'.txt', 'w') as output_moche_file:
         output_moche_file.write('**************************')
         output_moche_file.write('\n')
 
-        rate_sum = 0.0
-        for pathway in active_pathways_data:
-            rate_sum += pathway["rate"]
+        # The rate_sum for a species is the sum of its prod and destr
+
+        rate_sum = t_species["production rate"]["active pathways"] - t_species["destruction rate"]["active pathways"]
         # we re gonna sort the pathways in order of importance
         pathway_sorted = {}
         i = 0
-        for pathway in active_pathways_data:
-            pathway_sorted.update({i:pathway["rate"]/rate_sum * 100})
+        for pathway in act_pathways_data_t_specie:
+
+            print('stoich',pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]/rate_sum * 100)
+            pathway_sorted.update({i:pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]/rate_sum * 100})
             i += 1
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
 
         rate_deleted = 0.0
-        for pathway in deleted_pathways_data:
+        for pathway in del_pathways_data_t_specie:
             rate_sum += pathway["rate"]
             rate_deleted += pathway["rate"]
         
         # for pathway in active_pathways_data:
         for i in ind_pathway_sorted:
-            moche_writing_pathway(pathway=active_pathways_data[i],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum)
+            moche_writing_pathway(pathway=act_pathways_data_t_specie[i],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=act_pathways_data_t_specie[i]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])
         
         # Now the rate from deleted pathways
         output_moche_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))

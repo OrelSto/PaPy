@@ -57,16 +57,23 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
     # adding all the prod/destruction rates to evaluate the change in concentration of the compound
     D_conc = 0.0
     d_compound = 0.0
+    prod = 0.0
+    destr = 0.0
     for item in reaction_system:
         for r in item["results"]:
             if compound == r["compound"]:
+                if r["stoichiometry"] > 0:
+                    prod += r["stoichiometry"] * item["rate"]
+                else:
+                    destr += -r["stoichiometry"] * item["rate"]
+
                 D_conc += r["stoichiometry"] * item["rate"] * timestep
                 d_compound += r["stoichiometry"] * item["rate"]
 
     # Check for low values
-    if D_conc < 1.0e-16:
+    if (D_conc < 1.0e-16) and (D_conc > -1.0e-16):
         D_conc = 0.0
-    if d_compound < 1.0e-16:
+    if D_conc == 0.0:
         d_compound = 0.0
     
     # Create a JSON structure
@@ -74,10 +81,12 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
         "name": compound,
         "concentration": float(concentration),
         "production rate":{
+            "initial":prod,
             "active pathways":0.0,
             "deleted pathways":0.0,
             },
         "destruction rate":{
+            "initial":destr,
             "active pathways":0.0,
             "deleted pathways":0.0,
             },

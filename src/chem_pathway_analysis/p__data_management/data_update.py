@@ -236,10 +236,18 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     # update_chemical_system(f_prod=f_del_prod,p_prod=pathway_prod,f_destr=f_del_destr,p_destr=pathway_destr)
 
     # 3. Merging the pathways into a new one
+    # we check 0 values for D_compound
+    if d_tools.D_compound(d_tools.get_compound_dict(species)) != 0.0:
+        # prod and/or destr != 0, hence rate to be distributed
+        rate = bp_stoichiometry * (pathway_prod_tmp["rate"] * pathway_destr_tmp["rate"]) / d_tools.D_compound(d_tools.get_compound_dict(species))
+    else:
+        # it means that prod and destr = 0, hence no rate to distribute
+        rate = 0.0
+    
     new_pathway = {"reactions":pathway_prod_tmp["reactions"] + pathway_destr_tmp["reactions"],
         "branching points":clean_branching_points(pathway_prod_tmp["branching points"],pathway_destr_tmp["branching points"]),
         "list branching points used":list_bp_used,
-        "rate":bp_stoichiometry * (pathway_prod_tmp["rate"] * pathway_destr_tmp["rate"]) / d_tools.D_compound(d_tools.get_compound_dict(species))
+        "rate":rate
     }
     
     # We can clean for redundancy in the reactions
@@ -362,14 +370,23 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
     rate_deleted_prod_species = species_dict["production rate"]["deleted pathways"]
     D_species = d_tools.D_compound(species_dict)
 
-    # associated rate of pathway from the deleted pathways destr species
-    f_deleted_destr = (rate_p_prod * rate_deleted_destr_species) / D_species
+    # check for 0 value
+    if D_species != 0.0 :
+        # associated rate of pathway from the deleted pathways destr species
+        f_deleted_destr = (rate_p_prod * rate_deleted_destr_species) / D_species
 
-    # associated rate of pathway from the deleted pathways prod species
-    f_deleted_prod = (rate_p_prod * rate_deleted_prod_species) / D_species
-    
-    # associated rate of pathway from the deleted pathways prod and destr species
-    f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
+        # associated rate of pathway from the deleted pathways prod species
+        f_deleted_prod = (rate_p_prod * rate_deleted_prod_species) / D_species
+        
+        # associated rate of pathway from the deleted pathways prod and destr species
+        f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
+    else :
+        f_deleted_destr = 0.0
+
+        f_deleted_prod = 0.0
+        
+        f_deleted_prod_destr = 0.0
+
 
     match case_flag:
         case 'prod':
