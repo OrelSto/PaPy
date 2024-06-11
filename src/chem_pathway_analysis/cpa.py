@@ -45,7 +45,7 @@ def init_global_var(chronicle_writing:bool):
     global_var.chronicle_writing = chronicle_writing
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_specie:str,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing)
@@ -108,4 +108,4 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,filename_model:str,f
     print('Outputs formatting')
     print('##################')
     print()
-    out.moche()
+    out.moche(target_specie)

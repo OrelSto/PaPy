@@ -63,6 +63,12 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
                 D_conc += r["stoichiometry"] * item["rate"] * timestep
                 d_compound += r["stoichiometry"] * item["rate"]
 
+    # Check for low values
+    if D_conc < 1.0e-16:
+        D_conc = 0.0
+    if d_compound < 1.0e-16:
+        d_compound = 0.0
+    
     # Create a JSON structure
     chemical_species_data = {
         "name": compound,

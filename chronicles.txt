@@ -155,13 +155,13 @@ Connecting destruction of O to D[O]:
  O + O2 + M => O3 + M 
 ------------------
  O + O2 => O3
-with rate of: 4.299e-24
+with rate of: 0.000e+00
 
 Connecting destruction of O to D[O]:
  O + O3 => 2 O2 
 ------------------
  O + O3 => 2 O2
-with rate of: 4.343e-26
+with rate of: 0.000e+00
 
 Deleting pathway (too slow):
  O2 + hv => 2 O 
@@ -233,7 +233,7 @@ lifetime:1.835e+06 to 6.734e+06
 Updating:O
     prod:1.000e-07 to 0.000e+00
    destr:1.000e-07 to 0.000e+00
-lifetime:2.000e+01 to 4.605e+17
+lifetime:2.000e+01 to 1.000e+99
 
 Updating rates in chemical_species.json complete.
 **************************************
@@ -249,7 +249,7 @@ Updating: O2 + hv => 2 O
 del rate:1.000e-10
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
-del rate:4.299e-24
+del rate:0.000e+00
 Updating: O + O3 => 2 O2
     rate:1.000e-09
 del rate:2.000e-10
@@ -332,92 +332,3 @@ We are looking at the pathway
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
-
-The elementary subpathways is/are:
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-
-We have 2 sub-pathways:
-
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-explaining the pathway:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
- O3 + hv => O + O2 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:1.980e-08 to 1.782e-08
-   destr:1.600e-09 to 0.000e+00
-lifetime:4.444e+03 to 4.000e+04
-Updating:O2
-    prod:2.400e-09 to 0.000e+00
-   destr:2.970e-08 to 2.673e-08
-lifetime:6.734e+06 to 7.483e+06
-Updating:O
-    prod:0.000e+00 to 0.000e+00
-   destr:0.000e+00 to 0.000e+00
-lifetime:4.605e+17 to 4.605e+17
-
-Updating rates in chemical_species.json complete.
-**************************************
-
-**************************************
-Updating the rates of reaction system
-
-Updating: O3 + hv => O + O2
-    rate:8.000e-08
-del rate:0.000e+00
-Updating: O2 + hv => 2 O
-    rate:1.000e-08
-del rate:1.000e-10
-Updating: O + O2 + M => O3 + M
-    rate:9.900e-08
-del rate:4.299e-24
-Updating: O + O3 => 2 O2
-    rate:1.000e-09
-del rate:2.000e-10
-
-Updating rates in chemical_reaction_system.json complete.
-**************************************
