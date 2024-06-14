@@ -92,7 +92,8 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
             },
         "lifetime":0.0,
         "Delta concentration":D_conc,
-        "delta":d_compound
+        "delta":d_compound,
+        "used_as_BP":False
     }
 
     return chemical_species_data

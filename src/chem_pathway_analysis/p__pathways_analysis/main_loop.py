@@ -9,7 +9,7 @@ from ..p__sub_pathways import subpathways_main as sub_main
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
 
-def main_loop(t_min:float,f_min:float,max_iter:int):
+def main_loop(t_min:float,f_min:float):
     
     # main loop for connecting pathways and stuffs
     print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
@@ -23,18 +23,10 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Starting the pathways analysis')
 
-    # This is the main loop for the game!
-    # The goal is to have an empty list_bp, meaning no more chemical species with a lifetime < t_min.
-    # No more branching points, no more pathways to define.
-    # Time to be happy and do some Science!
-    
-    loop_number = 1
-    while list_bp and loop_number < max_iter+1:
-        print()
-        print('WE ARE AT LOOP NUMBER',loop_number)
-        print()
-        loop_number += 1
-    # for i in range(10):
+    # This is the species used as BP
+    used_species = []
+
+    while list_bp:
         # Opening JSON file
         ap = open('active_pathways.json')
         dp = open('deleted_pathways.json')
@@ -44,22 +36,17 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
         deleted_p = json.load(dp)
 
         # Connecting pathways
-        # setting up the flag list for species with no new pathways option
-        flagged_species = []
-        # for the sub_pathways
-        species_done = []
         for species in list_bp:
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('Pathways analysis for species: '+species)
             
-            species_done.append(species)
             # looking for each species from the shortest lived to the longest
-            flag,active_p = bp.connecting_pathways(active_pathways=active_p,species=species)
-            flagged_species.append(flag)
-            # cleaning pathways that are too slow. Keeping your pathway house tight and clean. if flagged, no cleaning necessary
-            if not flag:
-                active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
+            active_p = bp.connecting_pathways(active_pathways=active_p,species=species)
+
+            used_species.append(species)
+            # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
+            active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing
             print()
@@ -76,10 +63,10 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
                 o_tools.write_line_chronicle('\n')
             
             # After saving, SUB-PATHWAYS analysis !!
-            active_p = sub_main.main_subpathways(pathways=active_p,species_done=species_done)
+            active_p = sub_main.main_subpathways(pathways=active_p,species_done=used_species)
 
             # saving
-            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+str(loop_number-1)+'_'+species+'_'+'.json')
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+species+'_'+'.json')
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 
@@ -120,9 +107,9 @@ def main_loop(t_min:float,f_min:float,max_iter:int):
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)
         # print('This is list_bp: ',list_bp)
-        list_bp = list(compress(list_bp, flagged_species))
-        # print('This is flagged_species: ',flagged_species)
-        # print('This is not flagged_species: ',[not c for c in flagged_species])
+        list_bp = list(compress(list_bp, used_species))
+        # print('This is used_species: ',used_species)
+        # print('This is not used_species: ',[not c for c in used_species])
         # print('This is list_bp after flagged: ',list_bp)
     
     # Now that the main loop is over:

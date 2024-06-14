@@ -101,7 +101,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_specie:str,fi
     print('Pathways Analysis')
     print('#################')
     print()
-    ml.main_loop(t_min=t_min,f_min=rate_threshold,max_iter=3)
+    ml.main_loop(t_min=t_min,f_min=rate_threshold)
 
     # 4. main loop done. Outputs time!!!
     print('##################')

@@ -55,15 +55,23 @@ def extract_compound_and_stoichiometry(term:str):
     """
 
     # Define a regular expression pattern to match stoichiometry numbers
-    stoichiometry_pattern = re.compile(r'(\d*)\s*(\w+)')
+    # stoichiometry_pattern = re.compile(r'(\d*)\s*(\w+)')
+    stoichiometry_pattern = re.compile(r'(\d*\s)(\w+)')
 
     match = stoichiometry_pattern.match(term)
+    split = stoichiometry_pattern.split(term)
     if match:
         stoichiometry = int(match.group(1)) if match.group(1) else 1
         compound = match.group(2)
         return {"compound": compound, "stoichiometry": stoichiometry}
     else:
-        return None
+        if split:
+            stoichiometry = 1
+            compound = split[0]
+            return {"compound": compound, "stoichiometry": stoichiometry}
+        else:
+            exit()
+
 
 def format_line(reaction_equation:str):
     """format_line _summary_

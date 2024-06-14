@@ -19,7 +19,8 @@ def list_next_branching_points(t_min:float):
 
     # updating the rates
     for item in chemical_species:
-        tmp_dict[item["name"]]=item["lifetime"]
+        if not item["used_as_BP"]:
+            tmp_dict[item["name"]]=item["lifetime"]
     
     # Filter the keys based on values lower than t_min
     filtered_keys = [key for key, value in tmp_dict.items() if value < t_min]
@@ -70,12 +71,8 @@ def connecting_pathways(active_pathways:list,species:str):
     new_pathways = []
     new_pathways_Dbp = []
 
-    # we checked if one of the list is not empty
-    # if so, the species, even if "short-lived" according to t_min is flagged
-    # This prevent the case where some species are stil long-term but the user setup a very large t_min that do not match the destruction rate of species.
     # In that case, if there is no available pathways to produce ... nothing to do
     # And the main_loop can go forever
-    flagged_species = False
     if list_pathways_prod:
         cond_prod = True
     else:
@@ -165,10 +162,10 @@ def connecting_pathways(active_pathways:list,species:str):
         for p in active_pathways:
             print(p["reactions"])
 
-        return flagged_species,active_pathways
+        return active_pathways
     else:
-        flagged_species = True
-        return flagged_species, active_pathways
+        # No prod and destr at the same time
+        return active_pathways
 
 
 def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
