@@ -108,9 +108,9 @@ def main_loop(t_min:float,f_min:float):
         list_bp = bp.list_next_branching_points(t_min=t_min)
         # print('This is list_bp: ',list_bp)
         list_bp = list(compress(list_bp, used_species))
-        # print('This is used_species: ',used_species)
-        # print('This is not used_species: ',[not c for c in used_species])
-        # print('This is list_bp after flagged: ',list_bp)
+        print('This is used_species: ',used_species)
+        print('This is not used_species: ',[not c for c in used_species])
+        print('This is list_bp after flagged: ',list_bp)
     
     # Now that the main loop is over:
     # We check that the rates are conserved:
