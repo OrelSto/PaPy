@@ -1,6 +1,6 @@
 import json
 
-from itertools import compress
+from itertools import filterfalse
 from . import branching_points as bp
 from ..p__data_management import data_tools as d_tools
 from ..p__data_management import data_update as up
@@ -107,7 +107,7 @@ def main_loop(t_min:float,f_min:float):
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)
         # print('This is list_bp: ',list_bp)
-        list_bp = list(compress(list_bp, used_species))
+        list_bp = list(filterfalse(lambda x: x in used_species,list_bp))
         print('This is used_species: ',used_species)
         print('This is not used_species: ',[not c for c in used_species])
         print('This is list_bp after flagged: ',list_bp)
