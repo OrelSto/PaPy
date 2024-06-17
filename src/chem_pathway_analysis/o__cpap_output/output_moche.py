@@ -5,7 +5,7 @@ from ..p__data_management import global_var
 from ..p__data_management import data_tools as d_tools
 
 # we make a moche output ^^'
-def moche(target_specie:str) -> None:
+def moche(target_species:list) -> None:
     with open('active_pathways.json', 'r') as active_pathways_file:
         # Parse the JSON data and store it in a variable
         active_pathways_data = json.load(active_pathways_file)
@@ -49,8 +49,11 @@ def moche(target_specie:str) -> None:
         output_moche_file.write(' \n')
 
         # Now we call the output function for a target specie
-        if target_specie != 'None':
-            moche_target_specie_output(target_specie)
+        if target_species != 'None':
+            for s in target_species:
+                print('Writing outputs for branching point species: ',s)
+                moche_target_species_output(s)
+                print('\n')
 
 
 def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
@@ -74,7 +77,7 @@ def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_s
     output_moche_file.write('\n')
 
 
-def moche_target_specie_output(target_specie:str) -> None:
+def moche_target_species_output(target_specie:str) -> None:
     # The idea is that the user wants a specific output for a specified chemical species target_specie
     # We ll go through every active pathways and check if target_specie is present and list them.
     # Then we express their rate in a ratio over the prod/destr rate of the target_specie
@@ -111,7 +114,7 @@ def moche_target_specie_output(target_specie:str) -> None:
 
         # The rate_sum for a species is the sum of its prod and destr
         rate_sum = t_species["production rate"]["active pathways"] - t_species["destruction rate"]["active pathways"]
-        # if rate_sum == 0.0 there is no prod or destr of target_species
+        # if rate_sum == 0.0 there is no prod or destr of target_specie
         if rate_sum == 0.0:
             output_moche_file.write('No prod/destr of '+target_specie)
             output_moche_file.write('\n')

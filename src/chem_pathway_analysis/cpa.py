@@ -32,6 +32,7 @@ Note:
 
 from .i__user_model import convert_reaction_system_file as i_system
 from .i__user_model import convert_concentration_file as i_concentration
+from .i__user_model import check_target_species as i_ts
 from .p__initialization import init_pathways as p_init
 from .p__data_management import data_update as up
 from .p__data_management import global_var
@@ -45,7 +46,7 @@ def init_global_var(chronicle_writing:bool):
     global_var.chronicle_writing = chronicle_writing
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_specie:str,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing)
@@ -89,6 +90,8 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_specie:str,fi
     print('Updating prod/destr rates for chemical species')
     up.update_rates_chemical_species()
     print()
+    # Checking the targeted species as viable outputs
+    i_ts.check_list_target_species(target_species=target_species,t_min=t_min)
 
     # 3. We run the main loop
     if global_var.chronicle_writing:
@@ -108,4 +111,4 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_specie:str,fi
     print('Outputs formatting')
     print('##################')
     print()
-    out.moche(target_specie)
+    out.moche(target_species=target_species)
