@@ -57,8 +57,6 @@ def check_list_target_species(target_species:list,t_min:float):
     # returns JSON object as a dictionary
     chemical_species = json.load(cs)
 
-    target_species_updated = []
-    
     # We get the list of BP
     list_bp = bp.list_next_branching_points(t_min=t_min)
     for s in target_species:
@@ -72,6 +70,6 @@ def check_list_target_species(target_species:list,t_min:float):
                         o_tools.write_line_chronicle('Because '+s+' is not a branching Point')
                         o_tools.write_line_chronicle('Lifetime of '+s+' is '+'{:0.3e}'.format(s_lifetime))
                         o_tools.write_line_chronicle('Compared to user t_min '+'{:0.3e}'.format(t_min))
-            target_species_updated.append(s)
+            target_species.remove(s)
 
-    return target_species_updated
+    return target_species

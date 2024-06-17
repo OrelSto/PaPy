@@ -52,6 +52,10 @@ lifetime:0.000e+00 to 2.000e+01
 Updating rates in chemical_species.json complete.
 **************************************
 
+----------------------
+Check targeted species
+----------------------
+
 The specie O2 cannot be processed as an output
 Because O2 is not a branching Point
 Lifetime of O2 is 1.835e+06
