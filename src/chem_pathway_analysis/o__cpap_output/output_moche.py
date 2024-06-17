@@ -108,12 +108,30 @@ def moche_target_specie_output(target_specie:str) -> None:
     t_species = d_tools.get_compound_dict(compound=target_specie)
     
     with open('output_moche_'+target_specie+'.txt', 'w') as output_moche_file:
+
+        # The rate_sum for a species is the sum of its prod and destr
+        rate_sum = t_species["production rate"]["active pathways"] - t_species["destruction rate"]["active pathways"]
+        # if rate_sum == 0.0 there is no prod or destr of target_species
+        if rate_sum == 0.0:
+            output_moche_file.write('No prod/destr of '+target_specie)
+            output_moche_file.write('\n')
+            output_moche_file.write('rate_sum = 0')
+            output_moche_file.write('\n')
+            output_moche_file.write('\n')
+            # To avoid /0.0 error
+            rate_sum = 1.0
+        elif rate_sum > 0.0:
+            output_moche_file.write('Production of '+target_specie)
+            output_moche_file.write('\n')
+            output_moche_file.write('\n')
+        else:
+            output_moche_file.write('Destruction of '+target_specie)
+            output_moche_file.write('\n')
+            output_moche_file.write('\n')
+
         output_moche_file.write('**************************')
         output_moche_file.write('\n')
 
-        # The rate_sum for a species is the sum of its prod and destr
-
-        rate_sum = t_species["production rate"]["active pathways"] - t_species["destruction rate"]["active pathways"]
         # we re gonna sort the pathways in order of importance
         pathway_sorted = {}
         i = 0
