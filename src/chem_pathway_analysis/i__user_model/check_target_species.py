@@ -59,6 +59,11 @@ def check_list_target_species(target_species:list,t_min:float):
 
     # We get the list of BP
     list_bp = bp.list_next_branching_points(t_min=t_min)
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('We have the Branching point '+str(list_bp))
+        o_tools.write_line_chronicle('We have the Targeted Species '+str(target_species))
+
     for s in target_species:
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('\n')
