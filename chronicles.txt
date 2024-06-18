@@ -66,6 +66,9 @@ Because O2 is not a branching Point
 Lifetime of O2 is 1.835e+06
 Compared to user t_min 1.000e+04
 
+Looking for target specie O3
+O3 is in the list of Branching Points
+
 Looking for target specie O
 O is in the list of Branching Points
 
