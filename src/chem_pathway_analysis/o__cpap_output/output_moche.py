@@ -49,7 +49,7 @@ def moche(target_species:list) -> None:
         output_moche_file.write(' \n')
 
         # Now we call the output function for a target specie
-        if target_species != 'None':
+        if target_species != ['None']:
             for s in target_species:
                 print('Writing outputs for branching point species: ',s)
                 moche_target_species_output(s)
