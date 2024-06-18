@@ -60,16 +60,23 @@ def check_list_target_species(target_species:list,t_min:float):
     # We get the list of BP
     list_bp = bp.list_next_branching_points(t_min=t_min)
     for s in target_species:
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('Looking for target specie '+s)
         if not (s in list_bp):
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle(s+' is NOT in the list of Branching Points')
             for item_cs in chemical_species:
                 if item_cs["name"] == s:
                     s_lifetime = item_cs["lifetime"]
                     if global_var.chronicle_writing:
-                        o_tools.write_line_chronicle('\n')
                         o_tools.write_line_chronicle('The specie '+s+' cannot be processed as an output')
                         o_tools.write_line_chronicle('Because '+s+' is not a branching Point')
                         o_tools.write_line_chronicle('Lifetime of '+s+' is '+'{:0.3e}'.format(s_lifetime))
                         o_tools.write_line_chronicle('Compared to user t_min '+'{:0.3e}'.format(t_min))
                     target_species.remove(s)
+        else:
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle(s+' is in the list of Branching Points')
 
     return target_species
