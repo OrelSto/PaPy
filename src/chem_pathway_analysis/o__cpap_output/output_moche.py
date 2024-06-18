@@ -125,10 +125,12 @@ def moche_target_species_output(target_specie:str) -> None:
             rate_sum = 1.0
         elif rate_sum > 0.0:
             output_moche_file.write('Production of '+target_specie)
+            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
             output_moche_file.write('\n')
             output_moche_file.write('\n')
         else:
             output_moche_file.write('Destruction of '+target_specie)
+            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
             output_moche_file.write('\n')
             output_moche_file.write('\n')
 
