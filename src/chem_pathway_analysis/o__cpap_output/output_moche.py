@@ -158,8 +158,8 @@ def moche_target_species_output(target_specie:str) -> None:
             rate_deleted += pathway["rate"]
         
         # for pathway in active_pathways_data:
-        for i in ind_pathway_sorted:
-            moche_writing_pathway(pathway=act_pathways_data_t_specie[i],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=act_pathways_data_t_specie[i]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])
+        for ind in ind_pathway_sorted:
+            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])
         
         # Now the rate from deleted pathways
         output_moche_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
