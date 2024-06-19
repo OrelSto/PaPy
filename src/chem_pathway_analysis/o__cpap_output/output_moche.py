@@ -101,8 +101,8 @@ def moche_target_species_output(target_specie:str) -> None:
     for pathway in deleted_pathways_data:
         for species in pathway["list branching points used"]:
             list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-            if list_ind:
-                del_pathways_data_t_specie.append(pathway)
+        if list_ind:
+            del_pathways_data_t_specie.append(pathway)
 
     with open('chemical_reaction_system.json', 'r') as chem_system_file:
         # Parse the JSON data and store it in a variable
@@ -125,11 +125,13 @@ def moche_target_species_output(target_specie:str) -> None:
             rate_sum = 1.0
         elif rate_sum > 0.0:
             output_moche_file.write('Production of '+target_specie)
+            output_moche_file.write('\n')
             output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
             output_moche_file.write('\n')
             output_moche_file.write('\n')
         else:
             output_moche_file.write('Destruction of '+target_specie)
+            output_moche_file.write('\n')
             output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
             output_moche_file.write('\n')
             output_moche_file.write('\n')
