@@ -87,11 +87,12 @@ def moche_target_species_output(target_specie:str) -> None:
     # We set up the list of pathways acting on target_specie
     act_pathways_data_t_specie = []
     for pathway in active_pathways_data:
-        for species in pathway["list branching points used"]:
-            list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-        
-        if list_ind:
+        if target_specie in pathway["list branching points used"]:
             act_pathways_data_t_specie.append(pathway)
+        # for species in pathway["list branching points used"]:
+        #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+        # if list_ind:
+        #     act_pathways_data_t_specie.append(pathway)
 
     with open('deleted_pathways.json', 'r') as deleted_pathways_file:
         # Parse the JSON data and store it in a variable
@@ -99,10 +100,12 @@ def moche_target_species_output(target_specie:str) -> None:
     # We set up the list of pathways acting on target_specie
     del_pathways_data_t_specie = []
     for pathway in deleted_pathways_data:
-        for species in pathway["list branching points used"]:
-            list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-        if list_ind:
+        if target_specie in pathway["list branching points used"]:
             del_pathways_data_t_specie.append(pathway)
+        # for species in pathway["list branching points used"]:
+        #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+        # if list_ind:
+        #     del_pathways_data_t_specie.append(pathway)
 
     with open('chemical_reaction_system.json', 'r') as chem_system_file:
         # Parse the JSON data and store it in a variable

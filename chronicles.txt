@@ -56,7 +56,7 @@ Updating rates in chemical_species.json complete.
 Check targeted species
 ----------------------
 
-We have the Branching point ['O', 'O3']
+We have the Branching point(s) ['O', 'O3']
 We have the Targeted Species ['O2', 'O3', 'O']
 
 Looking for target specie O2

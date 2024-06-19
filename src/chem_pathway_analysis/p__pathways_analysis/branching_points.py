@@ -163,7 +163,55 @@ def connecting_pathways(active_pathways:list,species:str):
 
         return active_pathways
     else:
-        # No prod and destr at the same time
+        # No prod and destr at the same time !!
+        # We need the pathways (prod or destr) that end up explaining the contribution of Delta concentration of branching poing species
+        species_dict = d_tools.get_compound_dict(species)
+        if species_dict["Delta concentration"] != 0.0:
+            if species_dict["Delta concentration"] > 0.0:
+                # we have the productive case
+                for p_prod in list_pathways_prod:
+                    n_from = [n["index"] for n in active_pathways[p_prod]["reactions"]]
+                    print('connecting prod',n_from,' to D[',species,']')
+                    # Chronicles
+                    if global_var.chronicle_writing:
+                        o_tools.write_line_chronicle('\n')
+                        o_tools.write_line_chronicle('Connecting production of '+species+' to D['+species+']:\n'+
+                                                    o_tools.pathway_to_str(pathway=active_pathways[p_prod],chem_system_data=chemical_system))
+                    
+                    new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species,flag_update='production'))
+                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+
+                    # Chronicles
+                    if global_var.chronicle_writing:
+                        o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(new_pathways_Dbp[-1]["rate"]))
+            else:
+                # we have the destructive case
+                for p_destruct in list_pathways_destroy:
+                    n_to = [n["index"] for n in active_pathways[p_destruct]["reactions"]]
+                    print('connecting destr',n_to,' to D[',species,']')
+                    # Chronicles
+                    if global_var.chronicle_writing:
+                        o_tools.write_line_chronicle('\n')
+                        o_tools.write_line_chronicle('Connecting destruction of '+species+' to D['+species+']:\n'+
+                                                    o_tools.pathway_to_str(pathway=active_pathways[p_destruct],chem_system_data=chemical_system))
+                    new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
+                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+
+                    # Chronicles
+                    if global_var.chronicle_writing:
+                        o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(new_pathways_Dbp[-1]["rate"]))
+        else:
+            # Chronicles
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle('\n')
+                o_tools.write_line_chronicle('No connection: to D['+species+'] with Delta ='+'{:0.3e}'.format(species_dict["Delta concentration"]))
+
+        # We return the unaffected + new new_pathways_Dbp . In the case of no prod & destr of BP species
+        # we return the unaffected + new_pathways_Dbp since there is no new_pathways because those
+        # are constructed with destr+prod of BP
+        active_pathways = pathways_non_affected + new_pathways_Dbp
+        for p in active_pathways:
+            print(p["reactions"])
         return active_pathways
 
 
