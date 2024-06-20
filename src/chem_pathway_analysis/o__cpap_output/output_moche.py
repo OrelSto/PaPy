@@ -135,20 +135,23 @@ def moche_target_species_output(target_specie:str) -> None:
         else:
             output_moche_file.write('Destruction of '+target_specie)
             output_moche_file.write('\n')
-            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
+            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(abs(rate_sum)))
             output_moche_file.write('\n')
             output_moche_file.write('\n')
 
         output_moche_file.write('**************************')
         output_moche_file.write('\n')
 
+        # we are working with absolute values
+        rate_sum = abs(rate_sum)
+
         # we re gonna sort the pathways in order of importance
         pathway_sorted = {}
         i = 0
         for pathway in act_pathways_data_t_specie:
 
-            print('stoich',pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]/rate_sum * 100)
-            pathway_sorted.update({i:pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]/rate_sum * 100})
+            print('stoich',abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])/rate_sum * 100)
+            pathway_sorted.update({i:abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])/rate_sum * 100})
             i += 1
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
 
@@ -159,7 +162,8 @@ def moche_target_species_output(target_specie:str) -> None:
         
         # for pathway in active_pathways_data:
         for ind in ind_pathway_sorted:
-            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])
+            pathway = act_pathways_data_t_specie[ind]
+            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=abs(act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]))
         
         # Now the rate from deleted pathways
         output_moche_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
