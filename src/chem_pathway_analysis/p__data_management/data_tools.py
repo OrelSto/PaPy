@@ -50,7 +50,6 @@ def format_pseudo_reaction(species:str,flag:str):
     # this is used in sub_pathway analysis.
     # when a pathway is not a steady-state for any branching point species
     # we need to add some pseudo-reaction to enforce it!
-    # index = -1 is like a FLAG to see that this is a pseudo reaction !!!
     if flag == 'destroy':
         return {
         "reactants": [{"compound":species,"stoichiometry":1}],

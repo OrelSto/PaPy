@@ -243,7 +243,7 @@ def sub_pathway_set_init(pathway:dict):
                 set_SP.append(pseudo_rection_pathway)
             elif stoichiometry_s > 0:
                 print('adding a pseudo reaction that destroy',species)
-                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='destroy',chemical_system=chemical_system)
+                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=stoichiometry_s,flag='destroy',chemical_system=chemical_system)
                 # adding the pseudo reaction
                 set_SP.append(pseudo_rection_pathway)
             else:
