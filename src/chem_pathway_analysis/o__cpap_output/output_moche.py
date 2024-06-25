@@ -87,8 +87,11 @@ def moche_target_species_output(target_specie:str) -> None:
     # We set up the list of pathways acting on target_specie
     act_pathways_data_t_specie = []
     for pathway in active_pathways_data:
-        if target_specie in pathway["list branching points used"]:
-            act_pathways_data_t_specie.append(pathway)
+        if (target_specie in pathway["list branching points used"]) and (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+            ind = d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)[0]
+            # Then we check if this is a pathway with prod or destr of target specie
+            if pathway["branching points"][ind]["stoichiometry"] != 0:
+                act_pathways_data_t_specie.append(pathway)
         # for species in pathway["list branching points used"]:
         #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
         # if list_ind:
