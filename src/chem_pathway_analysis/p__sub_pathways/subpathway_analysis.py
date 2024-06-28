@@ -268,15 +268,22 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
     # This is v2, I changed things but I do not recall what I did actually
     no_net = True
     for item in set_SP:
+        print('We re looking at SP:',item["reactions"])
         bp_present = False
         for bp in item["branching points"]:
             if bp["compound"] == species:
                 bp_present = True
+                print('Specie',species,'is present')
             if bp["compound"] == species and bp["stoichiometry"] == 0:
                 print('We have a zero net prod pathway for',species)
                 print('SP:',item["reactions"])
                 no_net = False
                 set_SP_tmp.append(item)
+            else:
+                # we are in the case where species is present but no net
+                # we have to do smth, add pseudo-reactions to get 0 NET?
+                pass
+            
         # if the species is not present in the pathway, then this is equivalent to a 0 net prod
         if not bp_present:
             print('Specie',species,'is not present')
