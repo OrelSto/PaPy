@@ -46,7 +46,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             # We check if any sub-pathway in set_SP has a zero net production of species s
             # At init, there is only singular reaction but this helps "save" reaction where Sb do not appear
             # Meaning, equivalent to 0 net prod and likely containing other Sb used as BP
-            set_SP_tmp = checking_zero_net_SP_v2(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s,init_SP=init_SP)
+            set_SP_tmp = checking_zero_net_SP_v2(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
             # setting to False for next loop step
@@ -55,7 +55,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             print()
             print('connecting sub-pathways to',s)
             # We check if any sub-pathway in set_SP has a zero net production of species s
-            set_SP_tmp = checking_zero_net_SP_v2(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s,init_SP=init_SP)
+            set_SP_tmp = checking_zero_net_SP_v2(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
             
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
@@ -261,9 +261,11 @@ def update_subpathway(sub_pathway:dict,reaction:dict,pathway:dict):
     # doing stuff with pathway rate
     sub_pathway["rate"] = 0.0
 
-def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool):
+def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
     # checking if any pathway in set_SP has a zero net prod of species
     # If so, adding it to set_SP_tmp
+    # 28/06/2024:
+    # This is v2, I changed things but I do not recall what I did actually
     no_net = True
     for item in set_SP:
         bp_present = False
@@ -277,17 +279,13 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool
                 set_SP_tmp.append(item)
         # if the species is not present in the pathway, then this is equivalent to a 0 net prod
         if not bp_present:
-            print('We have an equivalent zero net prod pathway for',species)
-            if init_SP:
-                print('adding without check')
-                print('SP:',item["reactions"])
-                set_SP_tmp.append(item)
-            else:
-                print('SP:',item["reactions"])
-                set_SP_tmp.append(item)
+            print('Specie',species,'is not present')
+            print('This is an equivalent zero net prod pathway for',species)
+            print('SP:',item["reactions"])
+            set_SP_tmp.append(item)
 
     if no_net:
-        print('NO net prod for',species)
+        print('NO zero net prod for',species)
     return set_SP_tmp
 
 def checking_zero_net_SP(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool):
