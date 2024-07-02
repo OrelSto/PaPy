@@ -193,3 +193,31 @@ def is_there_a_pseudo_reaction(pathway:list,chemical_system_data:list):
             return True
     
     return False
+
+
+def find_index_pseudo_reaction(species:str,flag:str):
+    # We want to find the index of a pseudo_reaction and return it
+    # first we open the JSON chemical system file
+    cs = open('chemical_reaction_system.json')
+    # returns JSON object as a dictionary
+    chemical_system_data = json.load(cs)
+
+    # loop over it
+    # Iterate through the list
+    for index, r in enumerate(chemical_system_data):
+        # if it is a pseudo
+        if r["is_pseudo"]:
+            if flag == "prod":
+                if r["results"][0]["compound"]==species:
+                    return index
+            elif flag == "destr":
+                if r["results"][1]["compound"]==species:
+                    return index
+            else :
+                print('flag should be prod or destr in find_index_pseudo_reaction')
+                exit()
+    
+    # if we exit the loop, smth is wrong
+    print('no pseudo reaction of ',species,' found?')
+    print('error in find_index_pseudo_reaction')
+    exit()

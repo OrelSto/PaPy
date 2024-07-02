@@ -504,3 +504,37 @@ def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:lis
     
     return set_pathways
 
+
+def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
+    # we want to add a pseudo_reaction to an existing pathway
+
+    # we want the stoich of the species in the pathway
+    i_comp = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+    # we want the multiplicity of the pseudo reaction to be the opposite
+    # of the stoichiometry of species in order to have a 0 NET
+    mult = - pathway["branching points"][i_comp]["stoichiometry"]
+
+    # we define the flag
+    if mult > 0:
+        flag = "prod"
+    elif mult < 0:
+        flag = "destr"
+    else:
+        print('mult == 0 in add_pseudo_reaction_to_pathway_to_0NET')
+        print('NOT POSSIBLE')
+        exit()
+
+    # Then, get the index of the pseudo reaction to add
+    index = d_tools.find_index_pseudo_reaction(species=species,flag=flag)
+
+    # Now we add an entry to the reaction index
+    new_react = {
+        "index": index,
+        "multiplicity": mult
+    }
+    pathway["reactions"].append(new_react)
+
+    # Updating the species stoichiometry
+    pathway["branching points"][i_comp]["stoichiometry"] = 0
+
+    return pathway

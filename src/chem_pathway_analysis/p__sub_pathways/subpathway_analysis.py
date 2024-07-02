@@ -65,6 +65,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         for sp in set_SP_tmp:
             print('adding SP to final SP',sp["reactions"],'for species',s)
             final_set_SP.append(sp)
+        
 
         # This is what we did previously
         # # this loop is to get a list, and not a nested list
@@ -324,27 +325,62 @@ def checking_zero_net_SP(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool):
         print('NO net prod for',species)
     return set_SP_tmp
 
+
 def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
     # We connect subpathways as we did for pathways in branching_points.py
     # This is the same abstract idea.
     # final_set_SP = copy.deepcopy(set_SP)
     # list_pathways_prod,list_pathways_destroy,_ = d_tools.list_connecting_pathways(set_of_pathways=set_SP,species=species)
-    list_pathways_prod,list_pathways_destroy,pathways_non_affected = d_tools.list_connecting_pathways(set_of_pathways=set_SP,species=species)
+    list_pathways_prod,list_pathways_destroy,_ = d_tools.list_connecting_pathways(set_of_pathways=set_SP,species=species)
     print()
     print('We will connect prod',list_pathways_prod,'to',list_pathways_destroy)
-    # We connect each prod pathway to each destroy pathway
-    for p_from in list_pathways_prod:
-        for p_to in list_pathways_destroy:
+
+    # Checking the prod/destr cond
+    if list_pathways_prod:
+        cond_prod = True
+    else:
+        cond_prod = False
+    if list_pathways_destroy:
+        cond_destroy = True
+    else:
+        cond_destroy = False
+    
+    print('Condition Prod/Destroy:',cond_prod,cond_destroy)
+
+    if (cond_prod and cond_destroy):
+        # We connect each prod pathway to each destroy pathway
+        for p_from in list_pathways_prod:
+            for p_to in list_pathways_destroy:
+                n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
+                n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
+                print('connecting', str(n_from), 'to', str(n_to))
+                # new_SP is at stoichiometry 0, so i fulfills the zero net production of species s condition for a subpathway to be added
+                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species)
+                print('with rate of:',new_SP["rate"])
+                # checking if new_SP is already present in set_SP_tmp and if it is an actual 
+                # elementary pathway!
+                adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
+                # if we added new_SP, we have to delete
+    # only prod of Sb
+    elif (cond_prod and not cond_destroy):
+        for p_from in list_pathways_prod:
             n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
+            print('adding prod pseudo_reaction to', str(n_from))
+            # adding the pseudo reaction
+            p_from = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=p_from,species=species)
+            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=p_from)
+    # only destr of Sb
+    elif (not cond_prod and cond_destroy):
+        for p_to in list_pathways_destroy:
             n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
-            print('connecting', str(n_from), 'to', str(n_to))
-            # new_SP is at stoichiometry 0, so i fulfills the zero net production of species s condition for a subpathway to be added
-            new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species)
-            print('with rate of:',new_SP["rate"])
-            # checking if new_SP is already present in set_SP_tmp and if it is an actual 
-            # elementary pathway!
-            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
-            # if we added new_SP, we have to delete 
+            print('adding prod pseudo_reaction to', str(n_to))
+            # adding the pseudo reaction
+            p_to = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=p_from,species=species)
+            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=p_to)
+    # No prod nor destr, 0 NET hence the pathways are already added
+    elif (not cond_prod and not cond_destroy):
+        print('0 Net ',species)
+        pass
 
     # Are we returning the unaffected pathways ?
     # Not really since normally they are already added from the check_zero_prod before
@@ -356,6 +392,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
     #         print(n_unaffected)
     
     return set_SP_tmp
+
 
 def adding_SP(set_SP:list,final_set_SP:list,pathway_to_be_checked:dict):
     # we check if the pathway_to_be_checked is already in set_SP 
@@ -395,6 +432,7 @@ def adding_SP(set_SP:list,final_set_SP:list,pathway_to_be_checked:dict):
         else:
             print('not connected: subset exist')
         return
+
 
 def cond_elementary_pathway(set_SP:list,pathway_to_be_checked:dict):
     # It's here that we check if that pathway_to_be_checked is not a subset of other pathways in set_SP.
@@ -456,6 +494,7 @@ def ranked_list(final_set_SP:list,active_pathways:list,chemical_system_data:list
     list_ranked_merged = list_of_rank1_SP + list_of_rank2_SP + list_of_rank3_SP
 
     return list_ranked_merged
+
 
 def save_subpathways_to_JSON(set_SP:list,filename:str):
     # need a doc here?
