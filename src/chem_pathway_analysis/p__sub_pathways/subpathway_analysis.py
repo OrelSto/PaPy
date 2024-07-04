@@ -50,26 +50,24 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
             # setting to False for next loop step
+            # cleaning pseudo reactions
+            set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
             init_SP = False
         else:
             print()
             print('connecting sub-pathways to',s)
             # We check if any sub-pathway in set_SP has a zero net production of species s
             set_SP_tmp = checking_zero_net_SP_v2(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
-            
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
-        
+            # cleaning pseudo reactions
+            set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
         # We set up final as empty and copy set_SP_tmp
         final_set_SP = []
         for sp in set_SP_tmp:
             print('adding SP to final SP',sp["reactions"],'for species',s)
             final_set_SP.append(sp)
         
-        # We finally clean the final_set_SP because 
-        final_set_SP = data.clean_pathways_of_pseudo_reaction(set_pathways=final_set_SP,chemical_system_data=chemical_system_data)
-        
-
         # This is what we did previously
         # # this loop is to get a list, and not a nested list
         # for sp in set_SP_tmp:
