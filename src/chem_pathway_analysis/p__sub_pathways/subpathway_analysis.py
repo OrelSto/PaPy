@@ -21,7 +21,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
 
     # we initliaze the set of sub-pathways to the individual reactions present in the pathway
     # set_SP_init is our base to work with the sub-pathways. We'll construct the final set of SP building combination of the initial reactions defined in set_SP_init
-    set_SP_init = sub_pathway_set_init(pathway=pathway)
+    set_SP_init = sub_pathway_set_init(pathway=pathway,first_specie=species_done[0])
     print('we have set_SP_init',set_SP_init)
 
     # We can have a pathway that is a single entry R1 => Delta Sb
@@ -65,6 +65,9 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         for sp in set_SP_tmp:
             print('adding SP to final SP',sp["reactions"],'for species',s)
             final_set_SP.append(sp)
+        
+        # We finally clean the final_set_SP because 
+        final_set_SP = data.clean_pathways_of_pseudo_reaction(set_pathways=final_set_SP,chemical_system_data=chemical_system_data)
         
 
         # This is what we did previously
@@ -207,7 +210,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
 
     return returned_set_SP,flag_continue
 
-def sub_pathway_set_init(pathway:dict):
+def sub_pathway_set_init(pathway:dict,first_specie:str):
     # we open the chemical reaction file to retrieve the actual reaction
     # Opening JSON file
     cs = open('chemical_reaction_system.json')
@@ -231,27 +234,26 @@ def sub_pathway_set_init(pathway:dict):
         update_subpathway(sub_pathway=sub_pathway,reaction=r,pathway=pathway)
         set_SP.append(sub_pathway)
     
-    # We need to check if the pathway is not at steady-state for all former branching point species
-    for species in pathway["list branching points used"]:
-        list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-        if list_ind:
-            index = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)[0]
-            stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
-            if stoichiometry_s < 0:
-                print('adding a pseudo reaction that produce',species)
-                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=-stoichiometry_s,flag='prod',chemical_system=chemical_system)
-                # adding the pseudo reaction
-                set_SP.append(pseudo_rection_pathway)
-            elif stoichiometry_s > 0:
-                print('adding a pseudo reaction that destroy',species)
-                pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=species,multiplicity=stoichiometry_s,flag='destroy',chemical_system=chemical_system)
-                # adding the pseudo reaction
-                set_SP.append(pseudo_rection_pathway)
-            else:
-                print('NO pseudo reaction needed for',species)
+    # We need to check if the pathway is not at steady-state for the species consider at the first branching point
+    list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=first_specie)
+    if list_ind:
+        index = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=first_specie)[0]
+        stoichiometry_s = pathway["branching points"][index]["stoichiometry"]
+        if stoichiometry_s < 0:
+            print('adding a pseudo reaction that produce',first_specie)
+            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=first_specie,multiplicity=-stoichiometry_s,flag='prod',chemical_system=chemical_system)
+            # adding the pseudo reaction
+            set_SP.append(pseudo_rection_pathway)
+        elif stoichiometry_s > 0:
+            print('adding a pseudo reaction that destroy',first_specie)
+            pseudo_rection_pathway = d_tools.format_pseudo_pathway(species=first_specie,multiplicity=stoichiometry_s,flag='destroy',chemical_system=chemical_system)
+            # adding the pseudo reaction
+            set_SP.append(pseudo_rection_pathway)
         else:
-            print(species,' does not affect pathway')
-            print('NO pseudo reaction needed for',species)
+            print('NO pseudo reaction needed for',first_specie)
+    else:
+        print(first_specie,' does not affect pathway')
+        print('NO pseudo reaction needed for',first_specie)
 
     return set_SP
 
@@ -261,6 +263,7 @@ def update_subpathway(sub_pathway:dict,reaction:dict,pathway:dict):
     # sub_pathway_reaction["multiplicity"] = reaction["multiplicity"]
     # doing stuff with pathway rate
     sub_pathway["rate"] = 0.0
+
 
 def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
     # checking if any pathway in set_SP has a zero net prod of species
@@ -296,6 +299,7 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
         print('NO zero net prod for',species)
     return set_SP_tmp
 
+
 def checking_zero_net_SP(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool):
     # checking if any pathway in set_SP has a zero net prod of species
     # If so, adding it to set_SP_tmp
@@ -330,7 +334,6 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
     # We connect subpathways as we did for pathways in branching_points.py
     # This is the same abstract idea.
     # final_set_SP = copy.deepcopy(set_SP)
-    # list_pathways_prod,list_pathways_destroy,_ = d_tools.list_connecting_pathways(set_of_pathways=set_SP,species=species)
     list_pathways_prod,list_pathways_destroy,_ = d_tools.list_connecting_pathways(set_of_pathways=set_SP,species=species)
     print()
     print('We will connect prod',list_pathways_prod,'to',list_pathways_destroy)
@@ -367,16 +370,16 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
             n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
             print('adding prod pseudo_reaction to', str(n_from))
             # adding the pseudo reaction
-            p_from = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=p_from,species=species)
-            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=p_from)
+            new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_from],species=species)
+            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
     # only destr of Sb
     elif (not cond_prod and cond_destroy):
         for p_to in list_pathways_destroy:
             n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
             print('adding prod pseudo_reaction to', str(n_to))
             # adding the pseudo reaction
-            p_to = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=p_from,species=species)
-            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=p_to)
+            new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_to],species=species)
+            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
     # No prod nor destr, 0 NET hence the pathways are already added
     elif (not cond_prod and not cond_destroy):
         print('0 Net ',species)
