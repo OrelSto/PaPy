@@ -51,6 +51,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
             # setting to False for next loop step
             # cleaning pseudo reactions
+            print('cleaning pseudo-reactions in set_SP_tmp')
             set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
             init_SP = False
         else:
@@ -61,6 +62,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             # Now we are going to connect subpathways inside the set_SP
             set_SP_tmp = connecting_subpathways(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
             # cleaning pseudo reactions
+            print('cleaning pseudo-reactions in set_SP_tmp')
             set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
         # We set up final as empty and copy set_SP_tmp
         final_set_SP = []
