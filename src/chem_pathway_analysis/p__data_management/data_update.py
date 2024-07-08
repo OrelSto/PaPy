@@ -341,8 +341,11 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
     pathway_tmp = copy.deepcopy(pathway)
     species_dict = d_tools.get_compound_dict(species)
     list_bp_used = pathway_tmp["list branching points used"]
-    list_bp_used.append(species)
-    list_bp_used = list(set(list_bp_used))
+    # we don't add a species since this is not a "full" connection
+    # Meaning that there is only a prod/destr part of the connection.
+    # species cannot be list as a "branching point"
+    # list_bp_used.append(species)
+    # list_bp_used = list(set(list_bp_used))
 
     match flag_update:
         case 'production':

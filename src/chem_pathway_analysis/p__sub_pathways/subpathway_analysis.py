@@ -371,6 +371,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
             print('adding prod pseudo_reaction to', str(n_from))
             # adding the pseudo reaction
             new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_from],species=species)
+            new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_from],species=species)
             adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
     # only destr of Sb
     elif (not cond_prod and cond_destroy):
