@@ -515,7 +515,7 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
     i_comp = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
     # we want the multiplicity of the pseudo reaction to be the opposite
     # of the stoichiometry of species in order to have a 0 NET
-    mult = - pathway["branching points"][i_comp]["stoichiometry"]
+    mult = - pathway["branching points"][i_comp[0]]["stoichiometry"]
 
     # we define the flag
     if mult > 0:
@@ -538,6 +538,6 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
     pathway["reactions"].append(new_react)
 
     # Updating the species stoichiometry
-    pathway["branching points"][i_comp]["stoichiometry"] = 0
+    pathway["branching points"][i_comp[0]]["stoichiometry"] = 0
 
     return pathway

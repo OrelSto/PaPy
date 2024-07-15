@@ -19,6 +19,8 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # returns JSON object as a dictionary
     chemical_system_data = json.load(cs)
 
+    # Just trying to check if we can just work with the species done by being the species listed as BP used
+    species_done = pathway['list branching points used']
     # we initliaze the set of sub-pathways to the individual reactions present in the pathway
     # set_SP_init is our base to work with the sub-pathways. We'll construct the final set of SP building combination of the initial reactions defined in set_SP_init
     set_SP_init = sub_pathway_set_init(pathway=pathway,first_specie=species_done[0])
@@ -40,6 +42,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         
         # We look at if we are at the first step of the loop
         if init_SP:
+            print()
             print('We are at init of SP:')
             print()
             print('connecting sub-pathways to',s)
@@ -376,7 +379,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
     elif (not cond_prod and cond_destroy):
         for p_to in list_pathways_destroy:
             n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
-            print('adding prod pseudo_reaction to', str(n_to))
+            print('adding destr pseudo_reaction to', str(n_to))
             # adding the pseudo reaction
             new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_to],species=species)
             adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
