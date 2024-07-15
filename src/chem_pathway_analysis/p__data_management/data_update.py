@@ -523,21 +523,27 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
     elif mult < 0:
         flag = "destr"
     else:
-        print('mult == 0 in add_pseudo_reaction_to_pathway_to_0NET')
-        print('NOT POSSIBLE')
-        exit()
+        flag = 0
+        # print('mult == 0 in add_pseudo_reaction_to_pathway_to_0NET')
+        print('mult == 0')
+        print('No addition of pseudo-reactions for ',species)
+        # print('NOT POSSIBLE')
+        # exit()
 
-    # Then, get the index of the pseudo reaction to add
-    index = d_tools.find_index_pseudo_reaction(species=species,flag=flag)
+    if flag != 0:
+        print('Adding a pseudo-reaction for specie ',species)
+        print('with mult = ',mult)
+        # Then, get the index of the pseudo reaction to add
+        index = d_tools.find_index_pseudo_reaction(species=species,flag=flag)
 
-    # Now we add an entry to the reaction index
-    new_react = {
-        "index": index,
-        "multiplicity": mult
-    }
-    pathway["reactions"].append(new_react)
+        # Now we add an entry to the reaction index
+        new_react = {
+            "index": index,
+            "multiplicity": mult
+        }
+        pathway["reactions"].append(new_react)
 
-    # Updating the species stoichiometry
-    pathway["branching points"][i_comp[0]]["stoichiometry"] = 0
+        # Updating the species stoichiometry
+        pathway["branching points"][i_comp[0]]["stoichiometry"] = 0
 
     return pathway
