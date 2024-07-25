@@ -41,10 +41,10 @@ def main_loop(t_min:float,f_min:float):
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('Pathways analysis for species: '+species)
             
-            # looking for each species from the shortest lived to the longest
-            active_p = bp.connecting_pathways(active_pathways=active_p,species=species)
-
             used_species.append(species)
+            # looking for each species from the shortest lived to the longest
+            active_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species)
+
             # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
             active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
@@ -63,7 +63,7 @@ def main_loop(t_min:float,f_min:float):
                 o_tools.write_line_chronicle('\n')
             
             # After saving, SUB-PATHWAYS analysis !!
-            active_p = sub_main.main_subpathways(pathways=active_p,species_done=used_species)
+            active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species)
 
             # saving
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+species+'_'+'.json')

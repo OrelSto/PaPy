@@ -32,7 +32,7 @@ def list_next_branching_points(t_min:float):
     return sorted_keys
 
 
-def connecting_pathways(active_pathways:list,species:str):
+def connecting_pathways(active_pathways:list,species:str,list_species_done:list):
     # Opening JSON file
     crs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
@@ -104,7 +104,7 @@ def connecting_pathways(active_pathways:list,species:str):
                     o_tools.write_line_chronicle('\n')
                 
                 # we append the mew pathway
-                new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species))
+                new_pathways.append(data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species,list_species_done))
                 print('with rate of:',new_pathways[-1]["rate"])
                 # Chronicles
                 if global_var.chronicle_writing:

@@ -10,7 +10,7 @@ from ..p__data_management import global_var
 
 # This is where we analyze the pathway to determine if it is a combination of subpathways
 
-def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:list):
+def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_done:list):
 
     print('The PATHWAY STUDIED IS:',pathway['reactions'])
     # we open the chemical reaction file to clean pseudo-reaction later
@@ -21,11 +21,19 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
 
     # Just trying to check if we can just work with the species done by being the species listed as BP used
     species_done = pathway['list branching points used']
+    # NOOOOPE we need the same ORDER of construction of BP. It is not conserved, at the moment in the connecting process of pathways
+    # Basically pathway['list branching points used'] do not "retain" the timescale order of BPs
+
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('species_done for the subpathway analysis '+' '.join(species_done))
+
     # we initliaze the set of sub-pathways to the individual reactions present in the pathway
     # set_SP_init is our base to work with the sub-pathways. We'll construct the final set of SP building combination of the initial reactions defined in set_SP_init
     # set_SP_init = sub_pathway_set_init(pathway=pathway,first_specie=species_done[0])
-    set_SP_init = sub_pathway_set_init(pathway=pathway,list_species=species_done)
+    set_SP_init,pathway = sub_pathway_set_init(pathway=pathway,list_species=species_done)
     print('we have set_SP_init',set_SP_init)
+    print('The PATHWAY STUDIED AFTER INIT IS:',pathway['reactions'])
 
     # We can have a pathway that is a single entry R1 => Delta Sb
     # This means that we have to check for this possibility later on
@@ -52,7 +60,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             # Meaning, equivalent to 0 net prod and likely containing other Sb used as BP
             set_SP_tmp = checking_zero_net_SP_v2(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
             # Now we are going to connect subpathways inside the set_SP
-            set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s)
+            set_SP_tmp = connecting_subpathways(set_SP=set_SP_init,set_SP_tmp=set_SP_tmp,species=s,list_species_done=list_species_done)
             # setting to False for next loop step
             # cleaning pseudo reactions
             # print('cleaning pseudo-reactions in set_SP_tmp')
@@ -64,7 +72,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
             # We check if any sub-pathway in set_SP has a zero net production of species s
             set_SP_tmp = checking_zero_net_SP_v2(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
             # Now we are going to connect subpathways inside the set_SP
-            set_SP_tmp = connecting_subpathways(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s)
+            set_SP_tmp = connecting_subpathways(set_SP=final_set_SP,set_SP_tmp=set_SP_tmp,species=s,list_species_done=list_species_done)
             # cleaning pseudo reactions
             # print('cleaning pseudo-reactions in set_SP_tmp')
             # set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
@@ -93,6 +101,12 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # 2. Simplier is better! Less number of reactions is better
     # We have a list index_list_ranked which is the 
 
+    print('cleaning final_set_SP')
+    final_set_SP = data.clean_pathways_of_pseudo_reaction(set_pathways=final_set_SP,chemical_system_data=chemical_system_data)
+    print('cleaning pathway')
+    pathway = data.clean_pathway_of_PR(pathway=pathway,chemical_system_data=chemical_system_data)
+    # print('pathway after cleaning',pathway)
+
     # if len(final_set_SP) > 1:
     if len(final_set_SP) > 0:
         # Chronicles
@@ -104,7 +118,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
                 o_tools.write_line_chronicle('\n')
         
         index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways,chemical_system_data=chemical_system_data)
-        print('We have the ranked list of index: ',index_list_ranked)
+        # print('We have the ranked list of index: ',index_list_ranked)
 
         # After ranking, minimize!
         # scipy.optimize.linprog()
@@ -119,36 +133,37 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
         b_eq_reaction_ind = [r["index"] for r in pathway["reactions"]]
         # Building A_eq matrix
         A_eq = []
-        print('looping over reactions:',len(b_eq_reaction_ind))
-        print('looping over Sub-Pathways:',len(index_list_ranked))
+        # print('looping over reactions:',len(b_eq_reaction_ind))
+        # print('looping over Sub-Pathways:',len(index_list_ranked))
         for r in b_eq_reaction_ind:
             A_eq_row = []
-            print('NEW ROW')
+            # print('NEW ROW')
             for i in index_list_ranked:
                 sum_m = 0
                 for r_sp in final_set_SP[i]["reactions"]:
                     # print('comparing',r,'and',r_sp["index"])
                     if r == r_sp["index"]:
                         sum_m += r_sp["multiplicity"]
-                    # else:
-                    #     pass
+                    else:
+                        # print('weird stuff in A_eq_row')
+                        pass
                 A_eq_row.append(sum_m)
             A_eq.append(A_eq_row)
 
         A_eq = np.array(A_eq)
         c = np.array(c)
         b_eq = np.array(b_eq)
-        print('A_eq',A_eq)
-        print('len A_eq',np.shape(A_eq))
-        print('c',c)
-        print('len c',len(c))
-        print('b_eq',b_eq)
-        print('len b_eq',len(b_eq))
+        # print('A_eq',A_eq)
+        # print('len A_eq',np.shape(A_eq))
+        # print('c',c)
+        # print('len c',len(c))
+        # print('b_eq',b_eq)
+        # print('len b_eq',len(b_eq))
 
         result = opt.linprog(c=c,b_eq=b_eq,A_eq=A_eq,method='highs-ds',options={'disp':True})
-        print()
-        print('THIS IS THE RESULTS AFTER LINPROG')
-        print(result)
+        # print()
+        # print('THIS IS THE RESULTS AFTER LINPROG')
+        # print(result)
         print()
         
         # we can have moment where the result is bad
@@ -185,7 +200,11 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     # Those are NOT REAL! DO NOT BELIEVE THEM!
     # So, easy peasy, just get rid of them.
     # This is actually correct since they are likely here to explain the D[Sb] of each BP species
-    final_set_SP = data.clean_pathways_of_pseudo_reaction(set_pathways=final_set_SP,chemical_system_data=chemical_system_data)
+    # print('cleaning final_set_SP')
+    # final_set_SP = data.clean_pathways_of_pseudo_reaction(set_pathways=final_set_SP,chemical_system_data=chemical_system_data)
+    # print('cleaning pathway')
+    # pathway = data.clean_pathway_of_PR(pathway=pathway,chemical_system_data=chemical_system_data)
+    # print('pathway after cleaning',pathway)
 
     # saving
     save_subpathways_to_JSON(set_SP=final_set_SP,filename='subpathways_tmp_'+str(ind)+'.json')
@@ -215,7 +234,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,species_done:l
     return returned_set_SP,flag_continue
 
 # def sub_pathway_set_init(pathway:dict,first_specie:str):
-def sub_pathway_set_init(pathway:dict,list_species:list):
+def sub_pathway_set_init(pathway:dict,list_species:list) -> list:
     # we open the chemical reaction file to retrieve the actual reaction
     # Opening JSON file
     cs = open('chemical_reaction_system.json')
@@ -287,7 +306,7 @@ def sub_pathway_set_init(pathway:dict,list_species:list):
     #         print(s,' does not affect pathway')
     #         print('NO pseudo reaction needed for',s)
 
-    return set_SP
+    return set_SP,pathway
 
 def update_subpathway(sub_pathway:dict,reaction:dict,pathway:dict):
     sub_pathway_reaction = sub_pathway["reactions"][0]
@@ -362,7 +381,7 @@ def checking_zero_net_SP(set_SP:list,set_SP_tmp:list,species:str,init_SP:bool):
     return set_SP_tmp
 
 
-def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
+def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_done:list):
     # We connect subpathways as we did for pathways in branching_points.py
     # This is the same abstract idea.
     # final_set_SP = copy.deepcopy(set_SP)
@@ -389,8 +408,8 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
                 n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
                 n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
                 print('connecting', str(n_from), 'to', str(n_to))
-                # new_SP is at stoichiometry 0, so i fulfills the zero net production of species s condition for a subpathway to be added
-                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species)
+                # new_SP is at stoichiometry 0, so it fulfills the zero net production of species s condition for a subpathway to be added
+                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species,list_species_done)
                 print('with rate of:',new_SP["rate"])
                 # checking if new_SP is already present in set_SP_tmp and if it is an actual 
                 # elementary pathway!
@@ -398,21 +417,34 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str):
                 # if we added new_SP, we have to delete
     # only prod of Sb
     elif (cond_prod and not cond_destroy):
+        print('Only prod ',species)
         for p_from in list_pathways_prod:
             n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
-            print('adding prod pseudo_reaction to', str(n_from))
+            # print('adding prod pseudo_reaction to', str(n_from))
             # adding the pseudo reaction
-            new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_from],species=species)
-            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
+            # new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_from],species=species)
+            new_SP =set_SP[p_from]
+            # print('set_SP',set_SP)
+            # print('set_SP_tmp',set_SP_tmp)
+            # adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
+            set_SP_tmp.append(new_SP)
+
     # only destr of Sb
     elif (not cond_prod and cond_destroy):
+        print('Only destr ',species)
         for p_to in list_pathways_destroy:
             n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
-            print('adding destr pseudo_reaction to', str(n_to))
+            # print('adding destr pseudo_reaction to', str(n_to))
             # adding the pseudo reaction
-            new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_to],species=species)
-            adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
-    # No prod nor destr, 0 NET hence the pathways are already added
+            # new_SP = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=set_SP[p_to],species=species)
+            new_SP = set_SP[p_to]
+            # print('set_SP',set_SP)
+            # print('set_SP_tmp',set_SP_tmp)
+            # adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
+            set_SP_tmp.append(new_SP)
+    
+    # No prod 
+    # nor destr, 0 NET hence the pathways are already added
     elif (not cond_prod and not cond_destroy):
         print('0 Net ',species)
         pass
@@ -449,9 +481,9 @@ def adding_SP(set_SP:list,final_set_SP:list,pathway_to_be_checked:dict):
     # final_r_2b_checked_against = [[i["index"] for i in r["reactions"]] for r in final_set_SP]
     # final_r_2b_checked_against = sorted(final_r_2b_checked_against)
 
-    print('p_2b_checked_reactions',p_2b_checked_reactions)
-    print('r_2b_checked_against',r_2b_checked_against)
-    print('final_r_2b_checked_against',final_r_2b_checked_against)
+    # print('p_2b_checked_reactions',p_2b_checked_reactions)
+    # print('r_2b_checked_against',r_2b_checked_against)
+    # print('final_r_2b_checked_against',final_r_2b_checked_against)
 
     # if pathway_to_be_checked in set_SP:
     if (p_2b_checked_reactions in r_2b_checked_against) or (p_2b_checked_reactions in final_r_2b_checked_against):

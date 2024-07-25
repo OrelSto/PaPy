@@ -207,7 +207,7 @@ def update_rates_reaction_system():
         o_tools.write_line_chronicle('**************************************')
 
 
-def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
+def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list):
     # self explanatory ... connecting two pathways
     # I means we merge two pathways that are connected via a species that the one produce and the latter destroys
 
@@ -218,7 +218,8 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str):
     pathway_destr_tmp = copy.deepcopy(pathway_destr)
     list_bp_used = pathway_prod_tmp["list branching points used"] + pathway_destr_tmp["list branching points used"]
     list_bp_used.append(species)
-    list_bp_used = list(set(list_bp_used))
+    # list_bp_used = list(set(list_bp_used))
+    list_bp_used = sorted(set(list_bp_used),key=list_species_done.index)
 
     bp_stoichiometry,pathway_prod_tmp,pathway_destr_tmp = update_pathway_multiplicity(pathway_prod_tmp,pathway_destr_tmp,species)
     # print('pathway_prod_tmp',pathway_prod_tmp)
@@ -281,13 +282,14 @@ def clean_multiplicity(pathway:dict):
 
     # Updating the reactions if necessary
     if common_divisor > 1:
-        # print('There is a common divisor')
+        print('There is a common divisor: ',common_divisor)
         # print('previous rate:',pathway["rate"])
         pathway["rate"] = pathway["rate"] * float(common_divisor)
         for r in pathway["reactions"]:
             r["multiplicity"] = int(r["multiplicity"] / common_divisor)
         for bp in pathway["branching points"]:
             bp["stoichiometry"] = int(bp["stoichiometry"] / common_divisor)
+        print('returning: ',pathway)
 
     return pathway
 
@@ -297,7 +299,7 @@ def clean_reactions(pathway:dict):
     reactions = pathway["reactions"]
     new_reactions = []
     list_ind_r = [r["index"] for r in reactions]
-    # print('we clean the list of reactions', list_ind_r)
+    print('we clean the list of reactions', list_ind_r)
 
     # Create a dictionary to store indexes of values
     index_dict = {}
@@ -331,6 +333,7 @@ def clean_reactions(pathway:dict):
             new_reactions.append({"index":value,"multiplicity":reactions[i]["multiplicity"]})
     
     # updating pathway
+    print('updating reactions to',new_reactions)
     pathway["reactions"] = new_reactions
     return pathway
 
@@ -420,8 +423,8 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
     # We check if the multiplicity are different
     if bp_prod_m != bp_dest_m:
         new_multiplicty = max(bp_prod_m,bp_dest_m)
-        # print('new multiplicity:', new_multiplicty,'for species:',species)
-        # print('with:', bp_prod_m,'and :',bp_dest_m)
+        print('new multiplicity:', new_multiplicty,'for species:',species)
+        print('with:', bp_prod_m,'and :',bp_dest_m)
         
         # Third: updating the pathway prod or pathway destroy
         if bp_prod_m < bp_dest_m:
@@ -478,33 +481,49 @@ def clean_branching_points(pathway_one_bp:list,pathway_two_bp:list):
     
     return new_branching_points
 
+def clean_pathway_of_PR(pathway:dict,chemical_system_data:list):
+    list_r_to_remove = []
+    for r in pathway["reactions"]:
+        reaction_data = chemical_system_data[r["index"]]
+        # If it is a pseudo-reaction CLEAN IT
+        if reaction_data["is_pseudo"]:
+            print('We are cleaning the pseudo-reaction',r["index"])
+            list_r_to_remove.append(r)
+            for s in reaction_data["results"]:
+                # we re looking in the pseudo-reaction in chemical_system_data
+                # for the compound that is associated to it
+                if s["compound"] != '...':
+                    multiplicity = r["multiplicity"]
+                    compound = s["compound"]
+                    stoichiometry =s["stoichiometry"]
+                    # updating the branching points in the pathway
+                    for bp in pathway["branching points"]:
+                        # finding the BP == to the compound of the pseudo reaction
+                        if bp["compound"] == compound:
+                            bp["stoichiometry"] += - stoichiometry * multiplicity
+                            # # if the BP has a Null Net, hence it does not appear as a BP
+                            # if bp["stoichiometry"] == 0:
+                            #     pathway["branching points"].remove(bp)
+    
+    for r in list_r_to_remove:
+        pathway["reactions"].remove(r)
+    
+    for bp in pathway["branching points"]:
+        if bp["compound"] == '...':
+            pathway["branching points"].remove(bp)
+
+    return pathway
 
 def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:list):
     # We need to check if there is a reaction that is a pseudo-reaction.
     # If so, remove it and update the stoichiometry
-    for pathway in set_pathways:
-        list_r_to_remove = []
-        for r in pathway["reactions"]:
-            reaction_data = chemical_system_data[r["index"]]
-            # If it is a pseudo-reaction CLEAN IT
-            if reaction_data["is_pseudo"]:
-                print('We are cleaning the pseudo-reaction',r["index"])
-                list_r_to_remove.append(r)
-                for s in reaction_data["results"]:
-                    if s["compound"] != '...':
-                        multiplicity = r["multiplicity"]
-                        compound = s["compound"]
-                        stoichiometry =s["stoichiometry"]
-                # updating the branching points
-                for bp in pathway["branching points"]:
-                    if bp["compound"] == compound:
-                        bp["stoichiometry"] += - stoichiometry * multiplicity
-                        if bp["stoichiometry"] == 0:
-                            pathway["branching points"].remove(bp)
 
-        for r in list_r_to_remove:
-            pathway["reactions"].remove(r)
-    
+    # print('set_pathways',set_pathways)
+    # print()
+    for pathway in set_pathways:
+        # print('pathway in set_pathways',pathway)
+        pathway = clean_pathway_of_PR(pathway=pathway,chemical_system_data=chemical_system_data)
+
     return set_pathways
 
 
@@ -513,15 +532,16 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
 
     # we want the stoich of the species in the pathway
     i_comp = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-    # we want the multiplicity of the pseudo reaction to be the opposite
-    # of the stoichiometry of species in order to have a 0 NET
-    mult = - pathway["branching points"][i_comp[0]]["stoichiometry"]
+    # we want the stoechiometry of the compond to define if it needs a prod or destr to balance it out.
+    mult = pathway["branching points"][i_comp[0]]["stoichiometry"]
 
     # we define the flag
     if mult > 0:
-        flag = "prod"
-    elif mult < 0:
+        # looking for a destr to balance a prod
         flag = "destr"
+    elif mult < 0:
+        # looking for a prod to balance a destr
+        flag = "prod"
     else:
         flag = 0
         # print('mult == 0 in add_pseudo_reaction_to_pathway_to_0NET')
@@ -531,15 +551,14 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
         # exit()
 
     if flag != 0:
-        print('Adding a pseudo-reaction for specie ',species)
-        print('with mult = ',mult)
+        print('Adding a ',flag,' pseudo-reaction for specie ',species)
         # Then, get the index of the pseudo reaction to add
         index = d_tools.find_index_pseudo_reaction(species=species,flag=flag)
 
         # Now we add an entry to the reaction index
         new_react = {
             "index": index,
-            "multiplicity": mult
+            "multiplicity": abs(mult)
         }
         pathway["reactions"].append(new_react)
 

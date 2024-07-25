@@ -361,6 +361,8 @@ We are looking at the pathway
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
 
+species_done for the subpathway analysis O O3
+
 The elementary subpathways is/are:
  O3 + hv => O + O2 
  O + O2 + M => O3 + M 
@@ -405,6 +407,8 @@ We are looking at the pathway
 ------------------
  NULL 
 The pathway has at least than 3 reactions. Looking for subpathways!
+
+species_done for the subpathway analysis O O3
 
 The elementary subpathways is/are:
  O2 + hv => 2 O 

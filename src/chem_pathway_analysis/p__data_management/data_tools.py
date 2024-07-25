@@ -208,10 +208,10 @@ def find_index_pseudo_reaction(species:str,flag:str):
         # if it is a pseudo
         if r["is_pseudo"]:
             if flag == "prod":
-                if r["results"][0]["compound"]==species:
+                if (r["results"][1]["compound"]==species) and (r["results"][1]["stoichiometry"]>0):
                     return index
             elif flag == "destr":
-                if r["results"][1]["compound"]==species:
+                if (r["results"][0]["compound"]==species) and (r["results"][0]["stoichiometry"]<0):
                     return index
             else :
                 print('flag should be prod or destr in find_index_pseudo_reaction')
