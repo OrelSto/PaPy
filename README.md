@@ -38,7 +38,7 @@ Here's a short list of functionnality:
 - [x] Subpathways analysis implementation
 - [x] Basic visual outputs
 - [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
-- [ ] Selection of species of interest (discarding automatically species that have a longer lifetime)
+- [x] Selection of species of interest (discarding automatically species that have a longer lifetime)
 - [ ] Packaging (install via ```pip``` or ```conda```)
 - [ ] Tools for visualization (Pie charts, links, etc)
 
