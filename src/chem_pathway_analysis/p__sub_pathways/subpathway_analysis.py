@@ -34,6 +34,11 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_d
     set_SP_init,pathway = sub_pathway_set_init(pathway=pathway,list_species=species_done)
     print('we have set_SP_init',set_SP_init)
     print('The PATHWAY STUDIED AFTER INIT IS:',pathway['reactions'])
+    if global_var.chronicle_writing:
+        for sp in set_SP_init:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_pathway_chronicle(pathway=sp,chem_system_data=chemical_system_data)
+            o_tools.write_line_chronicle('\n')
 
     # We can have a pathway that is a single entry R1 => Delta Sb
     # This means that we have to check for this possibility later on
@@ -46,6 +51,9 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_d
     # init_SP is set to true because for the first pass through the loop we need set_SP_init. After, we need the updated final_set_SP.
     init_SP = True
     for s in species_done:
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('Building subpathways with BP '+s)
         # set_SP_tmp is the temporary set of pathway, it is equivalent to P^ in Lehmann, 2004
         set_SP_tmp = []
         
@@ -66,6 +74,11 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_d
             # print('cleaning pseudo-reactions in set_SP_tmp')
             # set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
             init_SP = False
+            if global_var.chronicle_writing:
+                for sp in set_SP_tmp:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_pathway_chronicle(pathway=sp,chem_system_data=chemical_system_data)
+                    o_tools.write_line_chronicle('\n')
         else:
             print()
             print('connecting sub-pathways to',s)
@@ -76,6 +89,12 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_d
             # cleaning pseudo reactions
             # print('cleaning pseudo-reactions in set_SP_tmp')
             # set_SP_tmp = data.clean_pathways_of_pseudo_reaction(set_pathways=set_SP_tmp,chemical_system_data=chemical_system_data)
+            if global_var.chronicle_writing:
+                for sp in set_SP_tmp:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_pathway_chronicle(pathway=sp,chem_system_data=chemical_system_data)
+                    o_tools.write_line_chronicle('\n')
+        
         # We set up final as empty and copy set_SP_tmp
         final_set_SP = []
         for sp in set_SP_tmp:

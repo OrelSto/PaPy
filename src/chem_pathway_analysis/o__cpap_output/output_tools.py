@@ -1,7 +1,5 @@
 # routines for writing stuff
 
-import json
-
 from io import TextIOWrapper
 
 def writing_reaction(reaction:list,output_file:TextIOWrapper,chem_system_data:list):
@@ -148,3 +146,7 @@ def write_line_chronicle(text_to_archive:str):
         else:
             output_file.write('\n')
             output_file.write(text_to_archive)
+
+def write_pathway_chronicle(pathway:list,chem_system_data:list):
+    with open('chronicles.txt', 'a') as output_file:
+        writing_pathway(pathway=pathway,output_file=output_file,chem_system_data=chem_system_data)

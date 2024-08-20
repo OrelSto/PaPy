@@ -87,7 +87,9 @@ def moche_target_species_output(target_specie:str) -> None:
     # We set up the list of pathways acting on target_specie
     act_pathways_data_t_specie = []
     for pathway in active_pathways_data:
-        if (target_specie in pathway["list branching points used"]) and (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+        # if (target_specie in pathway["list branching points used"]) and (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+        # species does not have to be in "list branching points used"
+        if (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
             ind = d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)[0]
             # Then we check if this is a pathway with prod or destr of target specie
             if pathway["branching points"][ind]["stoichiometry"] != 0:
@@ -152,10 +154,20 @@ def moche_target_species_output(target_specie:str) -> None:
         pathway_sorted = {}
         i = 0
         for pathway in act_pathways_data_t_specie:
-
-            print('stoich',abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])/rate_sum * 100)
-            pathway_sorted.update({i:abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])/rate_sum * 100})
-            i += 1
+            stoich = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])/rate_sum * 100
+            # We check that the pathway account for more that 0.0001% of the total rate of the species
+            # Meaning we explain the last 0.001% with pathways
+            if stoich >= 0.0001:
+                print('stoich',stoich)
+                pathway_sorted.update({i:stoich})
+                i += 1
+            # If not, then we we will not print it
+            else:
+                print('Not printing pathway with stoich',stoich)
+                # we advance the indice also
+                i += 1
+        
+        # Now we sort the indices
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
 
         rate_deleted = 0.0
@@ -173,5 +185,3 @@ def moche_target_species_output(target_specie:str) -> None:
         output_moche_file.write(' \n')
         output_moche_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
         output_moche_file.write(' \n')
-
-    pass

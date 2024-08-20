@@ -362,6 +362,57 @@ We are looking at the pathway
 The pathway has at least than 3 reactions. Looking for subpathways!
 
 species_done for the subpathway analysis O O3
+ O2 + hv => 2 O 
+------------------
+ O2 => 2 O
+
+ O + O2 + M => O3 + M 
+------------------
+ O + O2 => O3
+
+ O3 + hv => O + O2 
+------------------
+ O3 => O + O2
+
+ O + O3 => 2 O2 
+------------------
+ O + O3 => 2 O2
+
+
+Building subpathways with BP O
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O3 + hv => O + O2 
+ O + O3 => 2 O2 
+------------------
+ 2 O3 => 3 O2
+
+
+Building subpathways with BP O3
+ O3 + hv => O + O2 
+ O + O2 + M => O3 + M 
+------------------
+ NULL 
+
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
 
 The elementary subpathways is/are:
  O3 + hv => O + O2 
@@ -409,6 +460,38 @@ We are looking at the pathway
 The pathway has at least than 3 reactions. Looking for subpathways!
 
 species_done for the subpathway analysis O O3
+ O2 + hv => 2 O 
+------------------
+ O2 => 2 O
+
+ O + O2 + M => O3 + M 
+------------------
+ O + O2 => O3
+
+ O + O3 => 2 O2 
+------------------
+ O + O3 => 2 O2
+
+
+Building subpathways with BP O
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+
+Building subpathways with BP O3
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
 
 The elementary subpathways is/are:
  O2 + hv => 2 O 

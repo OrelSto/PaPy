@@ -284,11 +284,11 @@ def clean_multiplicity(pathway:dict):
     if common_divisor > 1:
         print('There is a common divisor: ',common_divisor)
         # print('previous rate:',pathway["rate"])
-        pathway["rate"] = pathway["rate"] * common_divisor
+        pathway["rate"] = pathway["rate"] * float(common_divisor)
         for r in pathway["reactions"]:
-            r["multiplicity"] = r["multiplicity"] / common_divisor
+            r["multiplicity"] = int(r["multiplicity"] / common_divisor)
         for bp in pathway["branching points"]:
-            bp["stoichiometry"] = bp["stoichiometry"] / common_divisor
+            bp["stoichiometry"] = int(bp["stoichiometry"] / common_divisor)
         print('returning: ',pathway)
 
     return pathway
@@ -317,10 +317,11 @@ def clean_reactions(pathway:dict):
     not_duplicates = {value: indexes for value, indexes in index_dict.items() if len(indexes) == 1}
 
     # duplicate reactions
-    total_multiplicity = 0
     # print('duplicates:',duplicates)
     # Print the indexes of the duplicates
     for value, indexes in duplicates.items():
+        # init total_multiplicity for each duplicated reaction
+        total_multiplicity = 0
         # print(f"Value {value} appears at indexes: {indexes}")
         for i in indexes:
             total_multiplicity += reactions[i]["multiplicity"]
@@ -433,18 +434,18 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
             # we need to conserve the molecule flux.
             pathway_prod["rate"] = pathway_prod["rate"] / new_multiplicty
             for r in pathway_prod["reactions"]:
-                r["multiplicity"] = new_multiplicty * r["multiplicity"]
+                r["multiplicity"] = int(new_multiplicty) * r["multiplicity"]
             for bp in pathway_prod["branching points"]:
-                bp["stoichiometry"] = new_multiplicty * bp["stoichiometry"]
+                bp["stoichiometry"] = int(new_multiplicty) * bp["stoichiometry"]
         else:
             # print('updating bp_dest_m', bp_dest_m, 'to',new_multiplicty)
             # we divide "rate" by new_multiplicty because it's a multiplicator
             # we need to conserve the molecule flux.
             pathway_destroy["rate"] = pathway_destroy["rate"] /new_multiplicty
             for r in pathway_destroy["reactions"]:
-                r["multiplicity"] = new_multiplicty * r["multiplicity"]
+                r["multiplicity"] = int(new_multiplicty) * r["multiplicity"]
             for bp in pathway_destroy["branching points"]:
-                bp["stoichiometry"] = new_multiplicty * bp["stoichiometry"]
+                bp["stoichiometry"] = int(new_multiplicty) * bp["stoichiometry"]
     
     # We return the two pathways updated so that merged together the species stoichiometry = 0
     # Last we check again where we have the branching point species with the updated pathways
