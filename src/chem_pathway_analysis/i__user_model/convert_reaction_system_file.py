@@ -61,7 +61,7 @@ def extract_compound_and_stoichiometry(term:str):
     match = stoichiometry_pattern.match(term)
     split = stoichiometry_pattern.split(term)
     if match:
-        stoichiometry = int(match.group(1)) if match.group(1) else 1
+        stoichiometry = float(match.group(1)) if match.group(1) else 1
         compound = match.group(2)
         return {"compound": compound, "stoichiometry": stoichiometry}
     else:
