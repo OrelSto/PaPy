@@ -26,6 +26,7 @@ def main_loop(t_min:float,f_min:float):
     # This is the species used as BP
     used_species = []
 
+    # We run the BP and Sub-BP routines until we are running out of BP
     while list_bp:
         # Opening JSON file
         ap = open('active_pathways.json')

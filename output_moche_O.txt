@@ -2,5 +2,5 @@ No prod/destr of O
 rate_sum = 0
 
 **************************
- RATE DELETED  : 0.000e+00 
+ RATE DELETED  : 1.000e-10 
  RATE DELETED %: 0.000 

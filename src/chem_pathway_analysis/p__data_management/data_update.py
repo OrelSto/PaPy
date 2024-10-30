@@ -371,7 +371,7 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
 
 def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
     # This routine update the rate of pathway according to the destruction rate of species via the deleted pathways
-    rate_p_prod = pathway["rate"]
+    rate_p = pathway["rate"]
     species_dict = d_tools.get_compound_dict(species)
     rate_deleted_destr_species = species_dict["destruction rate"]["deleted pathways"]
     rate_deleted_prod_species = species_dict["production rate"]["deleted pathways"]
@@ -380,13 +380,14 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
     # check for 0 value
     if D_species != 0.0 :
         # associated rate of pathway from the deleted pathways destr species
-        f_deleted_destr = (rate_p_prod * rate_deleted_destr_species) / D_species
+        f_deleted_destr = (rate_p * rate_deleted_destr_species) / D_species
 
         # associated rate of pathway from the deleted pathways prod species
-        f_deleted_prod = (rate_p_prod * rate_deleted_prod_species) / D_species
+        f_deleted_prod = (rate_p * rate_deleted_prod_species) / D_species
         
         # associated rate of pathway from the deleted pathways prod and destr species
-        f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
+        # f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
+        f_deleted_prod_destr = (rate_deleted_destr_species * rate_deleted_prod_species) / D_species
     else :
         f_deleted_destr = 0.0
 
