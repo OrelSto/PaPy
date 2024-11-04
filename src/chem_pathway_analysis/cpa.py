@@ -91,12 +91,12 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     up.update_rates_chemical_species()
     print()
     # Checking the targeted species as viable outputs
-    if global_var.chronicle_writing:
-        o_tools.write_line_chronicle('\n')
-        o_tools.write_line_chronicle('----------------------')
-        o_tools.write_line_chronicle('Check targeted species')
-        o_tools.write_line_chronicle('----------------------')
-    target_species=i_ts.check_list_target_species(target_species=target_species,t_min=t_min)
+    # if global_var.chronicle_writing:
+    #     o_tools.write_line_chronicle('\n')
+    #     o_tools.write_line_chronicle('----------------------')
+    #     o_tools.write_line_chronicle('Check targeted species')
+    #     o_tools.write_line_chronicle('----------------------')
+    # target_species=i_ts.check_list_target_species(target_species=target_species,t_min=t_min)
 
     # 3. We run the main loop
     if global_var.chronicle_writing:

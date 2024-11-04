@@ -56,14 +56,17 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
         o_tools.write_line_chronicle('Productive pathways : ')
         for i in list_pathways_prod:
             o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=active_pathways[i],chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(active_pathways[i]["rate"]))
             o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Destructive pathways: ')
         for i in list_pathways_destroy:
             o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=active_pathways[i],chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(active_pathways[i]["rate"]))
             o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Unaffected pathways : ')
         for p in pathways_non_affected:
             o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=p,chem_system_data=chemical_system))
+            o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(active_pathways[i]["rate"]))
             o_tools.write_line_chronicle('\n')
 
     # New list of new pathways

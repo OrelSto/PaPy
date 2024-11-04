@@ -164,6 +164,7 @@ def format_line(reaction_equation:str):
     reaction_data = {
         "reactants": reactant_data,
         "products": product_data,
+        "initial rate": float(rate),
         "rate": float(rate),
         "deleted rate":0.0,
         "results": result_data,

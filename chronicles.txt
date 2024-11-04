@@ -52,29 +52,13 @@ lifetime:0.000e+00 to 2.000e+01
 Updating rates in chemical_species.json complete.
 **************************************
 
-----------------------
-Check targeted species
-----------------------
-
-We have the Branching point(s) ['O', 'O3', 'O2']
-We have the Targeted Species ['O2', 'O3', 'O']
-
-Looking for target specie O2
-O2 is in the list of Branching Points
-
-Looking for target specie O3
-O3 is in the list of Branching Points
-
-Looking for target specie O
-O is in the list of Branching Points
-
 #################
 Pathways Analysis
 #################
 
 
-Here is the sorted list by lifetime of the next species considered as branching points for a fixed minimum timescale of 1.000e+07:
-O O3 O2
+Here is the sorted list by lifetime of the next species considered as branching points for a fixed minimum timescale of 1.000e+04:
+O O3
 
 Starting the pathways analysis
 
@@ -85,19 +69,23 @@ Productive pathways :
  O3 + hv => O + O2 
 ------------------
  O3 => O + O2
+with rate of: 8.000e-08
 
  O2 + hv => 2 O 
 ------------------
  O2 => 2 O
+with rate of: 1.000e-08
 
 Destructive pathways: 
  O + O2 + M => O3 + M 
 ------------------
  O + O2 => O3
+with rate of: 9.900e-08
 
  O + O3 => 2 O2 
 ------------------
  O + O3 => 2 O2
+with rate of: 1.000e-09
 
 Unaffected pathways : 
 
@@ -241,13 +229,13 @@ Updating: O3 + hv => O + O2
     rate:8.000e-08
 del rate:0.000e+00
 Updating: O2 + hv => 2 O
-    rate:1.000e-08
+    rate:9.900e-09
 del rate:1.000e-10
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
 del rate:0.000e+00
 Updating: O + O3 => 2 O2
-    rate:1.000e-09
+    rate:8.000e-10
 del rate:2.000e-10
 
 Updating rates in chemical_reaction_system.json complete.
@@ -261,18 +249,21 @@ Productive pathways :
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
+with rate of: 9.900e-09
 
 Destructive pathways: 
  O3 + hv => O + O2 
  O + O3 => 2 O2 
 ------------------
  2 O3 => 3 O2
+with rate of: 8.000e-10
 
 Unaffected pathways : 
  O3 + hv => O + O2 
  O + O2 + M => O3 + M 
 ------------------
  NULL 
+with rate of: 8.000e-10
 
 
 Starting to connect Pathways:
@@ -459,166 +450,13 @@ Updating: O3 + hv => O + O2
     rate:8.000e-08
 del rate:0.000e+00
 Updating: O2 + hv => 2 O
-    rate:1.000e-08
+    rate:9.900e-09
 del rate:1.000e-10
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
 del rate:0.000e+00
 Updating: O + O3 => 2 O2
-    rate:1.000e-09
-del rate:2.000e-10
-
-Updating rates in chemical_reaction_system.json complete.
-**************************************
-
-Pathways analysis for species: O2
-
-Here are the list of pathways for: O2
-Productive pathways : 
-Destructive pathways: 
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
-Unaffected pathways : 
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-
-Connecting destruction of O2 to D[O2]:
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-with rate of: 8.899e-09
-
-##############################
-Sub Pathways analysis starting
-##############################
-
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O3 + hv => O + O2 
- O + O2 + M => O3 + M 
-------------------
- NULL 
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-The pathway has at least than 3 reactions. Looking for subpathways!
-
-species_done for the subpathway analysis O O3
- O2 + hv => 2 O 
-------------------
- O2 => 2 O
-
- O + O2 + M => O3 + M 
-------------------
- O + O2 => O3
-
- O + O3 => 2 O2 
-------------------
- O + O3 => 2 O2
-
-
-Building subpathways with BP O
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
-
-
-Building subpathways with BP O3
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-
-The elementary subpathways is/are:
- O2 + hv => 2 O 
- O + O2 + M => O3 + M 
- O + O3 => 2 O2 
-------------------
- NULL 
-
-
-No subpathways found
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-We are looking at the pathway
- O2 + hv => 2 O 
-(O + O2 + M => O3 + M) x 2 
-------------------
- 3 O2 => 2 O3
-The pathway has less than 3 reactions. No need to look at subpathways
-
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-##########################
-Sub Pathways analysis DONE
-##########################
-
-
-**************************************
-Updating the rates of chemical species
-
-Updating:O3
-    prod:1.782e-08 to 1.780e-08
-   destr:0.000e+00 to 0.000e+00
-lifetime:4.000e+04 to 4.000e+04
-Updating:O2
-    prod:0.000e+00 to 0.000e+00
-   destr:2.673e-08 to 2.670e-08
-lifetime:7.483e+06 to 7.491e+06
-Updating:O
-    prod:0.000e+00 to 0.000e+00
-   destr:0.000e+00 to 0.000e+00
-lifetime:1.000e+99 to 1.000e+99
-
-Updating rates in chemical_species.json complete.
-**************************************
-
-**************************************
-Updating the rates of reaction system
-
-Updating: O3 + hv => O + O2
-    rate:8.000e-08
-del rate:0.000e+00
-Updating: O2 + hv => 2 O
-    rate:1.000e-08
-del rate:1.000e-10
-Updating: O + O2 + M => O3 + M
-    rate:9.900e-08
-del rate:0.000e+00
-Updating: O + O3 => 2 O2
-    rate:1.000e-09
+    rate:8.000e-10
 del rate:2.000e-10
 
 Updating rates in chemical_reaction_system.json complete.
