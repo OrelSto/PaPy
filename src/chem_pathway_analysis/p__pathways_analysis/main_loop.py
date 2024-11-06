@@ -28,13 +28,13 @@ def main_loop(t_min:float,f_min:float):
 
     # We run the BP and Sub-BP routines until we are running out of BP
     while list_bp:
-        # Opening JSON file
-        ap = open('active_pathways.json')
-        dp = open('deleted_pathways.json')
+        # # Opening JSON file
+        # ap = open('active_pathways.json')
+        # dp = open('deleted_pathways.json')
 
-        # returns JSON object as a dictionary
-        active_p = json.load(ap)
-        deleted_p = json.load(dp)
+        # # returns JSON object as a dictionary
+        # active_p = json.load(ap)
+        # deleted_p = json.load(dp)
 
         # Connecting pathways
         for species in list_bp:
@@ -42,11 +42,20 @@ def main_loop(t_min:float,f_min:float):
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('Pathways analysis for species: '+species)
             
+            # returns JSON object as a dictionary
+            with open('active_pathways.json') as ap:
+                active_p = json.load(ap)
+
             used_species.append(species)
             # looking for each species from the shortest lived to the longest
             active_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species)
 
             # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
+
+            # returns JSON object as a dictionary
+            with open('deleted_pathways.json') as dp:
+                deleted_p = json.load(dp)
+
             active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing

@@ -100,6 +100,10 @@ Connecting with O as branching point:
 ------------------
  O + O2 => O3
 
+with BP stoechio :1.000e+00
+with rate prod pw:8.000e-08
+with rate dest pw:9.900e-08
+with Db          :1.000e-07
 leads to:
  O3 + hv => O + O2 
  O + O2 + M => O3 + M 
@@ -116,6 +120,10 @@ Connecting with O as branching point:
 ------------------
  O + O3 => 2 O2
 
+with BP stoechio :1.000e+00
+with rate prod pw:8.000e-08
+with rate dest pw:1.000e-09
+with Db          :1.000e-07
 leads to:
  O3 + hv => O + O2 
  O + O3 => 2 O2 
@@ -132,6 +140,10 @@ Connecting with O as branching point:
 ------------------
  O + O2 => O3
 
+with BP stoechio :2.000e+00
+with rate prod pw:1.000e-08
+with rate dest pw:4.950e-08
+with Db          :1.000e-07
 leads to:
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
@@ -148,6 +160,10 @@ Connecting with O as branching point:
 ------------------
  O + O3 => 2 O2
 
+with BP stoechio :2.000e+00
+with rate prod pw:1.000e-08
+with rate dest pw:5.000e-10
+with Db          :1.000e-07
 leads to:
  O2 + hv => 2 O 
 (O + O3 => 2 O2) x 2 
@@ -156,12 +172,6 @@ leads to:
  with rate of: 1.000e-10
 
 No connection: to D[O] with Delta =0.000e+00
-
-Deleting pathway (too slow):
- O2 + hv => 2 O 
-(O + O3 => 2 O2) x 2 
-------------------
- 2 O3 => 3 O2
 
 ##############################
 Sub Pathways analysis starting
@@ -198,6 +208,16 @@ The pathway has less than 3 reactions. No need to look at subpathways
 
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+We are looking at the pathway
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+The pathway has less than 3 reactions. No need to look at subpathways
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 ##########################
 Sub Pathways analysis DONE
 ##########################
@@ -208,10 +228,10 @@ Updating the rates of chemical species
 
 Updating:O3
     prod:9.900e-08 to 1.980e-08
-   destr:8.100e-08 to 1.600e-09
+   destr:8.100e-08 to 1.800e-09
 lifetime:9.877e+01 to 4.444e+03
 Updating:O2
-    prod:8.200e-08 to 2.400e-09
+    prod:8.200e-08 to 2.700e-09
    destr:1.090e-07 to 2.970e-08
 lifetime:1.835e+06 to 6.734e+06
 Updating:O
@@ -229,14 +249,14 @@ Updating: O3 + hv => O + O2
     rate:8.000e-08
 del rate:0.000e+00
 Updating: O2 + hv => 2 O
-    rate:9.900e-09
-del rate:1.000e-10
+    rate:1.000e-08
+del rate:0.000e+00
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
 del rate:0.000e+00
 Updating: O + O3 => 2 O2
-    rate:8.000e-10
-del rate:2.000e-10
+    rate:1.000e-09
+del rate:0.000e+00
 
 Updating rates in chemical_reaction_system.json complete.
 **************************************
@@ -258,12 +278,18 @@ Destructive pathways:
  2 O3 => 3 O2
 with rate of: 8.000e-10
 
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+with rate of: 1.000e-10
+
 Unaffected pathways : 
  O3 + hv => O + O2 
  O + O2 + M => O3 + M 
 ------------------
  NULL 
-with rate of: 8.000e-10
+with rate of: 1.000e-10
 
 
 Starting to connect Pathways:
@@ -279,6 +305,10 @@ Connecting with O3 as branching point:
 ------------------
  2 O3 => 3 O2
 
+with BP stoechio :2.000e+00
+with rate prod pw:9.900e-09
+with rate dest pw:8.000e-10
+with Db          :1.980e-08
 leads to:
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
@@ -286,14 +316,37 @@ leads to:
  O + O3 => 2 O2 
 ------------------
  NULL 
- with rate of: 7.919e-10
+ with rate of: 8.000e-10
+
+Connecting with O3 as branching point:
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+ to 
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+with BP stoechio :2.000e+00
+with rate prod pw:9.900e-09
+with rate dest pw:1.000e-10
+with Db          :1.980e-08
+leads to:
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+ with rate of: 2.000e-10
 
 Connecting production of O3 to D[O3]:
  O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
-with rate of: 8.909e-09
+with rate of: 9.000e-09
 
 ##############################
 Sub Pathways analysis starting
@@ -412,6 +465,61 @@ explaining the pathway:
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 We are looking at the pathway
  O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+The pathway has at least than 3 reactions. Looking for subpathways!
+
+species_done for the subpathway analysis O O3
+ O2 + hv => 2 O 
+------------------
+ O2 => 2 O
+
+ O + O2 + M => O3 + M 
+------------------
+ O + O2 => O3
+
+ O + O3 => 2 O2 
+------------------
+ O + O3 => 2 O2
+
+
+Building subpathways with BP O
+ O2 + hv => 2 O 
+(O + O2 + M => O3 + M) x 2 
+------------------
+ 3 O2 => 2 O3
+
+ O2 + hv => 2 O 
+(O + O3 => 2 O2) x 2 
+------------------
+ 2 O3 => 3 O2
+
+
+Building subpathways with BP O3
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+
+The elementary subpathways is/are:
+ O2 + hv => 2 O 
+ O + O2 + M => O3 + M 
+ O + O3 => 2 O2 
+------------------
+ NULL 
+
+
+No subpathways found
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+We are looking at the pathway
+ O2 + hv => 2 O 
 (O + O2 + M => O3 + M) x 2 
 ------------------
  3 O2 => 2 O3
@@ -428,13 +536,13 @@ Sub Pathways analysis DONE
 Updating the rates of chemical species
 
 Updating:O3
-    prod:1.980e-08 to 1.782e-08
-   destr:1.600e-09 to 0.000e+00
-lifetime:4.444e+03 to 4.000e+04
+    prod:1.980e-08 to 1.800e-08
+   destr:1.800e-09 to 0.000e+00
+lifetime:4.444e+03 to 1.000e+99
 Updating:O2
-    prod:2.400e-09 to 0.000e+00
-   destr:2.970e-08 to 2.673e-08
-lifetime:6.734e+06 to 7.483e+06
+    prod:2.700e-09 to 0.000e+00
+   destr:2.970e-08 to 2.700e-08
+lifetime:6.734e+06 to 7.407e+06
 Updating:O
     prod:0.000e+00 to 0.000e+00
    destr:0.000e+00 to 0.000e+00
@@ -450,14 +558,14 @@ Updating: O3 + hv => O + O2
     rate:8.000e-08
 del rate:0.000e+00
 Updating: O2 + hv => 2 O
-    rate:9.900e-09
-del rate:1.000e-10
+    rate:1.000e-08
+del rate:0.000e+00
 Updating: O + O2 + M => O3 + M
     rate:9.900e-08
 del rate:0.000e+00
 Updating: O + O3 => 2 O2
-    rate:8.000e-10
-del rate:2.000e-10
+    rate:1.000e-09
+del rate:0.000e+00
 
 Updating rates in chemical_reaction_system.json complete.
 **************************************

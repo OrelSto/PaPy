@@ -428,7 +428,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_
                 n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
                 print('connecting', str(n_from), 'to', str(n_to))
                 # new_SP is at stoichiometry 0, so it fulfills the zero net production of species s condition for a subpathway to be added
-                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species,list_species_done)
+                new_SP,_,_ = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species,list_species_done,True)
                 print('with rate of:',new_SP["rate"])
                 # checking if new_SP is already present in set_SP_tmp and if it is an actual 
                 # elementary pathway!

@@ -17,6 +17,27 @@ def find_compound_in_merged_list(listing:list,compound:str):
     return index_found
 
 
+def find_compound_in_pathway_BP(list_of_BP:list,species:str):
+    """find_compound_in_pathway_BP _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    list_of_BP : list
+        _description_
+    species : str
+        _description_
+    """
+    for index, bp in enumerate(list_of_BP):
+        if bp["compound"] == species:
+            return index
+    
+    # Nothing is happening!
+    print("No dictionary with 'compound' equals ",species," was found in the list.")
+    exit()
+
+
 def save_pathways_to_JSON(pathways:list,filename:str):
     # need a doc here?
     # Write the JSON data to an output file
@@ -39,6 +60,9 @@ def get_compound_dict(compound:str):
 
     # returns JSON object as a dictionary
     chemical_species = json.load(cs)
+
+    # closing the file
+    cs.close()
 
     # iterate and return the correct dict
     for s in chemical_species:
@@ -221,3 +245,49 @@ def find_index_pseudo_reaction(species:str,flag:str):
     print('no pseudo reaction of ',species,' found?')
     print('error in find_index_pseudo_reaction')
     exit()
+
+
+def is_pathway_in_list(pathway_to_be_checked:dict,list_of_pathways:list):
+    """is_pathway_in_list looking for a specific pathway in a list of pathways
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    pathway_to_check : dict
+        _description_
+    list_of_pathways : list
+        _description_
+    """
+    p_2b_checked_reactions = [r["index"] for r in pathway_to_be_checked["reactions"]]
+    p_2b_checked_reactions = sorted(p_2b_checked_reactions)
+    r_2b_checked_against = [[r["index"] for r in p["reactions"]] for p in list_of_pathways]
+    r_2b_checked_against = sorted(r_2b_checked_against)
+
+    if (p_2b_checked_reactions in r_2b_checked_against):
+        return True
+    else:
+        return False
+
+
+def find_pathway_in_list(pathway_to_be_found:dict,list_of_pathways:list):
+    """find_pathway_in_list _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    pathway_to_be_found : dict
+        _description_
+    list_of_pathways : list
+        _description_
+    """
+
+    p_2b_found_reactions = [r["index"] for r in pathway_to_be_found["reactions"]]
+    p_2b_found_reactions = sorted(p_2b_found_reactions)
+
+    for index, r in enumerate(list_of_pathways):
+        r_2b_checked_against = [r["index"] for r in pathway_to_be_found["reactions"]]
+        r_2b_checked_against = sorted(r_2b_checked_against)
+        if p_2b_found_reactions == r_2b_checked_against:
+            return index
