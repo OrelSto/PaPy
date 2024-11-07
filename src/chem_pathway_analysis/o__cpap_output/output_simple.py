@@ -40,7 +40,7 @@ def text_output(target_species:list) -> None:
         
         # for pathway in active_pathways_data:
         for i in ind_pathway_sorted:
-            moche_writing_pathway(pathway=active_pathways_data[i],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum)
+            simple_output_writing_pathway(pathway=active_pathways_data[i],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum)
         
         # Now the rate from deleted pathways
         simple_output_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
@@ -52,11 +52,11 @@ def text_output(target_species:list) -> None:
         if target_species != ['None']:
             for s in target_species:
                 print('Writing outputs for branching point species: ',s)
-                moche_target_species_output(s)
+                target_species_output(s)
                 print('\n')
 
 
-def moche_writing_pathway(pathway:list,simple_output_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
+def simple_output_writing_pathway(pathway:list,simple_output_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
     # stoich_coeff is used when you want an output for a target specie
 
     o_tools.writing_pathway(pathway=pathway,output_file=simple_output_file,chem_system_data=chem_system_data)
@@ -77,7 +77,7 @@ def moche_writing_pathway(pathway:list,simple_output_file,chem_system_data,rate_
     simple_output_file.write('\n')
 
 
-def moche_target_species_output(target_specie:str) -> None:
+def target_species_output(target_specie:str) -> None:
     # The idea is that the user wants a specific output for a specified chemical species target_specie
     # We ll go through every active pathways and check if target_specie is present and list them.
     # Then we express their rate in a ratio over the prod/destr rate of the target_specie
@@ -105,12 +105,11 @@ def moche_target_species_output(target_specie:str) -> None:
     # We set up the list of pathways acting on target_specie
     del_pathways_data_t_specie = []
     for pathway in deleted_pathways_data:
-        if target_specie in pathway["list branching points used"]:
-            del_pathways_data_t_specie.append(pathway)
-        # for species in pathway["list branching points used"]:
-        #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-        # if list_ind:
-        #     del_pathways_data_t_specie.append(pathway)
+        if (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+            ind = d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)[0]
+            # Then we check if this is a pathway with prod or destr of target specie
+            if pathway["branching points"][ind]["stoichiometry"] != 0:
+                del_pathways_data_t_specie.append(pathway)
 
     with open('chemical_reaction_system.json', 'r') as chem_system_file:
         # Parse the JSON data and store it in a variable
@@ -121,7 +120,9 @@ def moche_target_species_output(target_specie:str) -> None:
     with open('simple_output_'+target_specie+'.txt', 'w') as simple_output_file:
 
         # The rate_sum for a species is the sum of its prod and destr
-        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] - t_species["destruction rate"]["active pathways"] - t_species["destruction rate"]["deleted pathways"]
+        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+        rate_sum_prod = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] 
+        rate_sum_dest = t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
         # if rate_sum == 0.0 there is no prod or destr of target_specie
         if rate_sum == 0.0:
             simple_output_file.write('No prod/destr of '+target_specie)
@@ -131,16 +132,24 @@ def moche_target_species_output(target_specie:str) -> None:
             simple_output_file.write('\n')
             # To avoid /0.0 error
             rate_sum = 1.0
-        elif rate_sum > 0.0:
+        elif rate_sum_prod > rate_sum_dest:
             simple_output_file.write('Production of '+target_specie)
             simple_output_file.write('\n')
-            simple_output_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
+            simple_output_file.write('rate_sum   = '+ '{:0.3e}'.format(rate_sum))
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_prod  = '+ '{:0.3e}'.format(rate_sum_prod))
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_destr = '+ '{:0.3e}'.format(rate_sum_dest))
             simple_output_file.write('\n')
             simple_output_file.write('\n')
         else:
             simple_output_file.write('Destruction of '+target_specie)
             simple_output_file.write('\n')
-            simple_output_file.write('rate_sum = '+ '{:0.3e}'.format(abs(rate_sum)))
+            simple_output_file.write('rate_sum   = '+ '{:0.3e}'.format(abs(rate_sum)))
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_prod  = '+ '{:0.3e}'.format(abs(rate_sum_prod)))
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_destr = '+ '{:0.3e}'.format(abs(rate_sum_dest)))
             simple_output_file.write('\n')
             simple_output_file.write('\n')
 
@@ -172,13 +181,12 @@ def moche_target_species_output(target_specie:str) -> None:
 
         rate_deleted = 0.0
         for pathway in del_pathways_data_t_specie:
-            rate_sum += pathway["rate"]
-            rate_deleted += pathway["rate"]
+            rate_deleted += abs(pathway["rate"] *pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"])
         
         # for pathway in active_pathways_data:
         for ind in ind_pathway_sorted:
             pathway = act_pathways_data_t_specie[ind]
-            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=abs(act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]))
+            simple_output_writing_pathway(pathway=act_pathways_data_t_specie[ind],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=abs(act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]))
         
         # Now the rate from deleted pathways
         simple_output_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
