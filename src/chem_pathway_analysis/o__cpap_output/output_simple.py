@@ -1,4 +1,5 @@
 import json
+import matplotlib.pyplot as plt
 
 from . import output_tools as o_tools
 from ..p__data_management import global_var
@@ -193,3 +194,111 @@ def target_species_output(target_specie:str) -> None:
         simple_output_file.write(' \n')
         simple_output_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
         simple_output_file.write(' \n')
+
+
+def pie_output(target_species:str):
+
+    for s in target_species:
+        # The idea is that the user wants a specific output for a specified chemical species target_specie
+        # We ll go through every active pathways and check if target_specie is present and list them.
+        # Then we express their rate in a ratio over the prod/destr rate of the target_specie
+        with open('active_pathways.json', 'r') as active_pathways_file:
+            # Parse the JSON data and store it in a variable
+            active_pathways_data = json.load(active_pathways_file)
+        # We set up the list of pathways acting on target_specie
+        act_pathways_data_t_specie = []
+        for pathway in active_pathways_data:
+            # if (target_specie in pathway["list branching points used"]) and (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+            # species does not have to be in "list branching points used"
+            if (d_tools.find_compound_in_merged_list(pathway["branching points"],s)):
+                ind = d_tools.find_compound_in_merged_list(pathway["branching points"],s)[0]
+                # Then we check if this is a pathway with prod or destr of target specie
+                if pathway["branching points"][ind]["stoichiometry"] != 0:
+                    act_pathways_data_t_specie.append(pathway)
+            # for species in pathway["list branching points used"]:
+            #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
+            # if list_ind:
+            #     act_pathways_data_t_specie.append(pathway)
+
+        with open('deleted_pathways.json', 'r') as deleted_pathways_file:
+            # Parse the JSON data and store it in a variable
+            deleted_pathways_data = json.load(deleted_pathways_file)
+        # We set up the list of pathways acting on s
+        del_pathways_data_t_specie = []
+        for pathway in deleted_pathways_data:
+            if (d_tools.find_compound_in_merged_list(pathway["branching points"],s)):
+                ind = d_tools.find_compound_in_merged_list(pathway["branching points"],s)[0]
+                # Then we check if this is a pathway with prod or destr of target specie
+                if pathway["branching points"][ind]["stoichiometry"] != 0:
+                    del_pathways_data_t_specie.append(pathway)
+
+        with open('chemical_reaction_system.json', 'r') as chem_system_file:
+            # Parse the JSON data and store it in a variable
+            chem_system_data = json.load(chem_system_file)
+        
+        t_species = d_tools.get_compound_dict(compound=s)
+        
+
+        # The rate_sum for a species is the sum of its prod and destr
+        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+        rate_sum_prod = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] 
+        rate_sum_dest = t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+        # if rate_sum == 0.0 there is no prod or destr of s
+
+        # we are working with absolute values
+        rate_sum = abs(rate_sum)
+
+        # we re gonna sort the pathways in order of importance
+        pathway_sorted = {}
+        i = 0
+
+        # Init Shits for plotting
+        labels = []
+        sizes = []
+
+        for pathway in act_pathways_data_t_specie:
+            stoich = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
+            # We check that the pathway account for more that 0.0001% of the total rate of the species
+            # Meaning we explain the last 0.001% with pathways
+            if stoich >= 0.0001:
+                print('stoich',stoich)
+                pathway_sorted.update({i:stoich})
+                i += 1
+            # If not, then we we will not print it
+            else:
+                print('Not printing pathway with stoich',stoich)
+                # we advance the indice also
+                i += 1
+            
+        # Now we sort the indices
+        ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
+
+        # for pathway in active_pathways_data:
+        for ind in ind_pathway_sorted:
+            pathway = act_pathways_data_t_specie[ind]
+            labels.append('P'+str(ind))
+            sizes.append(abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100)
+
+        rate_deleted = 0.0
+        for pathway in del_pathways_data_t_specie:
+            rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
+        
+        labels.append('P_del')
+        sizes.append(rate_deleted)
+
+        fig, ax = plt.subplots()
+        ax.set_title('Contributions for species: '+s)
+        ax.pie(sizes, labels=labels, autopct='%1.1f%%')
+
+        # Read the contents of the text file
+        
+        text="""Just a test \nwith a new line that is very loooooong"""
+
+        # Hide the axes
+        ax.axis("off")
+
+        # Display the text in the plot
+        ax.text(1.6, 0.5, text, fontsize=10)
+
+        # Display the plot
+        plt.show()

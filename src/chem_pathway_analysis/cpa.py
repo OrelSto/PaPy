@@ -117,3 +117,5 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     print('##################')
     print()
     out.text_output(target_species=target_species)
+
+    out.pie_output(target_species=target_species)
