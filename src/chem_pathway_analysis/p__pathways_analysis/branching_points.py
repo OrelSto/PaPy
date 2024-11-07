@@ -13,6 +13,9 @@ def list_next_branching_points(t_min:float):
     # returns JSON object as a dictionary
     chemical_species = json.load(cs)
 
+    # closing file
+    cs.close()
+
     # empty dict
     tmp_dict = {}
 
@@ -37,6 +40,8 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
     crs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
     chemical_system = json.load(crs)
+    # closing file
+    crs.close()
 
     # we connect pathways that are producing species to pathways that are consuming species
     # list of pathways that produce species
@@ -87,11 +92,11 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=p,chem_system_data=chemical_system))
                 o_tools.write_line_chronicle('with rate of: '+'{:0.3e}'.format(active_pathways[i]["rate"]))
                 o_tools.write_line_chronicle('\n')
-        # We connect each prod pathway to each destroy pathway
 
-        if global_var.chronicle_writing:
+        # We connect each prod pathway to each destroy pathway
             o_tools.write_line_chronicle('\n')
             o_tools.write_line_chronicle('Starting to connect Pathways:')
+        
         for p_from in list_pathways_prod:
             for p_to in list_pathways_destroy:
                 n_from = [n["index"] for n in active_pathways[p_from]["reactions"]]
@@ -225,11 +230,14 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
 
 
 def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
-    if global_var.chronicle_writing:
-        # Opening JSON file
-        crs = open('chemical_reaction_system.json')
-        # returns JSON object as a dictionary
-        chemical_system = json.load(crs)
+    
+    # Opening JSON file
+    crs = open('chemical_reaction_system.json')
+    # returns JSON object as a dictionary
+    chemical_system = json.load(crs)
+    # closing file
+    crs.close()
+
     # we iterate through active pathways to check if rate < f_min
     list_to_remove = []
     for item in active_pathways:
@@ -246,6 +254,9 @@ def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:floa
     for item in list_to_remove:
         active_pathways.remove(item)
     
+    # Closing the reaction file
+    crs.close()
+
     # Now we have to update the rates.
     
     return active_pathways,deleted_pathways

@@ -1,11 +1,11 @@
 import json
 
-from ..o__cpap_output import output_tools as o_tools
+from . import output_tools as o_tools
 from ..p__data_management import global_var
 from ..p__data_management import data_tools as d_tools
 
 # we make a moche output ^^'
-def moche(target_species:list) -> None:
+def text_output(target_species:list) -> None:
     with open('active_pathways.json', 'r') as active_pathways_file:
         # Parse the JSON data and store it in a variable
         active_pathways_data = json.load(active_pathways_file)
@@ -18,9 +18,9 @@ def moche(target_species:list) -> None:
         # Parse the JSON data and store it in a variable
         chem_system_data = json.load(chem_system_file)
 
-    with open('output_moche.txt', 'w') as output_moche_file:
-        output_moche_file.write('**************************')
-        output_moche_file.write('\n')
+    with open('simple_output.txt', 'w') as simple_output_file:
+        simple_output_file.write('**************************')
+        simple_output_file.write('\n')
 
         rate_sum = 0.0
         for pathway in active_pathways_data:
@@ -40,13 +40,13 @@ def moche(target_species:list) -> None:
         
         # for pathway in active_pathways_data:
         for i in ind_pathway_sorted:
-            moche_writing_pathway(pathway=active_pathways_data[i],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum)
+            moche_writing_pathway(pathway=active_pathways_data[i],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum)
         
         # Now the rate from deleted pathways
-        output_moche_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
-        output_moche_file.write(' \n')
-        output_moche_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
-        output_moche_file.write(' \n')
+        simple_output_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
+        simple_output_file.write(' \n')
+        simple_output_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
+        simple_output_file.write(' \n')
 
         # Now we call the output function for a target specie
         if target_species != ['None']:
@@ -56,25 +56,25 @@ def moche(target_species:list) -> None:
                 print('\n')
 
 
-def moche_writing_pathway(pathway:list,output_moche_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
+def moche_writing_pathway(pathway:list,simple_output_file,chem_system_data,rate_sum:float,stoich_coeff=1.0) -> None:
     # stoich_coeff is used when you want an output for a target specie
 
-    o_tools.writing_pathway(pathway=pathway,output_file=output_moche_file,chem_system_data=chem_system_data)
+    o_tools.writing_pathway(pathway=pathway,output_file=simple_output_file,chem_system_data=chem_system_data)
 
-    output_moche_file.write(' \n')
+    simple_output_file.write(' \n')
     
     # Now the rate
-    output_moche_file.write(' \n')
-    # output_moche_file.write(' RATE  : ' + str(round(pathway["rate"],3)))
-    output_moche_file.write(' RATE  : ' + '{:0.3e}'.format(pathway["rate"]*stoich_coeff))
-    output_moche_file.write(' \n')
-    output_moche_file.write(' RATE %: ' + '{:0.3f}'.format(pathway["rate"]*stoich_coeff/rate_sum * 100))
-    output_moche_file.write(' \n')
+    simple_output_file.write(' \n')
+    # simple_output_file.write(' RATE  : ' + str(round(pathway["rate"],3)))
+    simple_output_file.write(' RATE  : ' + '{:0.3e}'.format(pathway["rate"]*stoich_coeff))
+    simple_output_file.write(' \n')
+    simple_output_file.write(' RATE %: ' + '{:0.3f}'.format(pathway["rate"]*stoich_coeff/rate_sum * 100))
+    simple_output_file.write(' \n')
     
 
-    output_moche_file.write(' \n')
-    output_moche_file.write('**************************')
-    output_moche_file.write('\n')
+    simple_output_file.write(' \n')
+    simple_output_file.write('**************************')
+    simple_output_file.write('\n')
 
 
 def moche_target_species_output(target_specie:str) -> None:
@@ -118,34 +118,34 @@ def moche_target_species_output(target_specie:str) -> None:
     
     t_species = d_tools.get_compound_dict(compound=target_specie)
     
-    with open('output_moche_'+target_specie+'.txt', 'w') as output_moche_file:
+    with open('simple_output_'+target_specie+'.txt', 'w') as simple_output_file:
 
         # The rate_sum for a species is the sum of its prod and destr
-        rate_sum = t_species["production rate"]["active pathways"] - t_species["destruction rate"]["active pathways"]
+        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] - t_species["destruction rate"]["active pathways"] - t_species["destruction rate"]["deleted pathways"]
         # if rate_sum == 0.0 there is no prod or destr of target_specie
         if rate_sum == 0.0:
-            output_moche_file.write('No prod/destr of '+target_specie)
-            output_moche_file.write('\n')
-            output_moche_file.write('rate_sum = 0')
-            output_moche_file.write('\n')
-            output_moche_file.write('\n')
+            simple_output_file.write('No prod/destr of '+target_specie)
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_sum = 0')
+            simple_output_file.write('\n')
+            simple_output_file.write('\n')
             # To avoid /0.0 error
             rate_sum = 1.0
         elif rate_sum > 0.0:
-            output_moche_file.write('Production of '+target_specie)
-            output_moche_file.write('\n')
-            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
-            output_moche_file.write('\n')
-            output_moche_file.write('\n')
+            simple_output_file.write('Production of '+target_specie)
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_sum = '+ '{:0.3e}'.format(rate_sum))
+            simple_output_file.write('\n')
+            simple_output_file.write('\n')
         else:
-            output_moche_file.write('Destruction of '+target_specie)
-            output_moche_file.write('\n')
-            output_moche_file.write('rate_sum = '+ '{:0.3e}'.format(abs(rate_sum)))
-            output_moche_file.write('\n')
-            output_moche_file.write('\n')
+            simple_output_file.write('Destruction of '+target_specie)
+            simple_output_file.write('\n')
+            simple_output_file.write('rate_sum = '+ '{:0.3e}'.format(abs(rate_sum)))
+            simple_output_file.write('\n')
+            simple_output_file.write('\n')
 
-        output_moche_file.write('**************************')
-        output_moche_file.write('\n')
+        simple_output_file.write('**************************')
+        simple_output_file.write('\n')
 
         # we are working with absolute values
         rate_sum = abs(rate_sum)
@@ -178,10 +178,10 @@ def moche_target_species_output(target_specie:str) -> None:
         # for pathway in active_pathways_data:
         for ind in ind_pathway_sorted:
             pathway = act_pathways_data_t_specie[ind]
-            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],output_moche_file=output_moche_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=abs(act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]))
+            moche_writing_pathway(pathway=act_pathways_data_t_specie[ind],simple_output_file=simple_output_file,chem_system_data=chem_system_data,rate_sum=rate_sum,stoich_coeff=abs(act_pathways_data_t_specie[ind]["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=target_specie)[0]]["stoichiometry"]))
         
         # Now the rate from deleted pathways
-        output_moche_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
-        output_moche_file.write(' \n')
-        output_moche_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
-        output_moche_file.write(' \n')
+        simple_output_file.write(' RATE DELETED  : ' + '{:0.3e}'.format(rate_deleted))
+        simple_output_file.write(' \n')
+        simple_output_file.write(' RATE DELETED %: ' + '{:0.3f}'.format(rate_deleted/rate_sum * 100))
+        simple_output_file.write(' \n')

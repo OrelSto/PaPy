@@ -38,7 +38,7 @@ from .p__data_management import data_update as up
 from .p__data_management import global_var
 from .p__pathways_analysis import branching_points as bp
 from .p__pathways_analysis import main_loop as ml
-from .o__cpap_output import output_moche as out
+from .o__cpap_output import output_simple as out
 from .o__cpap_output import output_tools as o_tools
 
 
@@ -88,7 +88,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     p_init.init_pathways(json_filename="chemical_reaction_system.json")
     print()
     print('Updating prod/destr rates for chemical species')
-    up.update_rates_chemical_species()
+    up.update_rates_chemical_species(species='start')
     print()
     # Checking the targeted species as viable outputs
     # if global_var.chronicle_writing:
@@ -116,4 +116,4 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     print('Outputs formatting')
     print('##################')
     print()
-    out.moche(target_species=target_species)
+    out.text_output(target_species=target_species)

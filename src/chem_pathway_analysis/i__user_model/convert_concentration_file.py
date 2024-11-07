@@ -114,6 +114,9 @@ def convert_concentration_file(filename:str,timestep:float):
     # returns JSON object as a dictionary
     reaction_system = json.load(reactions)
 
+    # closing the file
+    reactions.close()
+
     # Empty list of all reactions
     chemical_species = []
     

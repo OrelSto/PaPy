@@ -19,7 +19,7 @@ python3 -m test_cpa
 This should run the model and provide you with results files.
 
 Some information will be displayed in your terminal and some files will be created:
->output_moche.txt
+>simple_output.txt
 
 This is the list of relevant pathways in a text format
 

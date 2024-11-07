@@ -224,7 +224,9 @@ def adding_pseudo_reactions():
     # returns JSON object as a dictionary
     chemical_species = json.load(cs)
     chemical_system = json.load(crs)
-
+    # closing files
+    cs.close()
+    crs.close()
     chemical_pseudo_reaction_system = []
     for item in chemical_species:
         chemical_pseudo_reaction_system.append(d_tools.format_pseudo_reaction(species=item["name"],flag='prod'))

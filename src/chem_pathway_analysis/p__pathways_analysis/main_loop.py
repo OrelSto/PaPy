@@ -75,10 +75,6 @@ def main_loop(t_min:float,f_min:float):
             # After saving, SUB-PATHWAYS analysis !!
             active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species)
 
-            # saving
-            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+species+'_'+'.json')
-            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
-            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
 
             # Printing
             print()
@@ -104,15 +100,33 @@ def main_loop(t_min:float,f_min:float):
             print('!!!!!!!!!!!!!!!!!!!!!!!!')
             print()
 
+            # Now we are at the step where we update some characteristics
+            # Namely: the prod/destr rates of every species and the reactions rates
+            # First, we need to update the active_p, why?
+            # Because there is a possibility that when constructing new pathways
+            # One of the prod/destr pathways might be related to destr/prod of the BP
+            # Hence, a part of its rate is deleted and is not yet saved in active_p
+
+            # Updating the Active Pathways list for deleted rate
+            print('Updating active pathways rates for possible deleted part')
+            # active_p = up.update_active_p_rates_from_deleted_p(active_pathways=active_p,deleted_pathways=deleted_p)
+            
+            # saving active/deleted pathways before updating the reaction/species rates
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+species+'.json')
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
+            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways_'+species+'.json')
+            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
+            
             # Updating the chemical species
             print('Updating prod/destr rates for chemical species')
-            up.update_rates_chemical_species()
+            up.update_rates_chemical_species(species=species)
             print()
 
             # Updating the chemical reaction system
             print('Updating rates for chemical reaction system')
             up.update_rates_reaction_system()
             print()
+
 
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)

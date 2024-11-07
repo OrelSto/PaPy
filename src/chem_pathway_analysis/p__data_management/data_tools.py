@@ -225,6 +225,8 @@ def find_index_pseudo_reaction(species:str,flag:str):
     cs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
     chemical_system_data = json.load(cs)
+    # closing file
+    cs.close()
 
     # loop over it
     # Iterate through the list

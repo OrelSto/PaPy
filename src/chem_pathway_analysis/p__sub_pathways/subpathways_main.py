@@ -15,6 +15,8 @@ def main_subpathways(pathways:list,list_species_done:list):
     crs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
     chemical_system = json.load(crs)
+    # closing file
+    crs.close()
 
     active_pathways_data_tmp = copy.deepcopy(pathways)
     ind=0

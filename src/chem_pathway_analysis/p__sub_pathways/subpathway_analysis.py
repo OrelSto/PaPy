@@ -18,6 +18,8 @@ def subpathway_analysis(pathway:dict,active_pathways:list,ind:int,list_species_d
     cs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
     chemical_system_data = json.load(cs)
+    # closing file
+    cs.close()
 
     # Just trying to check if we can just work with the species done by being the species listed as BP used
     species_done = pathway['list branching points used']
@@ -259,6 +261,8 @@ def sub_pathway_set_init(pathway:dict,list_species:list) -> list:
     cs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
     chemical_system = json.load(cs)
+    # closing file
+    cs.close()
 
     # We want to add to pathway, which is the initial pathway studied, the pseudo_react
     for s in list_species:

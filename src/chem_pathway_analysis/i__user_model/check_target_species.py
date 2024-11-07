@@ -93,4 +93,7 @@ def check_list_target_species(target_species:list,t_min:float):
     if not target_species:
         target_species = ['None']
 
+    # Closing file
+    cs.close()
+    
     return target_species
