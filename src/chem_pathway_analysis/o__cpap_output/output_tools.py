@@ -19,7 +19,7 @@ def writing_reaction(reaction:list,output_file:TextIOWrapper,chem_system_data:li
         else:
             output_file.write(reactant["compound"])
         if (list_reactant.index(reactant) + 1) == len(list_reactant):
-            output_file.write(' => ')
+            output_file.write(' -> ')
         else:
             output_file.write(' + ')
     for product in list_product:
@@ -51,7 +51,7 @@ def reaction_to_str(reaction:dict,chem_system_data:list):
         else:
             result += reactant["compound"]
         if (list_reactant.index(reactant) + 1) == len(list_reactant):
-            result += ' => '
+            result += ' -> '
         else:
             result += ' + '
     for product in list_product:
@@ -98,7 +98,7 @@ def writing_pathway(pathway:list,output_file:TextIOWrapper,chem_system_data:list
     else:
         # print('We finally write the reactants:',saving_react)
         # print('And write the products        :',saving_prod)
-        output_file.write(' ' + ' + '.join(saving_react) + ' => ' + ' + '.join(saving_prod))
+        output_file.write(' ' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod))
 
 def pathway_to_str(pathway:list,chem_system_data:list):
 
@@ -134,9 +134,49 @@ def pathway_to_str(pathway:list,chem_system_data:list):
     else:
         # print('We finally write the reactants:',saving_react)
         # print('And write the products        :',saving_prod)
-        result += ' ' + ' + '.join(saving_react) + ' => ' + ' + '.join(saving_prod)
+        result += ' ' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod)
     
     return result
+
+
+def pathway_to_latex_str(pathway:list,chem_system_data:list):
+
+    result = ''
+
+    for r in pathway["reactions"]:
+        result += '\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+'}'
+        result += ' \n'
+
+    result += '------------------'
+    result += '\n'
+
+    mask = []
+    saving_prod = []
+    saving_react = []
+    for bp in pathway["branching points"]:
+        if bp["stoichiometry"] > 0:
+            mask.append(False)
+            if bp["stoichiometry"] > 1:
+                saving_prod += [str(bp["stoichiometry"])+ ' ' +bp["compound"]]
+            else:
+                saving_prod += [bp["compound"]]
+        elif bp["stoichiometry"] == 0:
+            mask.append(True)
+        elif bp["stoichiometry"] < 0:
+            mask.append(False)
+            if bp["stoichiometry"] < -1:
+                saving_react += [str(-bp["stoichiometry"])+ ' ' +bp["compound"]]
+            else:
+                saving_react += [bp["compound"]]
+    if all(mask):
+        result += ' NULL '
+    else:
+        # print('We finally write the reactants:',saving_react)
+        # print('And write the products        :',saving_prod)
+        result += ' \ce{' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod)+'}'
+    
+    return result
+
 
 def write_line_chronicle(text_to_archive:str):
     # Write a a line in the chronicles

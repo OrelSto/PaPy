@@ -197,8 +197,21 @@ def target_species_output(target_specie:str) -> None:
 
 
 def pie_output(target_species:str):
+    """pie_output _summary_
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    target_species : str
+        _description_
+    """
+    from matplotlib import rcParams
+    rcParams['text.usetex'] = True
 
     for s in target_species:
+        # Before everything we init the text to print the pathways
+        text = ''
         # The idea is that the user wants a specific output for a specified chemical species target_specie
         # We ll go through every active pathways and check if target_specie is present and list them.
         # Then we express their rate in a ratio over the prod/destr rate of the target_specie
@@ -215,10 +228,6 @@ def pie_output(target_species:str):
                 # Then we check if this is a pathway with prod or destr of target specie
                 if pathway["branching points"][ind]["stoichiometry"] != 0:
                     act_pathways_data_t_specie.append(pathway)
-            # for species in pathway["list branching points used"]:
-            #     list_ind = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
-            # if list_ind:
-            #     act_pathways_data_t_specie.append(pathway)
 
         with open('deleted_pathways.json', 'r') as deleted_pathways_file:
             # Parse the JSON data and store it in a variable
@@ -248,57 +257,67 @@ def pie_output(target_species:str):
         # we are working with absolute values
         rate_sum = abs(rate_sum)
 
-        # we re gonna sort the pathways in order of importance
-        pathway_sorted = {}
-        i = 0
 
         # Init Shits for plotting
         labels = []
         sizes = []
 
+        print('For species: '+s)
+        # we re gonna sort the pathways in order of importance
+        pathway_sorted = {}
+        i = 0
         for pathway in act_pathways_data_t_specie:
             stoich = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
             # We check that the pathway account for more that 0.0001% of the total rate of the species
-            # Meaning we explain the last 0.001% with pathways
-            if stoich >= 0.0001:
+            # Meaning we explain the last 0.1% with pathways
+            # FOR THE PIE CHART:
+            # We only save Pathways with % above 0.1%
+            if stoich >= 0.1:
                 print('stoich',stoich)
                 pathway_sorted.update({i:stoich})
                 i += 1
             # If not, then we we will not print it
             else:
-                print('Not printing pathway with stoich',stoich)
+                print('Not adding pathway with stoich',stoich,' to the Pie Chart')
                 # we advance the indice also
                 i += 1
-            
+        
         # Now we sort the indices
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
+        print('We have the ind dict sorted:',ind_pathway_sorted)
 
         # for pathway in active_pathways_data:
         for ind in ind_pathway_sorted:
             pathway = act_pathways_data_t_specie[ind]
             labels.append('P'+str(ind))
             sizes.append(abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100)
+            # Adding the text of the pathway
+            text = text + ' \n'
+            text = text + r'\textbf{P'+str(ind)+r'}'
+            text = text + ' \n'
+            text = text + o_tools.pathway_to_latex_str(pathway=pathway,chem_system_data=chem_system_data)
+            text = text + ' \n'
 
         rate_deleted = 0.0
         for pathway in del_pathways_data_t_specie:
             rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
         
-        labels.append('P_del')
-        sizes.append(rate_deleted)
+        if rate_deleted >= 0.1:
+            labels.append('P_del')
+            sizes.append(rate_deleted)
 
-        fig, ax = plt.subplots()
-        ax.set_title('Contributions for species: '+s)
-        ax.pie(sizes, labels=labels, autopct='%1.1f%%')
-
-        # Read the contents of the text file
-        
-        text="""Just a test \nwith a new line that is very loooooong"""
+        fig, ax = plt.subplots(nrows=1,ncols=2)
+        plt.rc('text', usetex=True)
+        plt.rc('text.latex', preamble=r'\usepackage[version=4]{mhchem}')
+        fig.suptitle(r'Contributions for species: \ce{'+s+r'}')
+        ax[0].pie(sizes, labels=labels, autopct='%1.1f%%')
 
         # Hide the axes
-        ax.axis("off")
+        ax[1].axis("off")
 
         # Display the text in the plot
-        ax.text(1.6, 0.5, text, fontsize=10)
+        ax[1].text(0,0,text, fontsize=10)
 
         # Display the plot
+        plt.tight_layout()
         plt.show()
