@@ -5,14 +5,14 @@ from src.chem_pathway_analysis import cpa
 
 # this is a stupid way to test the package but it works
 # Next line is the example of lehmann 2004
-# cpa.run_cpa(timestep=1.0,rate_threshold=1e-12,t_min=1.0e4,
-#             target_species=['O2','O3','O'],
-#             filename_model='user_model_example.txt',
-#             filename_concentration='user_concentration_example.txt',
-#             final_AP_file='ActP_Lehmann2004.json',
-#             final_DP_file='DelP_Lehmann2004.json',
-#             chronicle_writing=True)
-# cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='active_pathways.json',del_P_json='deleted_pathways.json',chem_R_json='chemical_reaction_system.json')
+cpa.run_cpa(timestep=1.0,rate_threshold=1e-12,t_min=1.0e4,
+            target_species=['O2','O3','O'],
+            filename_model='user_model_example.txt',
+            filename_concentration='user_concentration_example.txt',
+            final_AP_file='ActP_Lehmann2004.json',
+            final_DP_file='DelP_Lehmann2004.json',
+            chronicle_writing=True)
+cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='active_pathways.json',del_P_json='deleted_pathways.json',chem_R_json='chemical_reaction_system.json')
 
 # test article to see if P4 is deleted!
 # cpa.run_cpa(timestep=1.0,rate_threshold=0.3e-9,t_min=1.0e4,

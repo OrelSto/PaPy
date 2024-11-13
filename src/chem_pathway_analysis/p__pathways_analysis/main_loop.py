@@ -12,7 +12,7 @@ from ..o__cpap_output import output_tools as o_tools
 def main_loop(t_min:float,f_min:float):
     
     # main loop for connecting pathways and stuffs
-    print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
+    # print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
     list_bp = bp.list_next_branching_points(t_min=t_min)
     print(list_bp)
     
@@ -59,12 +59,6 @@ def main_loop(t_min:float,f_min:float):
             active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing
-            print()
-            print('##############################')
-            print("Sub Pathways analysis starting")
-            print('##############################')
-            print()
-
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('##############################')
@@ -77,12 +71,6 @@ def main_loop(t_min:float,f_min:float):
 
 
             # Printing
-            print()
-            print('##########################')
-            print("Sub Pathways analysis done")
-            print('##########################')
-            print()
-
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('##########################')
@@ -93,13 +81,6 @@ def main_loop(t_min:float,f_min:float):
             # Maybe some checking for conservation properties?
             # Like the distribution of the chemical reaction rates onto the pathways (active & deleted)
 
-            # Printing
-            print()
-            print('!!!!!!!!!!!!!!!!!!!!!!!!')
-            print("active pathways updated")
-            print('!!!!!!!!!!!!!!!!!!!!!!!!')
-            print()
-
             # Now we are at the step where we update some characteristics
             # Namely: the prod/destr rates of every species and the reactions rates
             # First, we need to update the active_p, why?
@@ -107,10 +88,6 @@ def main_loop(t_min:float,f_min:float):
             # One of the prod/destr pathways might be related to destr/prod of the BP
             # Hence, a part of its rate is deleted and is not yet saved in active_p
 
-            # Updating the Active Pathways list for deleted rate
-            print('Updating active pathways rates for possible deleted part')
-            # active_p = up.update_active_p_rates_from_deleted_p(active_pathways=active_p,deleted_pathways=deleted_p)
-            
             # saving active/deleted pathways before updating the reaction/species rates
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+species+'.json')
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways.json')
@@ -118,23 +95,19 @@ def main_loop(t_min:float,f_min:float):
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
             
             # Updating the chemical species
-            print('Updating prod/destr rates for chemical species')
             up.update_rates_chemical_species(species=species)
-            print()
 
             # Updating the chemical reaction system
-            print('Updating rates for chemical reaction system')
             up.update_rates_reaction_system()
-            print()
 
 
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min)
         # print('This is list_bp: ',list_bp)
         list_bp = list(filterfalse(lambda x: x in used_species,list_bp))
-        print('This is used_species: ',used_species)
-        print('This is not used_species: ',[not c for c in used_species])
-        print('This is list_bp after flagged: ',list_bp)
+        # print('This is used_species: ',used_species)
+        # print('This is not used_species: ',[not c for c in used_species])
+        # print('This is list_bp after flagged: ',list_bp)
     
     # Now that the main loop is over:
     # We check that the rates are conserved:

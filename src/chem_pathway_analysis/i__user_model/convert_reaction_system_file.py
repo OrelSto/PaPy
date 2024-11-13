@@ -227,7 +227,6 @@ def convert_chemical_reaction_file(filename:str):
                 o_tools.write_line_chronicle(l)
         exit()
     else:
-        print("Conversion of",filename,"to JSON chemical system format complete.")
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
             o_tools.write_line_chronicle('Saved as chemical_reaction_system.json')

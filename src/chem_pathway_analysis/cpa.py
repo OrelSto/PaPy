@@ -53,13 +53,6 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     init_global_var(chronicle_writing=chronicle_writing)
 
     # first test is to convert a given text file into a workable JSON dataset
-
-    print('######################')
-    print('User Inputs Processing')
-    print('######################')
-    print()
-
-
     if global_var.chronicle_writing:
         with open('chronicles.txt', 'w') as output_file:
             output_file.write('Start of the Chemical Pathway Analysis')
@@ -81,16 +74,13 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('Pathways Initialization')
         o_tools.write_line_chronicle('#######################')
         o_tools.write_line_chronicle('\n')
-    print()
-    print('#######################')
-    print('Pathways Initialization')
-    print('#######################')
-    print()
+
     p_init.init_pathways(json_filename="chemical_reaction_system.json")
-    print()
-    print('Updating prod/destr rates for chemical species')
+
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Updating prod/destr rates for chemical species')
+    
     up.update_rates_chemical_species(species='start')
-    print()
     # Checking the targeted species as viable outputs
     # if global_var.chronicle_writing:
     #     o_tools.write_line_chronicle('\n')
@@ -106,17 +96,10 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('Pathways Analysis')
         o_tools.write_line_chronicle('#################')
         o_tools.write_line_chronicle('\n')
-    print('#################')
-    print('Pathways Analysis')
-    print('#################')
-    print()
+    
     ml.main_loop(t_min=t_min,f_min=rate_threshold)
 
     # 4. main loop done. Outputs time!!!
-    print('##################')
-    print('Outputs formatting')
-    print('##################')
-    print()
     out.text_output(target_species=target_species)
 
     # 5 copying results files

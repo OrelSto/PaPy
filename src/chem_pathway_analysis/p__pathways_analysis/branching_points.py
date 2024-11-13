@@ -47,12 +47,12 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
     # list of pathways that produce species
     list_pathways_prod,list_pathways_destroy,pathways_non_affected = d_tools.list_connecting_pathways(set_of_pathways=active_pathways,species=species)
 
-    print()
-    print('Here are the list of pathways for', species)
-    print('Productive pathways:',list_pathways_prod)
-    print('destructive pathways:',list_pathways_destroy)
-    print('unaffected pathways:',pathways_non_affected)
-    print()
+    # print()
+    # print('Here are the list of pathways for', species)
+    # print('Productive pathways:',list_pathways_prod)
+    # print('destructive pathways:',list_pathways_destroy)
+    # print('unaffected pathways:',pathways_non_affected)
+    # print()
 
 
     # New list of new pathways
@@ -70,7 +70,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
     else:
         cond_destroy = False
     
-    print('Condition Prod/Destroy:',cond_prod,cond_destroy)
+    # print('Condition Prod/Destroy:',cond_prod,cond_destroy)
 
     if (cond_prod and cond_destroy):
         # Writing some stuff in chronicles
@@ -101,7 +101,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
             for p_to in list_pathways_destroy:
                 n_from = [n["index"] for n in active_pathways[p_from]["reactions"]]
                 n_to = [n["index"] for n in active_pathways[p_to]["reactions"]]
-                print('connecting', str(n_from), 'to', str(n_to))
+                # print('connecting', str(n_from), 'to', str(n_to))
                 # Chronicles
                 if global_var.chronicle_writing:
                     o_tools.write_line_chronicle('\n')
@@ -114,7 +114,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 # we append the mew pathway
                 new_P_to_add,_,_=data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species,list_species_done,False)
                 new_pathways.append(new_P_to_add)
-                print('with rate of:',new_pathways[-1]["rate"])
+                # print('with rate of:',new_pathways[-1]["rate"])
                 # Chronicles
                 if global_var.chronicle_writing:
                     o_tools.write_line_chronicle('leads to:\n'+
@@ -129,7 +129,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 # we have the productive case
                 for p_prod in list_pathways_prod:
                     n_from = [n["index"] for n in active_pathways[p_prod]["reactions"]]
-                    print('connecting prod',n_from,' to D[',species,']')
+                    # print('connecting prod',n_from,' to D[',species,']')
                     # Chronicles
                     if global_var.chronicle_writing:
                         o_tools.write_line_chronicle('\n')
@@ -137,7 +137,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                                                     o_tools.pathway_to_str(pathway=active_pathways[p_prod],chem_system_data=chemical_system))
                     
                     new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species,flag_update='production'))
-                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+                    # print('with rate of:',new_pathways_Dbp[-1]["rate"])
 
                     # Chronicles
                     if global_var.chronicle_writing:
@@ -146,14 +146,14 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 # we have the destructive case
                 for p_destruct in list_pathways_destroy:
                     n_to = [n["index"] for n in active_pathways[p_destruct]["reactions"]]
-                    print('connecting destr',n_to,' to D[',species,']')
+                    # print('connecting destr',n_to,' to D[',species,']')
                     # Chronicles
                     if global_var.chronicle_writing:
                         o_tools.write_line_chronicle('\n')
                         o_tools.write_line_chronicle('Connecting destruction of '+species+' to D['+species+']:\n'+
                                                     o_tools.pathway_to_str(pathway=active_pathways[p_destruct],chem_system_data=chemical_system))
                     new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
-                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+                    # print('with rate of:',new_pathways_Dbp[-1]["rate"])
 
                     # Chronicles
                     if global_var.chronicle_writing:
@@ -167,8 +167,8 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
         
         # We return the unaffected + new pathways . It means that the old productive and destructive pathways of species are deleted from active_p
         active_pathways = pathways_non_affected + new_pathways + new_pathways_Dbp
-        for p in active_pathways:
-            print(p["reactions"])
+        # for p in active_pathways:
+            # print(p["reactions"])
 
         return active_pathways
     elif (cond_prod or cond_destroy):
@@ -180,7 +180,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 # we have the productive case
                 for p_prod in list_pathways_prod:
                     n_from = [n["index"] for n in active_pathways[p_prod]["reactions"]]
-                    print('connecting prod',n_from,' to D[',species,']')
+                    # print('connecting prod',n_from,' to D[',species,']')
                     # Chronicles
                     if global_var.chronicle_writing:
                         o_tools.write_line_chronicle('\n')
@@ -188,7 +188,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                                                     o_tools.pathway_to_str(pathway=active_pathways[p_prod],chem_system_data=chemical_system))
                     
                     new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_prod],species,flag_update='production'))
-                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+                    # print('with rate of:',new_pathways_Dbp[-1]["rate"])
 
                     # Chronicles
                     if global_var.chronicle_writing:
@@ -197,14 +197,14 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
                 # we have the destructive case
                 for p_destruct in list_pathways_destroy:
                     n_to = [n["index"] for n in active_pathways[p_destruct]["reactions"]]
-                    print('connecting destr',n_to,' to D[',species,']')
+                    # print('connecting destr',n_to,' to D[',species,']')
                     # Chronicles
                     if global_var.chronicle_writing:
                         o_tools.write_line_chronicle('\n')
                         o_tools.write_line_chronicle('Connecting destruction of '+species+' to D['+species+']:\n'+
                                                     o_tools.pathway_to_str(pathway=active_pathways[p_destruct],chem_system_data=chemical_system))
                     new_pathways_Dbp.append(data.connect_pathway_to_Dbp(active_pathways[p_destruct],species,flag_update='destruction'))
-                    print('with rate of:',new_pathways_Dbp[-1]["rate"])
+                    # print('with rate of:',new_pathways_Dbp[-1]["rate"])
 
                     # Chronicles
                     if global_var.chronicle_writing:
@@ -219,8 +219,8 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list)
         # we return the unaffected + new_pathways_Dbp since there is no new_pathways because those
         # are constructed with destr+prod of BP
         active_pathways = pathways_non_affected + new_pathways_Dbp
-        for p in active_pathways:
-            print(p["reactions"])
+        # for p in active_pathways:
+            # print(p["reactions"])
         return active_pathways
     
     else:

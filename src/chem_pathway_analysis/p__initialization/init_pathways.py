@@ -71,12 +71,10 @@ def init_pathways(json_filename:str):
     # Write the JSON data to an output file
     with open('active_pathways.json', 'w') as output_file:
         json.dump(active_pathways, output_file, indent=2)
-    print("Initialization of Active Pathways saved as active_pathways.json")
     
     # Write the JSON data to an output file
     with open('deleted_pathways.json', 'w') as output_file:
         json.dump([], output_file, indent=2)
-    print("Initialization of Deleted Pathways saved as deleted_pathways.json")
     
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('The initial active pathways are all the singular reactions in the system (not the pseudo-reactions)')

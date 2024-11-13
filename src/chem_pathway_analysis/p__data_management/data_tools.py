@@ -43,7 +43,7 @@ def save_pathways_to_JSON(pathways:list,filename:str):
     # Write the JSON data to an output file
     with open(filename, 'w') as output_file:
         json.dump(pathways, output_file, indent=2)
-    print("Pathways saved as",filename)
+    # print("Pathways saved as",filename)
 
 
 def D_compound(compound:dict):
