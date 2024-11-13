@@ -82,7 +82,8 @@ def format_pseudo_reaction(species:str,flag:str):
         "deleted rate":0.0,
         "results": [{"compound":species,"stoichiometry":-1},
                     {"compound":"...","stoichiometry":1}],
-        "is_pseudo":True
+        "is_pseudo":True,
+        "is_conserved":True
         }
     if flag == 'prod':
         return {
@@ -92,7 +93,8 @@ def format_pseudo_reaction(species:str,flag:str):
         "deleted rate":0.0,
         "results": [{"compound":"...","stoichiometry":-1},
                     {"compound":species,"stoichiometry":1}],
-        "is_pseudo":True
+        "is_pseudo":True,
+        "is_conserved":True
         }
 
 

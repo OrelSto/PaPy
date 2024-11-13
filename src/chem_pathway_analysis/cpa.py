@@ -29,6 +29,7 @@ Note:
 - This module is part of the sub-package i__user_model from CPAP
 
 """
+import shutil
 
 from .i__user_model import convert_reaction_system_file as i_system
 from .i__user_model import convert_concentration_file as i_concentration
@@ -46,7 +47,7 @@ def init_global_var(chronicle_writing:bool):
     global_var.chronicle_writing = chronicle_writing
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,chronicle_writing=False) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing)
@@ -118,4 +119,6 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     print()
     out.text_output(target_species=target_species)
 
-    out.pie_output(target_species=target_species)
+    # 5 copying results files
+    shutil.copy2(src='active_pathways.json',dst=final_AP_file)
+    shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)

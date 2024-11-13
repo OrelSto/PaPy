@@ -40,7 +40,12 @@ Here's a short list of functionnality:
 - [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
 - [x] Selection of species of interest (discarding automatically species that have a longer lifetime)
 - [ ] Packaging (install via ```pip``` or ```conda```)
-- [ ] Tools for visualization (Pie charts, links, etc)
+- [x] Tools for visualization: Pie charts
+- [ ] Rate evaluation for steady-state (info)
+- [ ] Tools for visualization: Links, Step Progression
+- [ ] Check the conservation of atoms in the User Inputs files
+- [ ] Flagging the unused reactions
+- [ ] Flagging the long-lived species according to the timestep
 
 ### Notes
 

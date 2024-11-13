@@ -196,7 +196,7 @@ def target_species_output(target_specie:str) -> None:
         simple_output_file.write(' \n')
 
 
-def pie_output(target_species:str):
+def pie_output(target_species:str,act_P_json:str,del_P_json:str,chem_R_json:str):
     """pie_output _summary_
 
     _extended_summary_
@@ -215,7 +215,7 @@ def pie_output(target_species:str):
         # The idea is that the user wants a specific output for a specified chemical species target_specie
         # We ll go through every active pathways and check if target_specie is present and list them.
         # Then we express their rate in a ratio over the prod/destr rate of the target_specie
-        with open('active_pathways.json', 'r') as active_pathways_file:
+        with open(act_P_json, 'r') as active_pathways_file:
             # Parse the JSON data and store it in a variable
             active_pathways_data = json.load(active_pathways_file)
         # We set up the list of pathways acting on target_specie
@@ -229,7 +229,7 @@ def pie_output(target_species:str):
                 if pathway["branching points"][ind]["stoichiometry"] != 0:
                     act_pathways_data_t_specie.append(pathway)
 
-        with open('deleted_pathways.json', 'r') as deleted_pathways_file:
+        with open(del_P_json, 'r') as deleted_pathways_file:
             # Parse the JSON data and store it in a variable
             deleted_pathways_data = json.load(deleted_pathways_file)
         # We set up the list of pathways acting on s
@@ -241,7 +241,7 @@ def pie_output(target_species:str):
                 if pathway["branching points"][ind]["stoichiometry"] != 0:
                     del_pathways_data_t_specie.append(pathway)
 
-        with open('chemical_reaction_system.json', 'r') as chem_system_file:
+        with open(chem_R_json, 'r') as chem_system_file:
             # Parse the JSON data and store it in a variable
             chem_system_data = json.load(chem_system_file)
         

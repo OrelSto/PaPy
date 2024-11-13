@@ -36,6 +36,8 @@ import re
 from ..p__data_management import data_tools as d_tools
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
+from ..p__data_management import data_check as d_check
+
 
 # Function to extract the compound and stoichiometry from a term
 def extract_compound_and_stoichiometry(term:str):
@@ -56,12 +58,13 @@ def extract_compound_and_stoichiometry(term:str):
 
     # Define a regular expression pattern to match stoichiometry numbers
     # stoichiometry_pattern = re.compile(r'(\d*)\s*(\w+)')
+    # right reg ex pattern
     stoichiometry_pattern = re.compile(r'(\d*\s)(\w+)')
 
     match = stoichiometry_pattern.match(term)
     split = stoichiometry_pattern.split(term)
     if match:
-        stoichiometry = float(match.group(1)) if match.group(1) else 1
+        stoichiometry = int(match.group(1)) if match.group(1) else 1
         compound = match.group(2)
         return {"compound": compound, "stoichiometry": stoichiometry}
     else:
@@ -168,7 +171,8 @@ def format_line(reaction_equation:str):
         "rate": float(rate),
         "deleted rate":0.0,
         "results": result_data,
-        "is_pseudo":False
+        "is_pseudo":False,
+        "is_conserved":d_check.check_conservation(product_data,reactant_data)
     }
 
     return reaction_data
@@ -207,10 +211,26 @@ def convert_chemical_reaction_file(filename:str):
     with open('chemical_reaction_system.json', 'w') as output_file:
         json.dump(chemical_system, output_file, indent=2)
 
-    print("Conversion of",filename,"to JSON chemical system format complete.")
-    if global_var.chronicle_writing:
-        o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
-        o_tools.write_line_chronicle('Saved as chemical_reaction_system.json')
+    # We check the potential non conserved reactions
+    list_r_flagged = []
+    list_r_flagged = d_check.list_reaction_system_conservation(chem_reaction_system=chemical_system)
+
+    if list_r_flagged:
+        print("Conversion of",filename,"to JSON chemical system format complete.")
+        print("With ERRORS.")
+        for l in list_r_flagged:
+            print(l)
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
+            o_tools.write_line_chronicle('Saved as chemical_reaction_system.json with ERRORS')
+            for l in list_r_flagged:
+                o_tools.write_line_chronicle(l)
+        exit()
+    else:
+        print("Conversion of",filename,"to JSON chemical system format complete.")
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
+            o_tools.write_line_chronicle('Saved as chemical_reaction_system.json')
 
 
 def adding_pseudo_reactions():
