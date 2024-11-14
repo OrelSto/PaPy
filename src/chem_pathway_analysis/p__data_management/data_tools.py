@@ -290,8 +290,10 @@ def find_pathway_in_list(pathway_to_be_found:dict,list_of_pathways:list):
     p_2b_found_reactions = [r["index"] for r in pathway_to_be_found["reactions"]]
     p_2b_found_reactions = sorted(p_2b_found_reactions)
 
-    for index, r in enumerate(list_of_pathways):
-        r_2b_checked_against = [r["index"] for r in pathway_to_be_found["reactions"]]
+    for index, p in enumerate(list_of_pathways):
+        r_2b_checked_against = [r["index"] for r in p["reactions"]]
         r_2b_checked_against = sorted(r_2b_checked_against)
         if p_2b_found_reactions == r_2b_checked_against:
             return index
+    
+    return -1

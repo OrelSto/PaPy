@@ -143,6 +143,11 @@ def pathway_to_latex_str(pathway:list,chem_system_data:list):
 
     result = ''
 
+    # first, if there is ony ONE reaction
+    if len(pathway["reactions"]) == 1:
+        result += '\ce{'+reaction_to_str(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+'}'
+        return result
+
     for r in pathway["reactions"]:
         result += '\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+'}'
         result += ' \n'

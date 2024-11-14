@@ -418,7 +418,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_
     # No prod 
     # nor destr, 0 NET hence the pathways are already added
     elif (not cond_prod and not cond_destroy):
-        print('0 Net ',species)
+        # print('0 Net ',species)
         pass
 
     # Are we returning the unaffected pathways ?

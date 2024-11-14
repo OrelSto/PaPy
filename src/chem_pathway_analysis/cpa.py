@@ -47,7 +47,7 @@ def init_global_var(chronicle_writing:bool):
     global_var.chronicle_writing = chronicle_writing
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,chronicle_writing=False) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing)
@@ -105,3 +105,4 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     # 5 copying results files
     shutil.copy2(src='active_pathways.json',dst=final_AP_file)
     shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
+    shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
