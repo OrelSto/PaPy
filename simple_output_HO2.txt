@@ -15,7 +15,7 @@ rate_destr = 0.000e+00
  H2O + hv -> OH + H 
  H2O2 + OH -> HO2 + H2O 
 ------------------
- H2O2 -> HO2 + H 
+ H2O2 -> H + HO2 
  
  RATE  : 6.337e-10 
  RATE %: 25.347 
@@ -24,7 +24,7 @@ rate_destr = 0.000e+00
  H2O2 + O -> OH + HO2 
  H2O2 + OH -> HO2 + H2O 
 ------------------
- 2 H2O2 + O -> 2 HO2 + H2O 
+ 2 H2O2 + O -> H2O + 2 HO2 
  
  RATE  : 3.802e-10 
  RATE %: 15.208 
@@ -34,7 +34,7 @@ rate_destr = 0.000e+00
  2 OH -> H2O2 
  H2O2 + O -> OH + HO2 
 ------------------
- H2O + O -> HO2 + H 
+ H2O + O -> H + HO2 
  
  RATE  : 2.263e-10 
  RATE %: 9.053 
@@ -43,7 +43,7 @@ rate_destr = 0.000e+00
 (H2O2 + O -> OH + HO2) x 2 
  2 OH -> H2O2 
 ------------------
- 2 O + H2O2 -> 2 HO2 
+ H2O2 + 2 O -> 2 HO2 
  
  RATE  : 1.828e-10 
  RATE %: 7.312 
@@ -53,7 +53,7 @@ rate_destr = 0.000e+00
  2 OH -> H2O2 
  H2O2 + OH -> HO2 + H2O 
 ------------------
- 2 H2O -> HO2 + 3 H 
+ 2 H2O -> 3 H + HO2 
  
  RATE  : 1.509e-10 
  RATE %: 6.035 

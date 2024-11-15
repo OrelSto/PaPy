@@ -363,10 +363,10 @@ def pie_output(target_species:str,act_P_json:str,del_P_json:str,chem_R_json:str)
 
         rate_deleted = 0.0
         for pathway in del_pathways_prod_data_t_specie:
-            rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
-        if rate_deleted >= 0.1:
+            rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
+        if rate_deleted/rate_sum * 100 >= 0.1:
             labels.append('P_del prod')
-            sizes.append(rate_deleted)
+            sizes.append(rate_deleted/rate_sum * 100)
             # Adding the text of the pathway
             text = text + ' \n'
             text = text + r'\textbf{P_del} Production of '+s+r' rate: '+r'{:0.3e}'.format(rate_deleted)
@@ -374,10 +374,10 @@ def pie_output(target_species:str,act_P_json:str,del_P_json:str,chem_R_json:str)
         
         rate_deleted = 0.0
         for pathway in del_pathways_dest_data_t_specie:
-            rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])/rate_sum * 100
-        if rate_deleted >= 0.1:
+            rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
+        if rate_deleted/rate_sum * 100 >= 0.1:
             labels.append('P_del destr')
-            sizes.append(rate_deleted)
+            sizes.append(rate_deleted/rate_sum * 100)
             # Adding the text of the pathway
             text = text + ' \n'
             text = text + r'\textbf{P_del} Destruction of '+s+r' rate: '+r'{:0.3e}'.format(rate_deleted)

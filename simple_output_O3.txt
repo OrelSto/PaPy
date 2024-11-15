@@ -1,7 +1,7 @@
 Production of O3
-rate_sum   = 1.800e-08
-rate_prod  = 1.800e-08
-rate_destr = 0.000e+00
+rate_sum   = 1.840e-08
+rate_prod  = 1.820e-08
+rate_destr = 2.000e-10
 
 **************************
  O2 + hv -> 2 O 
@@ -10,8 +10,8 @@ rate_destr = 0.000e+00
  3 O2 -> 2 O3 
  
  RATE  : 1.800e-08 
- RATE %: 100.000 
+ RATE %: 97.826 
  
 **************************
- RATE DELETED  : 0.000e+00 
- RATE DELETED %: 0.000 
+ RATE DELETED  : 4.000e-10 
+ RATE DELETED %: 2.174 

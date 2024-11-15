@@ -39,7 +39,8 @@ from .p__data_management import data_update as up
 from .p__data_management import global_var
 from .p__pathways_analysis import branching_points as bp
 from .p__pathways_analysis import main_loop as ml
-from .o__cpap_output import output_simple as out
+from .o__cpap_output import pie_output as pie_output
+from .o__cpap_output import output as out
 from .o__cpap_output import output_tools as o_tools
 
 
