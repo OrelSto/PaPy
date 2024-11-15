@@ -1,17 +1,24 @@
 Destruction of O2
-rate_sum   = 2.760e-08
-rate_prod  = 3.000e-10
-rate_destr = 2.730e-08
+rate_sum   = 6.343e-07
+rate_prod  = 2.119e-28
+rate_destr = 6.343e-07
 
 **************************
- O2 + hv -> 2 O 
-(O + O2 + M -> O3 + M) x 2 
+ O2 + [3]CH2 -> CO + OH + H 
 ------------------
- 3 O2 -> 2 O3 
+ O2 + [3]CH2 -> CO + OH + H 
  
- RATE  : 2.700e-08 
- RATE %: 97.826 
+ RATE  : 4.531e-07 
+ RATE %: 71.433 
  
 **************************
- RATE DELETED  : 6.000e-10 
- RATE DELETED %: 2.174 
+ O2 + [3]CH2 -> CO + H2O 
+------------------
+ O2 + [3]CH2 -> CO + H2O 
+ 
+ RATE  : 1.812e-07 
+ RATE %: 28.567 
+ 
+**************************
+ RATE DELETED  : 3.142e-18 
+ RATE DELETED %: 0.000 

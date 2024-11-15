@@ -1,0 +1,16 @@
+Destruction of O[3p]
+rate_sum   = 5.354e+03
+rate_prod  = 0.000e+00
+rate_destr = 5.354e+03
+
+**************************
+ O[3p] + H2 -> OH + H 
+------------------
+ O[3p] + H2 -> OH + H 
+ 
+ RATE  : 5.354e+03 
+ RATE %: 100.000 
+ 
+**************************
+ RATE DELETED  : 5.933e-16 
+ RATE DELETED %: 0.000 

@@ -1,31 +1,1084 @@
 **************************
- O3 + hv -> O + O2 
- O + O2 + M -> O3 + M 
+ O[3p] + H2 -> OH + H 
 ------------------
- NULL  
+ O[3p] + H2 -> OH + H 
  
- RATE  : 7.999e-08 
- RATE %: 88.896 
+ RATE  : 5.354e+03 
+ RATE %: 100.000 
  
 **************************
- O2 + hv -> 2 O 
-(O + O2 + M -> O3 + M) x 2 
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ HCO + H -> CO + H2 
 ------------------
- 3 O2 -> 2 O3 
+ 2 O[3p] + H2 -> 2 OH 
  
- RATE  : 9.000e-09 
- RATE %: 10.002 
+ RATE  : 5.368e-04 
+ RATE %: 0.000 
  
 **************************
- O2 + hv -> 2 O 
- O + O2 + M -> O3 + M 
- O + O3 -> 2 O2 
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
 ------------------
- NULL  
+ O[3p] + CO + H2 -> HCO + OH 
  
- RATE  : 7.919e-10 
- RATE %: 0.880 
+ RATE  : 2.751e-04 
+ RATE %: 0.000 
  
 **************************
- RATE DELETED  : 2.000e-10 
- RATE DELETED %: 0.222 
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+------------------
+ O[3p] + 2 H2 -> 2 H + H2O 
+ 
+ RATE  : 1.443e-06 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + H2 -> OH + H 
+------------------
+ O[1d] + H2 -> OH + H 
+ 
+ RATE  : 4.699e-07 
+ RATE %: 0.000 
+ 
+**************************
+ O2 + [3]CH2 -> CO + OH + H 
+------------------
+ O2 + [3]CH2 -> CO + OH + H 
+ 
+ RATE  : 4.531e-07 
+ RATE %: 0.000 
+ 
+**************************
+ O2 + [3]CH2 -> CO + H2O 
+------------------
+ O2 + [3]CH2 -> CO + H2O 
+ 
+ RATE  : 1.812e-07 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + C2H5 -> CO + C2H6 
+------------------
+ C2H5 + O[3p] + H2 -> C2H6 + OH 
+ 
+ RATE  : 7.685e-08 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ [3]CH2 + 2 O[3p] + 2 H2 -> CH4 + 2 OH 
+ 
+ RATE  : 4.097e-08 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ [3]CH2 + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 1.619e-08 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + [3]CH2 -> CO + CH3 
+------------------
+ [3]CH2 + O[3p] + H2 -> OH + CH3 
+ 
+ RATE  : 8.070e-09 
+ RATE %: 0.000 
+ 
+**************************
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH2CO + [3]CH2 -> CO + C2H4 
+ 
+ RATE  : 8.033e-11 
+ RATE %: 0.000 
+ 
+**************************
+ CO2 + [3]CH2 -> CO + H2CO 
+------------------
+ CO2 + [3]CH2 -> CO + H2CO 
+ 
+ RATE  : 5.124e-11 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + H + M -> HCO + M 
+ HCO + CH3 -> CO + CH4 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 2.367e-11 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + C2H3 -> CO + C2H4 
+------------------
+ C2H3 + O[3p] + H2 -> OH + C2H4 
+ 
+ RATE  : 2.231e-11 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CO -> CO2 + H 
+------------------
+ O[3p] + CO + H2 -> CO2 + 2 H 
+ 
+ RATE  : 1.744e-11 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + H + M -> HCO + M 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH4 + O[3p] + CO + H2 -> CH3CHO + H2O 
+ 
+ RATE  : 9.356e-12 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3OH + 2 O[3p] + 2 H2 -> CH4 + 2 OH + H2O 
+ 
+ RATE  : 6.990e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> CH2OH + H2 
+------------------
+ CH3OH + O[3p] -> OH + CH2OH 
+ 
+ RATE  : 5.382e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+------------------
+ CH4 + O[3p] + H2 -> CH3 + H + H2O 
+ 
+ RATE  : 4.662e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ O[1d] + CH4 -> OH + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ O[3p] + O[1d] + H2 -> 2 OH 
+ 
+ RATE  : 4.260e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + [3]CH2 -> CO + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ [3]CH2 + O[3p] + CO + H2 -> CH3CO + OH 
+ 
+ RATE  : 3.589e-12 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3OH + 3 O[3p] + 2 H2 -> CH4 + 4 OH 
+ 
+ RATE  : 3.397e-12 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO + H2O 
+ 
+ RATE  : 2.763e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + CH3CO -> CH3CHO + CO 
+------------------
+ CH3CO + O[3p] + H2 -> OH + CH3CHO 
+ 
+ RATE  : 1.818e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ O[1d] + CH4 -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH4 + O[3p] + CO + O[1d] + H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 1.684e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> H2O + CH3 
+------------------
+ CH3OH + O[3p] + H2 -> OH + CH3 + H2O 
+ 
+ RATE  : 1.377e-12 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + 3 O[3p] + CO + 2 H2 -> 4 OH + CH3CHO 
+ 
+ RATE  : 1.343e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + CH4 -> OH + CH3 
+------------------
+ O[1d] + CH4 -> OH + CH3 
+ 
+ RATE  : 8.392e-13 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + CH4 -> H2CO + H2 
+------------------
+ O[1d] + CH4 -> H2CO + H2 
+ 
+ RATE  : 7.538e-13 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+------------------
+ CH3OH + 2 O[3p] + H2 -> 3 OH + CH3 
+ 
+ RATE  : 6.691e-13 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> H2CO + H2 
+------------------
+ CH3OH + 2 O[3p] -> 2 OH + H2CO 
+ 
+ RATE  : 3.381e-13 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+ CO + H + M -> HCO + M 
+ HCO + H -> CO + H2 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 2.894e-13 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ CH3CHO + H -> CH3CO + H2 
+------------------
+ [3]CH2 + 3 O[3p] + CO + 2 H2 -> CH3CO + 3 OH 
+ 
+ RATE  : 1.827e-13 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3CO + O[3p] + H2 -> CH4 + OH + CO 
+ 
+ RATE  : 1.049e-13 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH2CO + H -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH2CO + 2 O[3p] + 2 H2 -> CH4 + 2 OH + CO 
+ 
+ RATE  : 9.993e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> CH2CO + H2 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + [3]CH2 + O[3p] -> OH + CO + C2H4 
+ 
+ RATE  : 8.969e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+(CO + H + M -> HCO + M) x 2 
+------------------
+ O[3p] + 2 CO + 2 H2 -> 2 HCO + H2O 
+ 
+ RATE  : 7.414e-14 
+ RATE %: 0.000 
+ 
+**************************
+(O[1d] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ HCO + H -> CO + H2 
+------------------
+ 2 O[1d] + H2 -> 2 OH 
+ 
+ RATE  : 4.711e-14 
+ RATE %: 0.000 
+ 
+**************************
+(O2 + [3]CH2 -> CO + OH + H) x 2 
+ CO + H + M -> HCO + M 
+ HCO + H -> CO + H2 
+------------------
+ 2 [3]CH2 + 2 O2 -> 2 OH + 2 CO + H2 
+ 
+ RATE  : 4.543e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3CO + O[3p] + H2 -> OH + CH3CHO 
+ 
+ RATE  : 4.148e-14 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH2CO + H -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH2CO + 2 O[3p] + 2 H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 3.950e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+------------------
+ O[1d] + CO + H2 -> HCO + OH 
+ 
+ RATE  : 2.414e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O2 + [3]CH2 -> CO + OH + H 
+ CO + H + M -> HCO + M 
+------------------
+ [3]CH2 + O2 -> HCO + OH 
+ 
+ RATE  : 2.328e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH2CO + H -> CO + CH3 
+------------------
+ CH2CO + O[3p] + H2 -> OH + CO + CH3 
+ 
+ RATE  : 1.968e-14 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3CO + H -> HCO + CH3 
+ HCO + H -> CO + H2 
+------------------
+ CH3CO + 2 O[3p] + H2 -> 2 OH + CO + CH3 
+ 
+ RATE  : 1.366e-14 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+------------------
+ CH3CO + O[3p] + H2 -> HCO + OH + CH3 
+ 
+ RATE  : 7.002e-15 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + HCO -> CO + H2O 
+ CO + H + M -> HCO + M 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 2.510e-15 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ CH4 + O[3p] + CO + H2 -> CH3CO + H + H2O 
+ 
+ RATE  : 2.073e-15 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + [3]CH2 -> OH + C2H4 
+------------------
+ CH3OH + [3]CH2 + O[3p] -> 2 OH + C2H4 
+ 
+ RATE  : 8.219e-16 
+ RATE %: 0.000 
+ 
+**************************
+ CH3OH + C2H -> CH2OH + C2H2 
+------------------
+ CH3OH + C2H -> CH2OH + C2H2 
+ 
+ RATE  : 6.663e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> H2O + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ CH3OH + O[3p] + CO + H2 -> CH3CO + OH + H2O 
+ 
+ RATE  : 6.122e-16 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + C2H -> CH2OH + C2H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3OH + C2H + 2 O[3p] + 2 H2 -> CH4 + 3 OH + C2H2 
+ 
+ RATE  : 4.206e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + CH4 -> OH + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ CH4 + O[1d] + CO -> CH3CO + OH 
+ 
+ RATE  : 3.732e-16 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ CH3OH + 2 O[3p] + CO + H2 -> CH3CO + 3 OH 
+ 
+ RATE  : 2.975e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ CH3OH + C2H -> CH3O + C2H2 
+ HCO + CH3O -> CH3OH + CO 
+------------------
+ C2H + O[3p] + H2 -> OH + C2H2 
+ 
+ RATE  : 2.732e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + C2H2 + M -> CH3CO + M 
+------------------
+ O[3p] + C2H2 + H2 -> CH3CO + H 
+ 
+ RATE  : 1.783e-16 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + C2H -> CH2OH + C2H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + C2H + 2 O[3p] + CO + 2 H2 -> 3 OH + C2H2 + CH3CHO 
+ 
+ RATE  : 1.662e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + C2H6 -> H2O + C2H5 
+ CO + H + M -> HCO + M 
+ HCO + C2H5 -> CO + C2H6 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 1.330e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+------------------
+ O[1d] + 2 H2 -> 2 H + H2O 
+ 
+ RATE  : 1.266e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O2 + [3]CH2 -> CO + OH + H 
+ OH + H2 -> H2O + H 
+------------------
+ [3]CH2 + O2 + H2 -> CO + 2 H + H2O 
+ 
+ RATE  : 1.221e-16 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CH3CO + H -> CH2CO + H2 
+ CO + H + M -> HCO + M 
+ CH2CO + H -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3CO + 3 O[3p] + 2 H2 -> CH4 + 3 OH + CO 
+ 
+ RATE  : 1.116e-16 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CH3CHO + H -> CH3CO + H2 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ HCO + CH4 + O[3p] -> CH3CO + H2O 
+ 
+ RATE  : 1.056e-16 
+ RATE %: 0.000 
+ 
+**************************
+ CH3OH + C2H -> CH2OH + C2H2 
+ O[3p] + H2 -> OH + H 
+ CH2OH + H -> OH + CH3 
+------------------
+ CH3OH + C2H + O[3p] + H2 -> 2 OH + C2H2 + CH3 
+ 
+ RATE  : 8.284e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H + M -> H2O + M 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 7.573e-17 
+ RATE %: 0.000 
+ 
+**************************
+ CO2 + [3]CH2 -> CO + H2CO 
+(O[3p] + H2 -> OH + H) x 2 
+ H2CO + H -> HCO + H2 
+ HCO + H -> CO + H2 
+------------------
+ [3]CH2 + 2 O[3p] + CO2 -> 2 OH + 2 CO 
+ 
+ RATE  : 6.138e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + C2H4 + M -> C2H4OH + M 
+ C2H4OH + H -> CH3CHO + H2 
+------------------
+ O[3p] + C2H4 -> CH3CHO 
+ 
+ RATE  : 5.975e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + [3]CH2 -> CO + CH3 
+ CH3CO + CH3 -> CO + C2H6 
+------------------
+ CH3CO + [3]CH2 + O[3p] + H2 -> C2H6 + OH + CO 
+ 
+ RATE  : 5.969e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH3OH -> CH2OH + H2O 
+------------------
+ CH3OH + O[3p] + H2 -> CH2OH + H + H2O 
+ 
+ RATE  : 5.890e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ CH3CO + [3]CH2 -> CH2CO + CH3 
+ HCO + CH3 -> CO + CH4 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + 2 [3]CH2 + O[3p] + H2 -> CH4 + OH + CO + C2H4 
+ 
+ RATE  : 5.349e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CH3CO + H -> CH2CO + H2 
+ CO + H + M -> HCO + M 
+ CH2CO + H -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3CO + 3 O[3p] + 2 H2 -> 3 OH + CH3CHO 
+ 
+ RATE  : 4.410e-17 
+ RATE %: 0.000 
+ 
+**************************
+ CH3OH + C2H -> CH2OH + C2H2 
+ O[3p] + H2 -> OH + H 
+ CH2OH + H -> H2CO + H2 
+------------------
+ CH3OH + C2H + O[3p] -> OH + H2CO + C2H2 
+ 
+ RATE  : 4.185e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH3OH -> CH3O + H2O 
+ CO + H + M -> HCO + M 
+ HCO + CH3O -> CH3OH + CO 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 4.056e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 -> CO + CH4 
+ OH + CH3OH -> CH2OH + H2O 
+------------------
+ CH3OH + 2 O[3p] + 2 H2 -> CH4 + 2 OH + H2O 
+ 
+ RATE  : 3.718e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> CH2OH + H2 
+ HCO + [3]CH2 -> CO + CH3 
+ CH2OH + CH3 -> H2CO + CH4 
+------------------
+ CH3OH + [3]CH2 + 2 O[3p] + H2 -> CH4 + 2 OH + H2CO 
+ 
+ RATE  : 3.519e-17 
+ RATE %: 0.000 
+ 
+**************************
+ CO2 + [3]CH2 -> CO + H2CO 
+ O[3p] + H2 -> OH + H 
+ H2CO + H -> HCO + H2 
+------------------
+ [3]CH2 + O[3p] + CO2 -> HCO + OH + CO 
+ 
+ RATE  : 3.146e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ CH3CHO + H -> CH3CO + H2 
+------------------
+ CH3OH + 3 O[3p] + CO + 2 H2 -> CH3CO + 3 OH + H2O 
+ 
+ RATE  : 3.117e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ [3]CH2 + O[3p] + 2 H2 -> CH4 + H2O 
+ 
+ RATE  : 2.209e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3CO + H -> CH2CO + H2 
+ CH2CO + H -> CO + CH3 
+------------------
+ CH3CO + 2 O[3p] + H2 -> 2 OH + CO + CH3 
+ 
+ RATE  : 2.198e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ CH3CO + [3]CH2 -> CH2CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + 2 [3]CH2 + O[3p] + H2 -> OH + C2H4 + CH3CHO 
+ 
+ RATE  : 2.114e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+(CO + H + M -> HCO + M) x 2 
+(HCO + C2H5 -> CO + C2H6) x 2 
+------------------
+ 2 C2H5 + O[3p] + 2 H2 -> 2 C2H6 + H2O 
+ 
+ RATE  : 2.071e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ HCO + CH3CO -> CH3CHO + CO 
+ CH3CHO + H -> CH3CO + H2 
+------------------
+ 2 O[3p] + H2 -> 2 OH 
+ 
+ RATE  : 2.051e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ O[1d] + CH4 -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ CH3CHO + H -> CH3CO + H2 
+------------------
+ CH4 + 2 O[3p] + CO + O[1d] + H2 -> CH3CO + 3 OH 
+ 
+ RATE  : 1.900e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 4 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ CH3CHO + H -> CH3CO + H2 
+------------------
+ CH3OH + 4 O[3p] + CO + 2 H2 -> CH3CO + 5 OH 
+ 
+ RATE  : 1.515e-17 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+ OH + CH3OH -> CH2OH + H2O 
+------------------
+ CH3OH + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO + H2O 
+ 
+ RATE  : 1.469e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + C2H5 -> CH3OH + C2H4 
+------------------
+ C2H5 + O[3p] -> OH + C2H4 
+ 
+ RATE  : 1.452e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + [3]CH2 -> CO + CH3 
+ CH3CO + CH3 -> CH2CO + CH4 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + 2 [3]CH2 + O[3p] + H2 -> CH4 + OH + CO + C2H4 
+ 
+ RATE  : 1.215e-17 
+ RATE %: 0.000 
+ 
+**************************
+ CH3CO + [3]CH2 -> CH2CO + CH3 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + 2 [3]CH2 -> CO + C2H4 + CH3 
+ 
+ RATE  : 1.054e-17 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH2CO + H -> CO + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ CH2CO + O[3p] + H2 -> CH3CO + OH 
+ 
+ RATE  : 8.753e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ [3]CH2 + O[3p] + CO + 2 H2 -> CH3CHO + H2O 
+ 
+ RATE  : 8.729e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH2OH + H -> OH + CH3 
+ OH + CH3OH -> CH2OH + H2O 
+------------------
+ CH3OH + O[3p] + H2 -> OH + CH3 + H2O 
+ 
+ RATE  : 7.322e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[1d] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + C2H5 -> CO + C2H6 
+------------------
+ C2H5 + O[1d] + H2 -> C2H6 + OH 
+ 
+ RATE  : 6.745e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O2 + [3]CH2 -> CO + OH + H 
+ CO + H + M -> HCO + M 
+ HCO + C2H5 -> CO + C2H6 
+------------------
+ C2H5 + [3]CH2 + O2 -> C2H6 + OH + CO 
+ 
+ RATE  : 6.504e-18 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CH3CO + H -> HCO + CH3 
+ CO + CH3 + M -> CH3CO + M 
+ HCO + H -> CO + H2 
+------------------
+ 2 O[3p] + H2 -> 2 OH 
+ 
+ RATE  : 6.076e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ CH3CHO + [3]CH2 -> CH3CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ [3]CH2 + O[3p] + CO + H2 -> CH3CO + OH 
+ 
+ RATE  : 5.774e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH3OH -> CH2OH + H2O 
+ CH2OH + H -> H2CO + H2 
+------------------
+ CH3OH + O[3p] -> H2CO + H2O 
+ 
+ RATE  : 3.699e-18 
+ RATE %: 0.000 
+ 
+**************************
+(O[1d] + H2 -> OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ [3]CH2 + 2 O[1d] + 2 H2 -> CH4 + 2 OH 
+ 
+ RATE  : 3.596e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CO -> CO2 + H 
+ CO + H + M -> HCO + M 
+ HCO + H -> CO + H2 
+------------------
+ O[3p] + CO -> CO2 
+ 
+ RATE  : 3.497e-18 
+ RATE %: 0.000 
+ 
+**************************
+(O2 + [3]CH2 -> CO + OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ 3 [3]CH2 + 2 O2 -> CH4 + 2 OH + 2 CO 
+ 
+ RATE  : 3.467e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ CO + CH3 + M -> CH3CO + M 
+------------------
+ O[3p] + CO + H2 -> HCO + OH 
+ 
+ RATE  : 3.114e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+(CO + H + M -> HCO + M) x 2 
+(HCO + [3]CH2 -> CO + CH3) x 2 
+------------------
+ 2 [3]CH2 + O[3p] + 2 H2 -> 2 CH3 + H2O 
+ 
+ RATE  : 2.175e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ HCO + C2H5 -> CO + C2H6 
+------------------
+ C2H5 + CH3CO + O[3p] + H2 -> C2H6 + OH + CO + CH3 
+ 
+ RATE  : 1.956e-18 
+ RATE %: 0.000 
+ 
+**************************
+(O[1d] + H2 -> OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ [3]CH2 + 2 O[1d] + CO + 2 H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 1.421e-18 
+ RATE %: 0.000 
+ 
+**************************
+(O2 + [3]CH2 -> CO + OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ 3 [3]CH2 + 2 O2 -> 2 OH + CO + CH3CHO 
+ 
+ RATE  : 1.371e-18 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ HCO + [3]CH2 -> CO + CH3 
+------------------
+ CH3CO + [3]CH2 + O[3p] + H2 -> OH + CO + 2 CH3 
+ 
+ RATE  : 1.043e-18 
+ RATE %: 0.000 
+ 
+**************************
+ RATE DELETED  : 6.017e-16 
+ RATE DELETED %: 0.000 

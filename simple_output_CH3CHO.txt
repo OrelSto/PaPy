@@ -1,0 +1,95 @@
+Production of CH3CHO
+rate_sum   = 1.621e-08
+rate_prod  = 1.621e-08
+rate_destr = 9.621e-19
+
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+(CO + H + M -> HCO + M) x 2 
+ HCO + [3]CH2 -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ [3]CH2 + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 1.619e-08 
+ RATE %: 99.895 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + H + M -> HCO + M 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH4 + O[3p] + CO + H2 -> CH3CHO + H2O 
+ 
+ RATE  : 9.356e-12 
+ RATE %: 0.058 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO + H2O 
+ 
+ RATE  : 2.763e-12 
+ RATE %: 0.017 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + CH3CO -> CH3CHO + CO 
+------------------
+ CH3CO + O[3p] + H2 -> OH + CH3CHO 
+ 
+ RATE  : 1.818e-12 
+ RATE %: 0.011 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ O[1d] + CH4 -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH4 + O[3p] + CO + O[1d] + H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 1.684e-12 
+ RATE %: 0.010 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 3 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + H -> OH + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + 3 O[3p] + CO + 2 H2 -> 4 OH + CH3CHO 
+ 
+ RATE  : 1.343e-12 
+ RATE %: 0.008 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> HCO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3CO + O[3p] + H2 -> OH + CH3CHO 
+ 
+ RATE  : 4.148e-14 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH2CO + H -> CO + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH2CO + 2 O[3p] + 2 H2 -> 2 OH + CH3CHO 
+ 
+ RATE  : 3.950e-14 
+ RATE %: 0.000 
+ 
+**************************
+ RATE DELETED  : 7.772e-18 
+ RATE DELETED %: 0.000 

@@ -48,14 +48,15 @@ Here's a short list of functionnality:
 * [x] Selection of min lifetime of species (discard long-lived species as branching points)
 * [x] Subpathways analysis implementation
 * [x] Checking the conservation of atoms in the User's chemical reaction system
+* [x] Handling of pseudo-reactions for any physical process, noted as X[transp], X[liq], etc
 * [x] Basic visual outputs
 * [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
 * [x] Selection of species of interest
 * [ ] Packaging (install via ```pip``` or ```conda```)
 * [x] Tools for visualization: Pie charts
-* [ ] Rate evaluation for steady-state (info)
+* [x] Tools for visualization: Latex Table
 * [ ] Tools for visualization: Links, Step Progression
-* [ ] Check the conservation of atoms in the User Inputs files
+* [ ] Rate evaluation for steady-state (info)
 * [ ] Flagging the unused reactions
 * [ ] Flagging the long-lived species according to the timestep
 

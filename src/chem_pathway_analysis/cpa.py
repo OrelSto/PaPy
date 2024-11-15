@@ -39,7 +39,6 @@ from .p__data_management import data_update as up
 from .p__data_management import global_var
 from .p__pathways_analysis import branching_points as bp
 from .p__pathways_analysis import main_loop as ml
-from .o__cpap_output import pie_output as pie_output
 from .o__cpap_output import output as out
 from .o__cpap_output import output_tools as o_tools
 
@@ -48,7 +47,7 @@ def init_global_var(chronicle_writing:bool):
     global_var.chronicle_writing = chronicle_writing
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing=False) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing)
@@ -107,3 +106,4 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     shutil.copy2(src='active_pathways.json',dst=final_AP_file)
     shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
     shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
+    shutil.copy2(src='chemical_species.json',dst=final_SL_file)

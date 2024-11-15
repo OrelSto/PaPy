@@ -1,0 +1,46 @@
+Production of C2H4
+rate_sum   = 1.027e-10
+rate_prod  = 1.027e-10
+rate_destr = 5.976e-17
+
+**************************
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH2CO + [3]CH2 -> CO + C2H4 
+ 
+ RATE  : 8.033e-11 
+ RATE %: 78.195 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+ HCO + C2H3 -> CO + C2H4 
+------------------
+ C2H3 + O[3p] + H2 -> OH + C2H4 
+ 
+ RATE  : 2.231e-11 
+ RATE %: 21.717 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3CO + H -> CH2CO + H2 
+ CH2CO + [3]CH2 -> CO + C2H4 
+------------------
+ CH3CO + [3]CH2 + O[3p] -> OH + CO + C2H4 
+ 
+ RATE  : 8.969e-14 
+ RATE %: 0.087 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ CH3OH + H -> CH2OH + H2 
+ CH2OH + [3]CH2 -> OH + C2H4 
+------------------
+ CH3OH + [3]CH2 + O[3p] -> 2 OH + C2H4 
+ 
+ RATE  : 8.219e-16 
+ RATE %: 0.001 
+ 
+**************************
+ RATE DELETED  : 2.915e-19 
+ RATE DELETED %: 0.000 

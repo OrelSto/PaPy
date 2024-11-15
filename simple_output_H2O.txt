@@ -1,0 +1,78 @@
+Production of H2O
+rate_sum   = 1.624e-06
+rate_prod  = 1.624e-06
+rate_destr = 5.499e-23
+
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + H2 -> H2O + H 
+------------------
+ O[3p] + 2 H2 -> 2 H + H2O 
+ 
+ RATE  : 1.443e-06 
+ RATE %: 88.841 
+ 
+**************************
+ O2 + [3]CH2 -> CO + H2O 
+------------------
+ O2 + [3]CH2 -> CO + H2O 
+ 
+ RATE  : 1.812e-07 
+ RATE %: 11.156 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + H + M -> HCO + M 
+ HCO + CH3 -> CO + CH4 
+------------------
+ O[3p] + H2 -> H2O 
+ 
+ RATE  : 2.367e-11 
+ RATE %: 0.001 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+ CO + H + M -> HCO + M 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH4 + O[3p] + CO + H2 -> CH3CHO + H2O 
+ 
+ RATE  : 9.356e-12 
+ RATE %: 0.001 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 -> CO + CH4 
+------------------
+ CH3OH + 2 O[3p] + 2 H2 -> CH4 + 2 OH + H2O 
+ 
+ RATE  : 6.990e-12 
+ RATE %: 0.000 
+ 
+**************************
+ O[3p] + H2 -> OH + H 
+ OH + CH4 -> H2O + CH3 
+------------------
+ CH4 + O[3p] + H2 -> CH3 + H + H2O 
+ 
+ RATE  : 4.662e-12 
+ RATE %: 0.000 
+ 
+**************************
+(O[3p] + H2 -> OH + H) x 2 
+ CO + H + M -> HCO + M 
+ CH3OH + H -> H2O + CH3 
+ HCO + CH3 + M -> CH3CHO + M 
+------------------
+ CH3OH + 2 O[3p] + CO + 2 H2 -> 2 OH + CH3CHO + H2O 
+ 
+ RATE  : 2.763e-12 
+ RATE %: 0.000 
+ 
+**************************
+ RATE DELETED  : 3.473e-18 
+ RATE DELETED %: 0.000 

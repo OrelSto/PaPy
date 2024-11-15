@@ -183,6 +183,50 @@ def pathway_to_latex_str(pathway:list,chem_system_data:list):
     return result
 
 
+def pathway_to_latex_cell(pathway:list,chem_system_data:list):
+
+    result = r'\makecell{'
+
+    # first, if there is ony ONE reaction
+    if len(pathway["reactions"]) == 1:
+        result += r'\ce{'+reaction_to_str(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+r'}}'
+        return result
+
+    for r in pathway["reactions"]:
+        result += r'\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+r'}'
+        result += r' \\ '
+
+    result += r'------------------'
+    result += r' \\'
+
+    mask = []
+    saving_prod = []
+    saving_react = []
+    for bp in pathway["branching points"]:
+        if bp["stoichiometry"] > 0:
+            mask.append(False)
+            if bp["stoichiometry"] > 1:
+                saving_prod += [str(bp["stoichiometry"])+ ' ' +bp["compound"]]
+            else:
+                saving_prod += [bp["compound"]]
+        elif bp["stoichiometry"] == 0:
+            mask.append(True)
+        elif bp["stoichiometry"] < 0:
+            mask.append(False)
+            if bp["stoichiometry"] < -1:
+                saving_react += [str(-bp["stoichiometry"])+ ' ' +bp["compound"]]
+            else:
+                saving_react += [bp["compound"]]
+    if all(mask):
+        result += r' NULL }'
+    else:
+        # print('We finally write the reactants:',saving_react)
+        # print('And write the products        :',saving_prod)
+        result += r' \ce{' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod)+r'}}'
+    
+    return result
+
+
 def write_line_chronicle(text_to_archive:str):
     # Write a a line in the chronicles
     with open('chronicles.txt', 'a') as output_file:

@@ -1,0 +1,17 @@
+Production of HCO
+rate_sum   = 2.751e-04
+rate_prod  = 2.751e-04
+rate_destr = 1.280e-16
+
+**************************
+ O[3p] + H2 -> OH + H 
+ CO + H + M -> HCO + M 
+------------------
+ O[3p] + CO + H2 -> HCO + OH 
+ 
+ RATE  : 2.751e-04 
+ RATE %: 100.000 
+ 
+**************************
+ RATE DELETED  : 5.828e-16 
+ RATE DELETED %: 0.000 

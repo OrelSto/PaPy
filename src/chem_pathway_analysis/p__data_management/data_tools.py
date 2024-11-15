@@ -69,6 +69,21 @@ def get_compound_dict(compound:str):
         if s["name"] == compound:
             return s
 
+def get_compound_dict_from_results(compound:str,SpecL:str):
+    # return the dict of a specified compound
+    # Opening JSON file
+    cs = open(SpecL)
+
+    # returns JSON object as a dictionary
+    chemical_species = json.load(cs)
+
+    # closing the file
+    cs.close()
+
+    # iterate and return the correct dict
+    for s in chemical_species:
+        if s["name"] == compound:
+            return s
 
 def format_pseudo_reaction(species:str,flag:str):
     # this is used in sub_pathway analysis.
