@@ -66,6 +66,40 @@ def reaction_to_str(reaction:dict,chem_system_data:list):
             result += ' + '
     return result
 
+
+def reaction_to_str_latex(reaction:dict,chem_system_data:list):
+    # Writing the reaction results in a given file
+    result = ''
+    mult = []
+    if reaction["multiplicity"] > 1:
+        mult.append(reaction["multiplicity"])
+        result += str(mult[0]) + r'$\times$ ('
+    else:
+        result += ' '
+    list_reactant = chem_system_data[reaction["index"]]["reactants"]
+    list_product = chem_system_data[reaction["index"]]["products"]
+    for reactant in list_reactant:
+        if reactant["stoichiometry"] > 1:
+            result += str(reactant["stoichiometry"])+ ' ' +reactant["compound"]
+        else:
+            result += reactant["compound"]
+        if (list_reactant.index(reactant) + 1) == len(list_reactant):
+            result += ' -> '
+        else:
+            result += ' + '
+    for product in list_product:
+        if product["stoichiometry"] > 1:
+            result += str(product["stoichiometry"])+ ' ' +product["compound"]
+        else:
+            result += product["compound"]
+        if (list_product.index(product) + 1) == len(list_product):
+            if mult:
+                result += ')'
+        else:
+            result += ' + '
+    return result
+
+
 def writing_pathway(pathway:list,output_file:TextIOWrapper,chem_system_data:list):
 
     for r in pathway["reactions"]:
@@ -145,11 +179,11 @@ def pathway_to_latex_str(pathway:list,chem_system_data:list):
 
     # first, if there is ony ONE reaction
     if len(pathway["reactions"]) == 1:
-        result += '\ce{'+reaction_to_str(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+'}'
+        result += r'\ce{'+reaction_to_str(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+'}'
         return result
 
     for r in pathway["reactions"]:
-        result += '\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+'}'
+        result += r'\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+'}'
         result += ' \n'
 
     result += '------------------'
@@ -178,7 +212,7 @@ def pathway_to_latex_str(pathway:list,chem_system_data:list):
     else:
         # print('We finally write the reactants:',saving_react)
         # print('And write the products        :',saving_prod)
-        result += ' \ce{' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod)+'}'
+        result += r' \ce{' + ' + '.join(saving_react) + ' -> ' + ' + '.join(saving_prod)+'}'
     
     return result
 
@@ -189,11 +223,11 @@ def pathway_to_latex_cell(pathway:list,chem_system_data:list):
 
     # first, if there is ony ONE reaction
     if len(pathway["reactions"]) == 1:
-        result += r'\ce{'+reaction_to_str(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+r'}}'
+        result += r'\ce{'+reaction_to_str_latex(reaction=pathway["reactions"][0],chem_system_data=chem_system_data)+r'}}'
         return result
 
     for r in pathway["reactions"]:
-        result += r'\ce{'+reaction_to_str(reaction=r,chem_system_data=chem_system_data)+r'}'
+        result += r'\ce{'+reaction_to_str_latex(reaction=r,chem_system_data=chem_system_data)+r'}'
         result += r' \\ '
 
     result += r'------------------'

@@ -291,8 +291,10 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
     # print('pathway_prod',pathway_prod)
 
     # 2. We check the deleted pathways effects on branching point species
-    pathway_prod_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod')
-    pathway_destr_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr')
+    # pathway_prod_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod')
+    # pathway_destr_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr')
+    update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod')
+    update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr')
 
     # 3. Merging the pathways into a new one
     # we check 0 values for D_compound
@@ -340,7 +342,7 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
     # 4. We check the deleted pathways if some could have connected, prod and destr
     # those deleted connected pathways must be removed from the final rate
     # of the new pathway
-    # new_pathway = update_pathway_rate_from_deleted_p(new_pathway,species,case_flag='new_pathway')
+    # new_pathway["rate"] = update_pathway_rate_from_deleted_p(new_pathway,species,case_flag='new_pathway')
 
     return new_pathway,pathway_prod_tmp["rate"],pathway_destr_tmp["rate"]
 
@@ -413,24 +415,30 @@ def clean_reactions(pathway:dict):
 
 def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
     # self explanatory ... connecting pathway to the change in species concentration
-    # I means we merge two pathways that are connected via a species that the one produce and the latter destroys
+    # It means we merge two pathways that are connected via a species that the one produce and the latter destroys
     pathway_tmp = copy.deepcopy(pathway)
     species_dict = d_tools.get_compound_dict(species)
     list_bp_used = pathway_tmp["list branching points used"]
     # we don't add a species since this is not a "full" connection
     # Meaning that there is only a prod/destr part of the connection.
     # species cannot be list as a "branching point"
-    # list_bp_used.append(species)
-    # list_bp_used = list(set(list_bp_used))
 
     match flag_update:
         case 'production':
-            # we remove the destructive rate from deleted pathways because we are producing species
-            # pathway_tmp = update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='prod')
+            # we remove the productive rate from deleted pathways because we are producing species Sb connecting to Sb
+            # The case_flag is the opposite because when we connact two prod-destr pathways this is how the
+            # routine update_pathway_rate_from_deleted_p is coded
+            # pathway_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='destr')
+            # NO WE DON'T
+            # update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='destr')
             pass
         case 'destruction':
-            # we remove the productive rate from deleted pathways because we are destroying species
-            # pathway_tmp = update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='destr')
+            # we remove the destructive rate from deleted pathways because we are destroying species Sb connecting to Sb
+            # The case_flag is the opposite because when we connact two prod-destr pathways this is how the
+            # routine update_pathway_rate_from_deleted_p is coded
+            # pathway_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='prod')
+            # NO WE DON'T
+            # update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='prod')
             pass
 
     # Updating the pathway into a new one
@@ -487,8 +495,8 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
 
                     # print('Updating pathway prod rate from connecting with deleted one')
                     # print('with rate deleted: ',f_deleted_destr,' from: ',rate_p)
-                    # updating the rate
-                    pathway_tmp["rate"] -= f_deleted_destr
+                    # updating the rate NO WE DON'T
+                    # pathway_tmp["rate"] -= f_deleted_destr
                     # Now we need to update the deleted rate of reactions that destroyed species and species affected by the pathway
                     # We do that by adding the same pathway in deleted_pathways, but with the are f_deleted
                     if d_tools.is_pathway_in_list(pathway_to_be_checked=pathway_tmp,list_of_pathways=deleted_p):
@@ -523,8 +531,8 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
 
                     # print('Updating pathway destr rate from connecting with deleted one')
                     # print('with rate deleted: ',f_deleted_prod,' from: ',rate_p)
-                    # updating the rate
-                    pathway_tmp["rate"] -= f_deleted_prod
+                    # updating the rate NO WE DON'T
+                    # pathway_tmp["rate"] -= f_deleted_prod
                     # print('the new pathway rate is: ',pathway_tmp["rate"])
                     ## Now we need to update the deleted rate of reactions that destroyed species and species affected by the pathway
                     # We do that by adding the same pathway in deleted_pathways, but with the are f_deleted
@@ -545,11 +553,40 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
                     d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
             case 'new_pathway':
                 if f_deleted_prod_destr > 0.0:
+                    # We open deleted_pathways in order to add it some
+                    # Opening JSON file
+                    dp = open('deleted_pathways.json')
+
+                    # returns JSON object as a list of dict
+                    deleted_p = json.load(dp)
+
+                    # closing file
+                    dp.close()
+
+                    # print('Updating pathway destr rate from connecting with deleted one')
+                    # print('with rate deleted: ',f_deleted_prod,' from: ',rate_p)
                     # updating the rate
-                    # pathway["rate"] -= f_deleted_prod_destr
-                    pass
+                    pathway_tmp["rate"] -= f_deleted_prod_destr
+
+                    if d_tools.is_pathway_in_list(pathway_to_be_checked=pathway_tmp,list_of_pathways=deleted_p):
+                        # We have the pathway already in deleted_p
+                        # we need to modify its rate then in deleted_p
+                        index = d_tools.find_pathway_in_list(pathway_to_be_found=pathway_tmp,list_of_pathways=deleted_p)
+                        deleted_p[index]["rate"] += f_deleted_prod_destr
+                    else:
+                        # pathway is NOT in deleted_p
+                        # Hence, we add it with the deleted rate associated
+                        deleted_p.append(copy.deepcopy(pathway_tmp))
+                        deleted_p[-1]["rate"] = f_deleted_prod_destr
+                    # print('the new pathway rate is: ',pathway_tmp["rate"])
+
+                    # update_reaction_rate_delete_p(reactions=pathway["reactions"],rate_del=f_deleted_prod_destr)
+                    # Now we update the species affected by the pathway
+                    # update_rate_chemical_species_delete_p(branching_points=pathway["branching points"],rate_del=f_deleted_prod_destr)
+                    # Before we leave we save the json file
+                    d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
     
-    return pathway_tmp["rate"]
+    # return pathway_tmp["rate"]
 
 
 def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:dict):
