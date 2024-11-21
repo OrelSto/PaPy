@@ -6,16 +6,16 @@ from ..p__data_management import data_tools as d_tools
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
 
-def eval_specie_prod_rate_active_p(species:str):
+def eval_specie_prod_rate_active_p(species:str, active_p:list):
     # Evaluates the production rate of a given species according to the active pathways
-    # Opening JSON file
-    ap = open('active_pathways.json')
+    # # Opening JSON file
+    # ap = open('active_pathways.json')
 
-    # returns JSON object as a dictionary
-    active_p = json.load(ap)
+    # # returns JSON object as a dictionary
+    # active_p = json.load(ap)
 
-    # closing file
-    ap.close()
+    # # closing file
+    # ap.close()
 
     # setting production rate to 0
     production_rate = 0.0
@@ -31,16 +31,16 @@ def eval_specie_prod_rate_active_p(species:str):
     return production_rate
 
 
-def eval_specie_prod_rate_deleted_p(species:str):
+def eval_specie_prod_rate_deleted_p(species:str,deleted_p:list):
     # Evaluates the production rate of a given species according to the deleted pathways
-    # Opening JSON file
-    dp = open('deleted_pathways.json')
+    # # Opening JSON file
+    # dp = open('deleted_pathways.json')
 
-    # returns JSON object as a dictionary
-    deleted_p = json.load(dp)
+    # # returns JSON object as a dictionary
+    # deleted_p = json.load(dp)
 
-    # closing file
-    dp.close()
+    # # closing file
+    # dp.close()
 
     # setting production rate to 0
     production_rate = 0.0
@@ -56,19 +56,19 @@ def eval_specie_prod_rate_deleted_p(species:str):
     return production_rate
 
 
-def eval_specie_destr_rate_active_p(species:str):
+def eval_specie_destr_rate_active_p(species:str,active_p:list):
     # Evaluates the destruction rate of a given species according to the active pathways
-    # Opening JSON file
-    ap = open('active_pathways.json')
+    # # Opening JSON file
+    # ap = open('active_pathways.json')
     
-    # returns JSON object asa dictionary
-    active_p = json.load(ap)
+    # # returns JSON object asa dictionary
+    # active_p = json.load(ap)
+
+    # # closing file
+    # ap.close()
 
     # setting destruction rate to 0
     destruction_rate = 0.0
-
-    # closing file
-    ap.close()
 
     # Check the JSON dict for the presence of species
     for item in active_p:
@@ -81,16 +81,16 @@ def eval_specie_destr_rate_active_p(species:str):
     return destruction_rate
 
 
-def eval_specie_destr_rate_deleted_p(species:str):
+def eval_specie_destr_rate_deleted_p(species:str,deleted_p:list):
     # Evaluates the destruction rate of a given species according to deleted pathways
-    # Opening JSON file
-    dp = open('deleted_pathways.json')
+    # # Opening JSON file
+    # dp = open('deleted_pathways.json')
     
-    # returns JSON object asa dictionary
-    deleted_p = json.load(dp)
+    # # returns JSON object asa dictionary
+    # deleted_p = json.load(dp)
 
-    # closing file
-    dp.close()
+    # # closing file
+    # dp.close()
 
     # setting destruction rate to 0
     destruction_rate = 0.0
@@ -106,16 +106,16 @@ def eval_specie_destr_rate_deleted_p(species:str):
     return destruction_rate
 
 
-def eval_reaction_rate_deleted_p(reaction_index:int):
+def eval_reaction_rate_deleted_p(reaction_index:int,deleted_p:list):
     # Evaluates the rate of a given reaction according to the deleted pathways
-    # Opening JSON file
-    dp = open('deleted_pathways.json')
+    # # Opening JSON file
+    # dp = open('deleted_pathways.json')
 
-    # returns JSON object as a dictionary
-    deleted_p = json.load(dp)
+    # # returns JSON object as a dictionary
+    # deleted_p = json.load(dp)
 
-    # closing file
-    dp.close()
+    # # closing file
+    # dp.close()
 
     # setting deleted rate to 0
     deleted_rate = 0.0
@@ -131,36 +131,38 @@ def eval_reaction_rate_deleted_p(reaction_index:int):
     return deleted_rate
 
 
-def update_reaction_rate_delete_p(reactions:list,rate_del:float):
+def update_reaction_rate_delete_p(reactions:list,rate_del:float,chemical_reaction_system:list):
     # Update the rate of a given reaction according to its connection of a deleted pathway and an active one
-    # Opening JSON file
-    crs = open('chemical_reaction_system.json')
+    # # Opening JSON file
+    # crs = open('chemical_reaction_system.json')
 
-    # returns JSON object as a dictionary
-    chemical_system = json.load(crs)
+    # # returns JSON object as a dictionary
+    # chemical_reaction_system = json.load(crs)
 
-    # closing file
-    crs.close()
+    # # closing file
+    # crs.close()
 
     # for each reaction r in the pathway we update the rates in the reactions file
     for r in reactions:
-        reaction = chemical_system[r["index"]]
+        reaction = chemical_reaction_system[r["index"]]
         reaction["rate"] -= r["multiplicity"]*rate_del
         reaction["deleted rate"] += r["multiplicity"]*rate_del
 
-    # Now we save it
-    # Write the JSON data to an output file
-    with open('chemical_reaction_system.json', 'w') as output_file:
-        json.dump(chemical_system, output_file, indent=2)
+    # # Now we save it
+    # # Write the JSON data to an output file
+    # with open('chemical_reaction_system.json', 'w') as output_file:
+    #     json.dump(chemical_reaction_system, output_file, indent=2)
+    
+    return chemical_reaction_system
 
 
-def update_rate_chemical_species_delete_p(branching_points:list,rate_del:float):
+def update_rate_chemical_species_delete_p(branching_points:list,rate_del:float,chemical_species:list):
     # Update the rate of a given species according to its connection of a deleted pathway and an active one
     # We update every species present in the pathway
     for bp in branching_points:
         s = bp["compound"]
         m = bp["stoichiometry"]
-        species_dict = d_tools.get_compound_dict(s)
+        species_dict = d_tools.get_compound_dict(compound=s,chemical_species=chemical_species)
 
         # we check the stoichiometry of the species result in the pathway
         # if m=0, we don't update obviously
@@ -174,7 +176,9 @@ def update_rate_chemical_species_delete_p(branching_points:list,rate_del:float):
             d_rate_dict["deleted pathways"] += -m * rate_del
 
 
-def update_rates_chemical_species(species:str):
+def update_rates_chemical_species(active_p:list,deleted_p:list,chemical_species:list) -> list:
+
+    chemical_species_tmp = copy.deepcopy(chemical_species)
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
@@ -182,25 +186,25 @@ def update_rates_chemical_species(species:str):
         o_tools.write_line_chronicle('Updating the rates of chemical species')
         o_tools.write_line_chronicle('\n')
 
-    # Opening JSON file
-    cs = open('chemical_species.json')
+    # # Opening JSON file
+    # cs = open('chemical_species_tmp.json')
 
-    # returns JSON object as a dictionary
-    chemical_species = json.load(cs)
+    # # returns JSON object as a list dictionary
+    # chemical_species_tmp = json.load(cs)
 
-    # closing file
-    cs.close()
+    # # closing file
+    # cs.close()
 
     # updating the rates
-    for item in chemical_species:
+    for item in chemical_species_tmp:
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('Updating:'+item["name"])
-            o_tools.write_line_chronicle('    prod:'+'{:0.3e}'.format(item["production rate"]["active pathways"])+' to '+'{:0.3e}'.format((eval_specie_prod_rate_active_p(species=item["name"]))))
-            o_tools.write_line_chronicle('   destr:'+'{:0.3e}'.format(item["destruction rate"]["active pathways"])+' to '+'{:0.3e}'.format((eval_specie_destr_rate_active_p(species=item["name"]))))
-        item["production rate"]["active pathways"] = eval_specie_prod_rate_active_p(species=item["name"])
-        item["production rate"]["deleted pathways"] = eval_specie_prod_rate_deleted_p(species=item["name"])
-        item["destruction rate"]["active pathways"] = eval_specie_destr_rate_active_p(species=item["name"])
-        item["destruction rate"]["deleted pathways"] = eval_specie_destr_rate_deleted_p(species=item["name"])
+            o_tools.write_line_chronicle('    prod:'+'{:0.3e}'.format(item["production rate"]["active pathways"])+' to '+'{:0.3e}'.format((eval_specie_prod_rate_active_p(species=item["name"],active_p=active_p))))
+            o_tools.write_line_chronicle('   destr:'+'{:0.3e}'.format(item["destruction rate"]["active pathways"])+' to '+'{:0.3e}'.format((eval_specie_destr_rate_active_p(species=item["name"],active_p=active_p))))
+        item["production rate"]["active pathways"] = eval_specie_prod_rate_active_p(species=item["name"],active_p=active_p)
+        item["production rate"]["deleted pathways"] = eval_specie_prod_rate_deleted_p(species=item["name"],deleted_p=deleted_p)
+        item["destruction rate"]["active pathways"] = eval_specie_destr_rate_active_p(species=item["name"],active_p=active_p)
+        item["destruction rate"]["deleted pathways"] = eval_specie_destr_rate_deleted_p(species=item["name"],deleted_p=deleted_p)
         
         # updating its lifetime
         if global_var.chronicle_writing:
@@ -216,19 +220,21 @@ def update_rates_chemical_species(species:str):
              o_tools.write_line_chronicle('lifetime:'+'{:0.3e}'.format(sav_lt)+' to '+'{:0.3e}'.format(item["lifetime"]))
 
     # Now we save it
-    # Write the JSON data to an output file
-    with open('chemical_species.json', 'w') as output_file:
-        json.dump(chemical_species, output_file, indent=2)
-    with open('chemical_species_'+species+'.json', 'w') as output_file:
-        json.dump(chemical_species, output_file, indent=2)
+    # # Write the JSON data to an output file
+    # with open('chemical_species.json', 'w') as output_file:
+    #     json.dump(chemical_species_tmp, output_file, indent=2)
+    # with open('chemical_species_'+species+'.json', 'w') as output_file:
+    #     json.dump(chemical_species_tmp, output_file, indent=2)
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Updating rates in chemical_species.json complete.')
         o_tools.write_line_chronicle('**************************************')
+    
+    return chemical_species_tmp
 
 
-def update_rates_reaction_system():
+def update_rates_reaction_system(deleted_p:list):
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
@@ -252,7 +258,7 @@ def update_rates_reaction_system():
             # print("We are updating ",o_tools.reaction_to_str({"index":chemical_system.index(item),
             #                    "multiplicity":1},chemical_system))
             # updating the rate and deleted rate associated with the reaction
-            item["deleted rate"] = eval_reaction_rate_deleted_p(reaction_index=chemical_system.index(item))
+            item["deleted rate"] = eval_reaction_rate_deleted_p(reaction_index=chemical_system.index(item),deleted_p=deleted_p)
             item["rate"] = item["initial rate"] - item["deleted rate"]
             # Writing in chronicles
             if global_var.chronicle_writing:
@@ -272,7 +278,7 @@ def update_rates_reaction_system():
         o_tools.write_line_chronicle('**************************************')
 
 
-def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list,building_SP:bool):
+def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list,building_SP:bool,chemical_species:list):
     # self explanatory ... connecting two pathways
     # I means we merge two pathways that are connected via a species that the one produce and the latter destroys
 
@@ -293,12 +299,14 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
     # 2. We check the deleted pathways effects on branching point species
     # pathway_prod_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod')
     # pathway_destr_tmp["rate"] = update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr')
-    update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod')
-    update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr')
+    update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod',cs=chemical_species)
+    update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr',cs=chemical_species)
 
     # 3. Merging the pathways into a new one
     # we check 0 values for D_compound
-    if d_tools.D_compound(d_tools.get_compound_dict(species)) != 0.0:
+    compound_dict = d_tools.get_compound_dict(compound=species,chemical_species=chemical_species)
+    D_b = d_tools.D_compound(compound_dict)
+    if D_b != 0.0:
         # prod and/or destr != 0, hence rate to be distributed
         # print('with BP stoechio :',bp_stoichiometry)
         # print('with rate prod pw:',pathway_prod_tmp["rate"])
@@ -308,14 +316,18 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
                 o_tools.write_line_chronicle('with BP stoechio :'+'{:0.3e}'.format(bp_stoichiometry))
                 o_tools.write_line_chronicle('with rate prod pw:'+'{:0.3e}'.format(pathway_prod_tmp["rate"]))
                 o_tools.write_line_chronicle('with rate dest pw:'+'{:0.3e}'.format(pathway_destr_tmp["rate"]))
-                o_tools.write_line_chronicle('with Db          :'+'{:0.3e}'.format(d_tools.D_compound(d_tools.get_compound_dict(species))))
+                o_tools.write_line_chronicle('with Db          :'+'{:0.3e}'.format(D_b))
         
         # Evaluation of the rate of the new pathway
-        rate = bp_stoichiometry*(pathway_prod_tmp["rate"] * pathway_destr_tmp["rate"]) / d_tools.D_compound(d_tools.get_compound_dict(species))
+        rate = bp_stoichiometry*(pathway_prod_tmp["rate"] * pathway_destr_tmp["rate"]) / D_b
         # we multipliply by bp_stoichiometry in order to conserve molecule number
         # with DSb which is for 1.Sb where the constructed pathway is for 
         # bp_stoichiometry.Sb Hence we divide DSb by bp_stoichiometry
     else:
+        if (global_var.chronicle_writing and not building_SP):
+                o_tools.write_line_chronicle('Db == 0??? for species: '+species)
+                o_tools.write_line_chronicle('with Db          :'+'{:0.3e}'.format(D_b))
+                print(compound_dict)
         # it means that prod and destr = 0, hence no rate to distribute
         rate = 0.0
     
@@ -413,11 +425,11 @@ def clean_reactions(pathway:dict):
     return pathway
 
 
-def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
+def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_species:list):
     # self explanatory ... connecting pathway to the change in species concentration
     # It means we merge two pathways that are connected via a species that the one produce and the latter destroys
     pathway_tmp = copy.deepcopy(pathway)
-    species_dict = d_tools.get_compound_dict(species)
+    species_dict = d_tools.get_compound_dict(species,chemical_species)
     list_bp_used = pathway_tmp["list branching points used"]
     # we don't add a species since this is not a "full" connection
     # Meaning that there is only a prod/destr part of the connection.
@@ -453,11 +465,11 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str):
     return new_pathway
 
 
-def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int):
+def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs:list):
     # This routine update the rate of pathway according to the rate of the deleted pathways affecting species
     pathway_tmp = copy.deepcopy(pathway)
     rate_p = pathway_tmp["rate"]
-    species_dict = d_tools.get_compound_dict(species)
+    species_dict = d_tools.get_compound_dict(species,cs)
     rate_deleted_destr_species = species_dict["destruction rate"]["deleted pathways"]
     rate_deleted_prod_species = species_dict["production rate"]["deleted pathways"]
     D_species = d_tools.D_compound(species_dict)

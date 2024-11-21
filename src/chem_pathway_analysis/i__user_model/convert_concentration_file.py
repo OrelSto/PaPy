@@ -140,3 +140,5 @@ def convert_concentration_file(filename:str,timestep:float):
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('Conversion of '+filename+' to JSON  chemical species format complete.')
         o_tools.write_line_chronicle('Saved as chemical_species.json')
+    
+    return chemical_species

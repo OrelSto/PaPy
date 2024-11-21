@@ -60,16 +60,16 @@ def D_compound(compound:dict):
     return max(p,d)
 
 
-def get_compound_dict(compound:str):
+def get_compound_dict(compound:str,chemical_species:list):
     # return the dict of a specified compound
-    # Opening JSON file
-    cs = open('chemical_species.json')
+    # # Opening JSON file
+    # cs = open('chemical_species.json')
 
-    # returns JSON object as a dictionary
-    chemical_species = json.load(cs)
+    # # returns JSON object as a dictionary
+    # chemical_species = json.load(cs)
 
-    # closing the file
-    cs.close()
+    # # closing the file
+    # cs.close()
 
     # iterate and return the correct dict
     for s in chemical_species:

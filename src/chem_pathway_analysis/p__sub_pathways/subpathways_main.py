@@ -10,7 +10,7 @@ from ..p__data_management import global_var
 # 1. reading the active_pathways.json
 # 2. looping through the pathways and initialze the set of sub-pathways
 
-def main_subpathways(pathways:list,list_species_done:list):
+def main_subpathways(pathways:list,list_species_done:list,chemical_species:list):
     # Opening JSON file
     crs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
@@ -19,7 +19,6 @@ def main_subpathways(pathways:list,list_species_done:list):
     crs.close()
 
     active_pathways_data_tmp = copy.deepcopy(pathways)
-    ind=0
 
     # print('We are working with these active pathways')
     # for item in pathways:
@@ -43,7 +42,7 @@ def main_subpathways(pathways:list,list_species_done:list):
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('The pathway has at least than 3 reactions. Looking for subpathways!')
 
-            returned_set_SP,flag_update = sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data_tmp,ind=ind,list_species_done=list_species_done)
+            returned_set_SP,flag_update = sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data_tmp,list_species_done=list_species_done,chemical_species=chemical_species)
             # with that returned_set_SP, we have to clean the active pathways data.
             # First we remove the actual pathway since it is no longer needed
             # we check the list of reactions and not the entire item because "rate" key is changing !
@@ -98,7 +97,6 @@ def main_subpathways(pathways:list,list_species_done:list):
                 o_tools.write_line_chronicle('\n')
                 o_tools.write_line_chronicle('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
         # incrementing the indice
-        ind += 1
     
     return pathways
 

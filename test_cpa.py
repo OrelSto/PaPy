@@ -45,15 +45,16 @@ from src.chem_pathway_analysis import cpa
 # test with Uranus data!
 # record start time
 start = time.time()
-cpa.run_cpa(timestep=1.0,rate_threshold=7.0e-8,t_min=1.0e13,
-            target_species=['O2','O[3p]','CH4','CH3CHO','H2O','C2H4','HCO','[3]CH2'],
+cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-18,t_min=1.0e14,
+            # target_species=['O2','O[3p]','CH4','CH3CHO','H2O','C2H4','HCO','[3]CH2'],
+            target_species=[],
             filename_model='reactions_Uranus.txt',
             filename_concentration='concentrations_Uranus.txt',
             final_AP_file='ActP_Uranus.json',
             final_DP_file='DelP_Uranus.json',
             final_CS_file='ChemS_Uranus.json',
             final_SL_file='SpecL_Uranus.json',
-            chronicle_writing=True)
+            chronicle_writing=False)
 # record end time
 end = time.time()
 # print the difference between start 

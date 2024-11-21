@@ -58,6 +58,7 @@ def init_pathways(json_filename:str):
 
     # Empty list of active pathways
     active_pathways = []
+    deleted_pathways = []
 
     # We save the JSON stucture into a dict
     chemical_system = read_chemical_system(json_filename=json_filename)
@@ -81,3 +82,5 @@ def init_pathways(json_filename:str):
         o_tools.write_line_chronicle('Initialization of Active Pathways saved as active_pathways.json')
         o_tools.write_line_chronicle('The initial deleted pathways is an empty list')
         o_tools.write_line_chronicle('Initialization of Deleted Pathways saved as deleted_pathways.json')
+    
+    return active_pathways,deleted_pathways

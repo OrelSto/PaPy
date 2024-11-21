@@ -41,6 +41,7 @@ from .p__pathways_analysis import branching_points as bp
 from .p__pathways_analysis import main_loop as ml
 from .o__cpap_output import output as out
 from .o__cpap_output import output_tools as o_tools
+from .p__data_management import data_tools as d_tools
 
 
 def init_global_var(chronicle_writing:bool):
@@ -64,8 +65,8 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('\n')
     
     i_system.convert_chemical_reaction_file(filename=filename_model)
-    i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
-    i_system.adding_pseudo_reactions()
+    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
+    i_system.adding_pseudo_reactions(chemical_species=chemical_species)
 
     # 2. We run the initialization
     if global_var.chronicle_writing:
@@ -75,12 +76,12 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('#######################')
         o_tools.write_line_chronicle('\n')
 
-    p_init.init_pathways(json_filename="chemical_reaction_system.json")
+    active_p,deleted_p = p_init.init_pathways(json_filename="chemical_reaction_system.json")
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('Updating prod/destr rates for chemical species')
     
-    up.update_rates_chemical_species(species='start')
+    chemical_species = up.update_rates_chemical_species(active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species)
     # Checking the targeted species as viable outputs
     # if global_var.chronicle_writing:
     #     o_tools.write_line_chronicle('\n')
@@ -97,13 +98,16 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('#################')
         o_tools.write_line_chronicle('\n')
     
-    ml.main_loop(t_min=t_min,f_min=rate_threshold)
+    active_p,deleted_p,chemical_species = ml.main_loop(t_min=t_min,f_min=rate_threshold,active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species)
 
     # 4. main loop done. Outputs time!!!
-    out.text_output(target_species=target_species)
+    # out.text_output(target_species=target_species)
 
     # 5 copying results files
-    shutil.copy2(src='active_pathways.json',dst=final_AP_file)
-    shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
+    d_tools.save_pathways_to_JSON(pathways=active_p,filename=final_AP_file)
+    d_tools.save_pathways_to_JSON(pathways=deleted_p,filename=final_DP_file)
+    d_tools.save_pathways_to_JSON(pathways=chemical_species,filename=final_SL_file)
+    # shutil.copy2(src='active_pathways.json',dst=final_AP_file)
+    # shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
     shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
-    shutil.copy2(src='chemical_species.json',dst=final_SL_file)
+    # shutil.copy2(src='chemical_species.json',dst=final_SL_file)
