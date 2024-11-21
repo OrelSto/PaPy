@@ -19,7 +19,7 @@ from src.chem_pathway_analysis import cpa
 # cpa.out.table_Tex(target_species=['O2','O3','O'],unit='ppbv\per\hour',act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json')
 
 # test article to see if P4 is deleted!
-# cpa.run_cpa(timestep=1.0,rate_threshold=0.3e-9,t_min=1.0e4,
+# cpa.run_cpa(timestep=1.0,rate_threshold=0.2e-9,t_min=1.0e4,
 #             target_species=['O2','O3','O'],
 #             filename_model='user_model_example.txt',
 #             filename_concentration='user_concentration_example.txt',
@@ -45,8 +45,7 @@ from src.chem_pathway_analysis import cpa
 # test with Uranus data!
 # record start time
 start = time.time()
-cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-18,t_min=1.0e14,
-            # target_species=['O2','O[3p]','CH4','CH3CHO','H2O','C2H4','HCO','[3]CH2'],
+cpa.run_cpa(timestep=1.0,rate_threshold=7.0e-8,t_min=1.0e14,
             target_species=[],
             filename_model='reactions_Uranus.txt',
             filename_concentration='concentrations_Uranus.txt',
@@ -60,7 +59,6 @@ end = time.time()
 # print the difference between start 
 # and end time in milli. secs
 print("The time of execution of above program is :",(end-start) * 10**3, "ms")
-# cpa.out.pie_output(target_species=['O2','O[3p]','CH4','CH3','CH3CHO','H2O','C2H4','HCO','[3]CH2'],act_P_json='ActP_Uranus.json',del_P_json='DelP_Uranus.json',chem_R_json='ChemS_Uranus.json',spec_L_json='SpecL_Uranus.json')
 cpa.out.pie_output(target_species=['[3]CH2'],act_P_json='ActP_Uranus.json',del_P_json='DelP_Uranus.json',chem_R_json='ChemS_Uranus.json',spec_L_json='SpecL_Uranus.json')
 cpa.out.table_Tex(target_species=['[3]CH2'],unit='ppbv\per\hour',act_P_json='ActP_Uranus.json',del_P_json='DelP_Uranus.json',chem_R_json='ChemS_Uranus.json',spec_L_json='SpecL_Uranus.json')
 

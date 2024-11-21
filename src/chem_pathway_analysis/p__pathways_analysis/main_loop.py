@@ -48,7 +48,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
 
             used_species.append(species)
             # looking for each species from the shortest lived to the longest
-            active_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species,chemical_species=chemical_species)
+            active_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species,chemical_species=chemical_species,deleted_pathways=deleted_p)
 
             # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
 
@@ -56,7 +56,15 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             # with open('deleted_pathways.json') as dp:
             #     deleted_p = json.load(dp)
 
-            active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
+            # Printing
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle('\n')
+                o_tools.write_line_chronicle('#################')
+                o_tools.write_line_chronicle('Cleaning Pathways')
+                o_tools.write_line_chronicle('#################')
+                o_tools.write_line_chronicle('\n')
+            
+            # active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing
             if global_var.chronicle_writing:
@@ -68,7 +76,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             
             # After saving, SUB-PATHWAYS analysis !!
             active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species,chemical_species=chemical_species)
-
+            active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing
             if global_var.chronicle_writing:

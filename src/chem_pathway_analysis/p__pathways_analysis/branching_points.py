@@ -35,7 +35,7 @@ def list_next_branching_points(t_min:float,chemical_species:list):
     return sorted_keys
 
 
-def connecting_pathways(active_pathways:list,species:str,list_species_done:list,chemical_species:list):
+def connecting_pathways(active_pathways:list,species:str,list_species_done:list,chemical_species:list,deleted_pathways:list):
     # Opening JSON file
     crs = open('chemical_reaction_system.json')
     # returns JSON object as a dictionary
@@ -112,7 +112,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
                     o_tools.write_line_chronicle('\n')
                 
                 # we append the mew pathway
-                new_P_to_add,_,_=data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species,list_species_done,False,chemical_species)
+                new_P_to_add=data.connect_two_pathway(active_pathways[p_from],active_pathways[p_to],species,list_species_done,False,chemical_species,deleted_pathways)
                 new_pathways.append(new_P_to_add)
                 # print('with rate of:',new_pathways[-1]["rate"])
                 # Chronicles
@@ -171,6 +171,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
             # print(p["reactions"])
 
         return active_pathways
+    
     elif (cond_prod or cond_destroy):
         # No prod and destr at the same time !!
         # We need the pathways (prod or destr) that end up explaining the contribution of Delta concentration of branching poing species
