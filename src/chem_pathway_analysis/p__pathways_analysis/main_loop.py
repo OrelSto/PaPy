@@ -64,8 +64,8 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
                 o_tools.write_line_chronicle('#################')
                 o_tools.write_line_chronicle('\n')
             
-            # active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
-
+            active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
+            
             # Printing
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('\n')
@@ -76,7 +76,6 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             
             # After saving, SUB-PATHWAYS analysis !!
             active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species,chemical_species=chemical_species)
-            active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
             # Printing
             if global_var.chronicle_writing:
