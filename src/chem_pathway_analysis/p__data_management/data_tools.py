@@ -10,9 +10,11 @@ def find_compound_in_merged_list(listing:list,compound:str):
         if "compound" in item and item["compound"] == compound:
             index_found.append(index)
 
-    if index_found is []:
-        print("No dictionary with 'compound' equals ",compound," was found in the list.")
-        exit()
+    # if index_found == []:
+    #     print("Error in find_compound_in_merged_list")
+    #     print("No dictionary with 'compound' equals ",compound," was found in the list.")
+    #     print('listing:',listing)
+    #     exit()
 
     return index_found
 
@@ -34,6 +36,7 @@ def find_compound_in_pathway_BP(list_of_BP:list,species:str):
             return index
     
     # Nothing is happening!
+    print("Error in find_compound_in_pathway_BP")
     print("No dictionary with 'compound' equals ",species," was found in the list.")
     exit()
 
@@ -49,8 +52,8 @@ def save_pathways_to_JSON(pathways:list,filename:str):
 # def D_compound(compound:dict,use_total:bool):
 def D_compound(compound:dict):
     # It's the contribution of prod or consum for the pathways of a specific compound
-    p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"]
-    d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"]
+    p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"] - compound["add_del_pbdb"]
+    d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"] - compound["add_del_pbdb"]
     # if use_total:
     #     p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"]
     #     d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"]
@@ -72,9 +75,11 @@ def get_compound_dict(compound:str,chemical_species:list):
     # cs.close()
 
     # iterate and return the correct dict
+    ind = 0
     for s in chemical_species:
         if s["name"] == compound:
-            return s
+            return s,int(ind)
+        ind += 1
 
 def get_compound_dict_from_results(compound:str,SpecL:str):
     # return the dict of a specified compound
@@ -88,9 +93,11 @@ def get_compound_dict_from_results(compound:str,SpecL:str):
     cs.close()
 
     # iterate and return the correct dict
+    ind = 0
     for s in chemical_species:
         if s["name"] == compound:
-            return s
+            return s,int(ind)
+        ind += 1
 
 def format_pseudo_reaction(species:str,flag:str):
     # this is used in sub_pathway analysis.
@@ -285,10 +292,12 @@ def is_pathway_in_list(pathway_to_be_checked:dict,list_of_pathways:list):
     list_of_pathways : list
         _description_
     """
-    p_2b_checked_reactions = [r["index"] for r in pathway_to_be_checked["reactions"]]
-    p_2b_checked_reactions = sorted(p_2b_checked_reactions)
-    r_2b_checked_against = [[r["index"] for r in p["reactions"]] for p in list_of_pathways]
-    r_2b_checked_against = sorted(r_2b_checked_against)
+    p_2b_checked_reactions = [{r["index"]:r["multiplicity"]} for r in pathway_to_be_checked["reactions"]]
+    p_2b_checked_reactions = sorted(p_2b_checked_reactions, key=lambda x:list(x.keys())[0])
+    r_2b_checked_against = [[{r["index"]:r["multiplicity"]} for r in p["reactions"]] for p in list_of_pathways]
+    # we sort each element of the list
+    for p in r_2b_checked_against:
+        p = sorted(p, key=lambda x:list(x.keys())[0])
 
     if (p_2b_checked_reactions in r_2b_checked_against):
         return True
@@ -309,12 +318,12 @@ def find_pathway_in_list(pathway_to_be_found:dict,list_of_pathways:list):
         _description_
     """
 
-    p_2b_found_reactions = [r["index"] for r in pathway_to_be_found["reactions"]]
-    p_2b_found_reactions = sorted(p_2b_found_reactions)
+    p_2b_found_reactions = [{r["index"]:r["multiplicity"]} for r in pathway_to_be_found["reactions"]]
+    p_2b_found_reactions = sorted(p_2b_found_reactions, key=lambda x:list(x.keys())[0])
 
     for index, p in enumerate(list_of_pathways):
-        r_2b_checked_against = [r["index"] for r in p["reactions"]]
-        r_2b_checked_against = sorted(r_2b_checked_against)
+        r_2b_checked_against = [{r["index"]:r["multiplicity"]} for r in p["reactions"]]
+        r_2b_checked_against = sorted(r_2b_checked_against, key=lambda x:list(x.keys())[0])
         if p_2b_found_reactions == r_2b_checked_against:
             return index
     

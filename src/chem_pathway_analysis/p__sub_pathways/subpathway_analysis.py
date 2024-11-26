@@ -53,6 +53,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
     # init_SP is set to true because for the first pass through the loop we need set_SP_init. After, we need the updated final_set_SP.
     init_SP = True
     for s in species_done:
+        # THE NEXT LINE IS FOR SUPER DETAILED SUB P CONSTRUCTION DEBUGGING
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('\n')
             o_tools.write_line_chronicle('Building subpathways with BP '+s)
@@ -211,6 +212,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
             # print('res is',res,'in result.x',result,'at index',index_list_ranked[ind_sp])
             # if we have a weight > 0.0
             if res > 0.0:
+                # print('res is',res,'in result.x',result,'at index',index_list_ranked[ind_sp])
                 # print('updating rate')
                 # save_solo_index = ind_sp
                 final_set_SP[index_list_ranked[ind_sp]]["rate"] = pathway["rate"] * res
@@ -381,7 +383,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_
                 # n_from = [n["index"] for n in set_SP[p_from]["reactions"]]
                 # n_to = [n["index"] for n in set_SP[p_to]["reactions"]]
                 # new_SP is at stoichiometry 0, so it fulfills the zero net production of species s condition for a subpathway to be added
-                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species,list_species_done,True,chemical_species,[])
+                new_SP = data.connect_two_pathway(set_SP[p_from], set_SP[p_to],species,list_species_done,True,chemical_species)
                 # print('with rate of:',new_SP["rate"])
                 # checking if new_SP is already present in set_SP_tmp and if it is an actual 
                 # elementary pathway!
@@ -435,32 +437,29 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_
 
 def adding_SP(set_SP:list,final_set_SP:list,pathway_to_be_checked:dict):
     # we check if the pathway_to_be_checked is already in set_SP 
-    p_2b_checked_reactions = [r["index"] for r in pathway_to_be_checked["reactions"]]
-    p_2b_checked_reactions = sorted(p_2b_checked_reactions)
-    r_2b_checked_against = [[i["index"] for i in r["reactions"]] for r in set_SP]
-    r_2b_checked_against = sorted(r_2b_checked_against)
+    p_2b_checked = [{r["index"]:r["multiplicity"]} for r in pathway_to_be_checked["reactions"]]
+    p_2b_checked = sorted(p_2b_checked,key=lambda x:list(x.keys())[0])
+    r_2b_checked_against = [[{i["index"]:i["multiplicity"]} for i in r["reactions"]] for r in set_SP]
+    for p in r_2b_checked_against:
+        p = sorted(p,key=lambda x:list(x.keys())[0])
+    # r_2b_checked_against = sorted(r_2b_checked_against)
     final_r_2b_checked_against = []
     # print('final_set_SP',final_set_SP)
     for item in final_set_SP:
         list_item = []
         for r in item["reactions"]:
-            list_item.append(r["index"])
-        # list_item = sorted(list_item)
-        # print('list_item',sorted(list_item))
-        final_r_2b_checked_against.append(sorted(list_item))
-    # final_r_2b_checked_against = sorted(final_r_2b_checked_against)
+            list_item.append({r["index"]:r["multiplicity"]})
+        final_r_2b_checked_against.append(sorted(list_item,key=lambda x:list(x.keys())[0]))
 
-    # final_r_2b_checked_against = [[i["index"] for i in r["reactions"]] for r in final_set_SP]
-    # final_r_2b_checked_against = sorted(final_r_2b_checked_against)
-
-    # print('p_2b_checked_reactions',p_2b_checked_reactions)
+    # print('p_2b_checked',p_2b_checked)
     # print('r_2b_checked_against',r_2b_checked_against)
     # print('final_r_2b_checked_against',final_r_2b_checked_against)
 
     # if pathway_to_be_checked in set_SP:
-    if (p_2b_checked_reactions in r_2b_checked_against) or (p_2b_checked_reactions in final_r_2b_checked_against):
+    if (p_2b_checked in r_2b_checked_against) or (p_2b_checked in final_r_2b_checked_against):
         # print('not connected: Already present')
-        return
+        # set_SP is not altered
+        return set_SP
     else:
         # pathway_to_be_checked is not already in set_SP
         # check if it is an elementary pathway of set_SP
@@ -468,10 +467,10 @@ def adding_SP(set_SP:list,final_set_SP:list,pathway_to_be_checked:dict):
         if cond_elementary_pathway(set_SP=set_SP,pathway_to_be_checked=pathway_to_be_checked):
             # print('connected: All cond checked')
             set_SP.append(pathway_to_be_checked)
+            return set_SP
         else:
             # print('not connected: subset exist')
-            pass
-        return
+            return set_SP
 
 
 def cond_elementary_pathway(set_SP:list,pathway_to_be_checked:dict):

@@ -117,7 +117,7 @@ def target_species_output(target_specie:str) -> None:
         # Parse the JSON data and store it in a variable
         chem_system_data = json.load(chem_system_file)
     
-    t_species = d_tools.get_compound_dict(compound=target_specie)
+    t_species,_ = d_tools.get_compound_dict(compound=target_specie)
     
     with open('simple_output_'+target_specie+'.txt', 'w') as simple_output_file:
 
@@ -259,7 +259,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             # Parse the JSON data and store it in a variable
             chem_system_data = json.load(chem_system_file)
         
-        t_species = d_tools.get_compound_dict_from_results(compound=s,SpecL=spec_L_json)
+        t_species,_ = d_tools.get_compound_dict_from_results(compound=s,SpecL=spec_L_json)
 
         # The rate_sum for a species is the sum of its prod and destr
         rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
@@ -506,7 +506,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             # Parse the JSON data and store it in a variable
             chem_system_data = json.load(chem_system_file)
         
-        t_species = d_tools.get_compound_dict_from_results(compound=s,SpecL=spec_L_json)
+        t_species,_ = d_tools.get_compound_dict_from_results(compound=s,SpecL=spec_L_json)
         print(t_species)
 
         # The rate_sum for a species is the sum of its prod and destr

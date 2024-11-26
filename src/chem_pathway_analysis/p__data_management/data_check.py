@@ -1,6 +1,35 @@
 import json
 import numpy as np
 import re
+from ..p__data_management import global_var
+from ..o__cpap_output import output_tools as o_tools
+
+def check_flux_conservation_species(chemical_species:list):
+    # We want to check that we have the conservation of flux for each species
+    for species in chemical_species:
+        # We have the theoritical delta/sum of prod/destr
+        theoritical_delta = abs(species["production rate"]["initial"] - species["destruction rate"]["initial"])
+        delta = abs(species["production rate"]["active pathways"] + species["production rate"]["deleted pathways"] - species["destruction rate"]["active pathways"] - species["destruction rate"]["deleted pathways"])
+        if theoritical_delta > 0.0:
+            relative_error = abs(theoritical_delta-delta)/theoritical_delta
+        else:
+            relative_error = abs(theoritical_delta-delta)
+
+
+        # if theoritical_delta != delta :
+        if relative_error > 1e-9 :
+            if global_var.chronicle_writing:
+                 o_tools.write_line_chronicle("ISSUE FLUX CONSERVATION WITH "+species["name"])
+                 o_tools.write_line_chronicle("theoritical_delta : "+str(theoritical_delta))
+                 o_tools.write_line_chronicle("            delta : "+str(delta))
+                 o_tools.write_line_chronicle("   relative error : "+str(relative_error))
+        else:
+            if global_var.chronicle_writing:
+                 o_tools.write_line_chronicle("FLUX CONSERVED FOR "+species["name"])
+                 o_tools.write_line_chronicle("theoritical_delta : "+str(theoritical_delta))
+                 o_tools.write_line_chronicle("            delta : "+str(delta))
+                 o_tools.write_line_chronicle("   relative error : "+str(relative_error))
+
 
 def check_rates(active_pathways:dict,deleted_pathways:dict):
     pass

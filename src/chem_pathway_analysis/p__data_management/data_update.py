@@ -131,51 +131,6 @@ def eval_reaction_rate_deleted_p(reaction_index:int,deleted_p:list):
     return deleted_rate
 
 
-def update_reaction_rate_delete_p(reactions:list,rate_del:float,chemical_reaction_system:list):
-    # Update the rate of a given reaction according to its connection of a deleted pathway and an active one
-    # # Opening JSON file
-    # crs = open('chemical_reaction_system.json')
-
-    # # returns JSON object as a dictionary
-    # chemical_reaction_system = json.load(crs)
-
-    # # closing file
-    # crs.close()
-
-    # for each reaction r in the pathway we update the rates in the reactions file
-    for r in reactions:
-        reaction = chemical_reaction_system[r["index"]]
-        reaction["rate"] -= r["multiplicity"]*rate_del
-        reaction["deleted rate"] += r["multiplicity"]*rate_del
-
-    # # Now we save it
-    # # Write the JSON data to an output file
-    # with open('chemical_reaction_system.json', 'w') as output_file:
-    #     json.dump(chemical_reaction_system, output_file, indent=2)
-    
-    return chemical_reaction_system
-
-
-def update_rate_chemical_species_delete_p(branching_points:list,rate_del:float,chemical_species:list):
-    # Update the rate of a given species according to its connection of a deleted pathway and an active one
-    # We update every species present in the pathway
-    for bp in branching_points:
-        s = bp["compound"]
-        m = bp["stoichiometry"]
-        species_dict = d_tools.get_compound_dict(compound=s,chemical_species=chemical_species)
-
-        # we check the stoichiometry of the species result in the pathway
-        # if m=0, we don't update obviously
-        if m > 0:
-            p_rate_dict=species_dict["production rate"]
-            p_rate_dict["active pathways"] -= m * rate_del
-            p_rate_dict["deleted pathways"] += m * rate_del
-        elif m < 0:
-            d_rate_dict=species_dict["destruction rate"]
-            d_rate_dict["active pathways"] -= -m * rate_del
-            d_rate_dict["deleted pathways"] += -m * rate_del
-
-
 def update_rates_chemical_species(active_p:list,deleted_p:list,chemical_species:list) -> list:
 
     chemical_species_tmp = copy.deepcopy(chemical_species)
@@ -284,7 +239,7 @@ def update_rates_reaction_system(deleted_p:list):
         o_tools.write_line_chronicle('**************************************')
 
 
-def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list,building_SP:bool,chemical_species:list,deleted_p:list):
+def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list,building_SP:bool,chemical_species:list):
     # self explanatory ... connecting two pathways
     # I means we merge two pathways that are connected via a species that the one produce and the latter destroys
 
@@ -298,13 +253,14 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
     # list_bp_used = list(set(list_bp_used))
     list_bp_used = sorted(set(list_bp_used),key=list_species_done.index)
 
+    # bp_stoichiometry can be seen as the number of moles commonly shared by Prod and Destr pathways to achieve a 0 NET of BP species
     bp_stoichiometry,pathway_prod_tmp,pathway_destr_tmp = update_pathway_multiplicity(pathway_prod_tmp,pathway_destr_tmp,species)
     # print('pathway_prod_tmp',pathway_prod_tmp)
     # print('pathway_prod',pathway_prod)
 
-    # 2. Merging the pathways into a new one
+    # 3. Merging the pathways into a new one
     # we check 0 values for D_compound
-    compound_dict = d_tools.get_compound_dict(compound=species,chemical_species=chemical_species)
+    compound_dict,_ = d_tools.get_compound_dict(compound=species,chemical_species=chemical_species)
     D_b = d_tools.D_compound(compound_dict)
     if D_b != 0.0:
         # prod and/or destr != 0, hence rate to be distributed
@@ -350,16 +306,6 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
     # it does not matters if in the pathway reactions are listed as R0, R1, R3, R7.
     # Because it is the connection between Branching points and Reactions that is important here
     # So, we clean here, better sooner than later where it can be messy ^^
-
-    # 3. We check the deleted pathways if some could have connected, prod and destr
-    # those deleted connected pathways must be removed from the final rate
-    # of the new pathway
-    # new_pathway["rate"] = update_pathway_rate_from_deleted_p(new_pathway,species,case_flag='new_pathway')
-
-    # 4. We check the deleted pathways effects on branching point species
-    if not building_SP:
-        deleted_p = update_pathway_rate_from_deleted_p(pathway_prod_tmp,species,case_flag='prod',cs=chemical_species,deleted_p=deleted_p)
-        deleted_p = update_pathway_rate_from_deleted_p(pathway_destr_tmp,species,case_flag='destr',cs=chemical_species,deleted_p=deleted_p)
 
     return new_pathway
 
@@ -434,7 +380,7 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_spe
     # self explanatory ... connecting pathway to the change in species concentration
     # It means we merge two pathways that are connected via a species that the one produce and the latter destroys
     pathway_tmp = copy.deepcopy(pathway)
-    species_dict = d_tools.get_compound_dict(species,chemical_species)
+    species_dict,_ = d_tools.get_compound_dict(species,chemical_species)
     list_bp_used = pathway_tmp["list branching points used"]
     # we don't add a species since this is not a "full" connection
     # Meaning that there is only a prod/destr part of the connection.
@@ -458,6 +404,11 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_spe
             # update_pathway_rate_from_deleted_p(pathway_tmp,species,case_flag='prod',cs=chemical_species)
             pass
 
+    if global_var.chronicle_writing :
+        # o_tools.write_line_chronicle('with BP stoechio :'+'{:0.3e}'.format(bp_stoichiometry))
+        o_tools.write_line_chronicle('with rate prod pw:'+'{:0.3e}'.format(pathway_tmp["rate"]))
+        o_tools.write_line_chronicle('with delta       :'+'{:0.3e}'.format(abs(species_dict["delta"])))
+        o_tools.write_line_chronicle('with Db          :'+'{:0.3e}'.format(d_tools.D_compound(species_dict)))
     # Updating the pathway into a new one
     # We don't need bp_stoichiometry here because we have a ratio of dSb/DSb
     # Even if the pathway produce N.Sb, we multiply it by a ratio hence, no problem
@@ -472,12 +423,22 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_spe
 
 def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs:list,deleted_p:list):
     # This routine update the rate of pathway according to the rate of the deleted pathways affecting species
+
+    if global_var.chronicle_writing:
+        # Opening JSON file
+        crs = open('chemical_reaction_system.json')
+        # returns JSON object as a dictionary
+        chemical_system = json.load(crs)
+        # closing file
+        crs.close()
+    
     pathway_tmp = copy.deepcopy(pathway)
     rate_p = pathway_tmp["rate"]
-    species_dict = d_tools.get_compound_dict(species,cs)
+    species_dict,_ = d_tools.get_compound_dict(species,cs)
     rate_deleted_destr_species = species_dict["destruction rate"]["deleted pathways"]
     rate_deleted_prod_species = species_dict["production rate"]["deleted pathways"]
     D_species = d_tools.D_compound(species_dict)
+    # We don't need the BP stoichiometry since it's a ratio of del_db or del_pb over Db
     # index = d_tools.find_compound_in_pathway_BP(pathway_tmp["branching points"],species)
     # stoichiometry = pathway_tmp["branching points"][index]["stoichiometry"]
 
@@ -492,9 +453,8 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs
         # f_deleted_prod = stoichiometry * (rate_p * rate_deleted_prod_species) / D_species
         
         # associated rate of pathway from the deleted pathways prod and destr species
-        f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
+        # f_deleted_prod_destr = (rate_deleted_prod_species * rate_deleted_prod_species) / D_species
         # f_deleted_prod_destr = stoichiometry * (rate_deleted_destr_species * rate_deleted_prod_species) / D_species
-
 
         match case_flag:
             case 'prod':
@@ -520,17 +480,23 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs
                         # we need to modify its rate then in deleted_p
                         index = d_tools.find_pathway_in_list(pathway_to_be_found=pathway_tmp,list_of_pathways=deleted_p)
                         deleted_p[index]["rate"] += f_deleted_destr
+                        # Chronicles printing
+                        if global_var.chronicle_writing:
+                            o_tools.write_line_chronicle('Deleting pathway portion connected to del d of:'+species+'\n'+o_tools.pathway_to_str(pathway=pathway_tmp,chem_system_data=chemical_system))
+                            o_tools.write_line_chronicle('                                   added rate :'+'{:0.3e}'.format(f_deleted_destr))
+                            o_tools.write_line_chronicle('                                   total rate :'+'{:0.3e}'.format(deleted_p[index]["rate"]))
+                            o_tools.write_line_chronicle('\n')
                     else:
                         # pathway is NOT in deleted_p
                         # Hence, we add it with the deleted rate associated
                         deleted_p.append(copy.deepcopy(pathway_tmp))
                         deleted_p[-1]["rate"] = f_deleted_destr
-                    # print('the new pathway rate is: ',pathway_tmp["rate"])
-
-                    # update_reaction_rate_delete_p(reactions=pathway["reactions"],rate_del=f_deleted_destr)
-                    # Now we update the species affected by the pathway
-                    # update_rate_chemical_species_delete_p(branching_points=pathway["branching points"],rate_del=f_deleted_destr)
-                    # Before we leave we save the json file
+                        # Chronicles printing
+                        if global_var.chronicle_writing:
+                            o_tools.write_line_chronicle('Deleting pathway portion connected to del d of:'+species+'\n'+o_tools.pathway_to_str(pathway=pathway_tmp,chem_system_data=chemical_system))
+                            o_tools.write_line_chronicle('                                         rate :'+'{:0.3e}'.format(f_deleted_destr))
+                            o_tools.write_line_chronicle('                                   total rate :'+'{:0.3e}'.format(deleted_p[-1]["rate"]))
+                            o_tools.write_line_chronicle('\n')
                     # d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
                 
             case 'destr':
@@ -557,52 +523,36 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs
                         # we need to modify its rate then in deleted_p
                         index = d_tools.find_pathway_in_list(pathway_to_be_found=pathway_tmp,list_of_pathways=deleted_p)
                         deleted_p[index]["rate"] += f_deleted_prod
+                        # Chronicles printing
+                        if global_var.chronicle_writing:
+                            o_tools.write_line_chronicle('Deleting pathway portion connected to del p of:'+species+'\n'+o_tools.pathway_to_str(pathway=pathway_tmp,chem_system_data=chemical_system))
+                            o_tools.write_line_chronicle('                                   added rate :'+'{:0.3e}'.format(f_deleted_prod))
+                            o_tools.write_line_chronicle('                                   total rate :'+'{:0.3e}'.format(deleted_p[index]["rate"]))
+                            o_tools.write_line_chronicle('\n')
                     else:
                         # pathway is NOT in deleted_p
                         # Hence, we add it with the deleted rate associated
                         deleted_p.append(copy.deepcopy(pathway))
                         deleted_p[-1]["rate"] = f_deleted_prod
-                    # update_reaction_rate_delete_p(reactions=pathway["reactions"],rate_del=f_deleted_prod)
-                    # Now we update the species affected by the pathway
-                    # update_rate_chemical_species_delete_p(branching_points=pathway["branching points"],rate_del=f_deleted_prod)
+                        # Chronicles printing
+                        if global_var.chronicle_writing:
+                            o_tools.write_line_chronicle('Deleting pathway portion connected to del p of:'+species+'\n'+o_tools.pathway_to_str(pathway=pathway_tmp,chem_system_data=chemical_system))
+                            o_tools.write_line_chronicle('                                         rate :'+'{:0.3e}'.format(f_deleted_prod))
+                            o_tools.write_line_chronicle('                                   total rate :'+'{:0.3e}'.format(deleted_p[-1]["rate"]))
+                            o_tools.write_line_chronicle('\n')
                     # Before we leave we save the json file
                     # d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
+                
             # case 'new_pathway':
             #     if f_deleted_prod_destr > 0.0:
-            #         # We open deleted_pathways in order to add it some
-            #         # # Opening JSON file
-            #         # dp = open('deleted_pathways.json')
-
-            #         # # returns JSON object as a list of dict
-            #         # deleted_p = json.load(dp)
-
-            #         # # closing file
-            #         # dp.close()
-
-            #         # print('Updating pathway destr rate from connecting with deleted one')
-            #         # print('with rate deleted: ',f_deleted_prod,' from: ',rate_p)
-            #         # updating the rate
-            #         pathway_tmp["rate"] -= f_deleted_prod_destr
-
-            #         if d_tools.is_pathway_in_list(pathway_to_be_checked=pathway_tmp,list_of_pathways=deleted_p):
-            #             # We have the pathway already in deleted_p
-            #             # we need to modify its rate then in deleted_p
-            #             index = d_tools.find_pathway_in_list(pathway_to_be_found=pathway_tmp,list_of_pathways=deleted_p)
-            #             deleted_p[index]["rate"] += f_deleted_prod_destr
-            #         else:
-            #             # pathway is NOT in deleted_p
-            #             # Hence, we add it with the deleted rate associated
-            #             deleted_p.append(copy.deepcopy(pathway_tmp))
-            #             deleted_p[-1]["rate"] = f_deleted_prod_destr
-            #         # print('the new pathway rate is: ',pathway_tmp["rate"])
-
-            #         # update_reaction_rate_delete_p(reactions=pathway["reactions"],rate_del=f_deleted_prod_destr)
-            #         # Now we update the species affected by the pathway
-            #         # update_rate_chemical_species_delete_p(branching_points=pathway["branching points"],rate_del=f_deleted_prod_destr)
-            #         # Before we leave we save the json file
-            #         d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways.json')
+            #         # we want to add to the species the additional connection between del pb and del db:
+            #         # print('for species: ',species)
+            #         # print('         in: ',cs)
+            #         # print(d_tools.get_compound_dict(compound=species,chemical_species=cs))
+            #         _,ind_s = d_tools.get_compound_dict(compound=species,chemical_species=cs)
+            #         cs[ind_s]["add_del_pbdb"] += f_deleted_prod_destr
+            #         # staph()
     
-    # return pathway_tmp["rate"]
     return deleted_p
 
 
@@ -631,7 +581,7 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
         # print('updating bp_prod_m', bp_prod_m, 'to',new_multiplicty)
         # we divide "rate" by new_multiplicty because it's a multiplicator
         # we need to conserve the molecule flux.
-        pathway_prod["rate"] = pathway_prod["rate"] / m_prod
+        pathway_prod["rate"] = pathway_prod["rate"] / float(m_prod)
         for r in pathway_prod["reactions"]:
             r["multiplicity"] = int(m_prod * r["multiplicity"])
         for bp in pathway_prod["branching points"]:
@@ -639,13 +589,13 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
         # print('updating bp_dest_m', bp_dest_m, 'to',new_multiplicty)
         # we divide "rate" by new_multiplicty because it's a multiplicator
         # we need to conserve the molecule flux.
-        pathway_destroy["rate"] = pathway_destroy["rate"] / m_dest
+        pathway_destroy["rate"] = pathway_destroy["rate"] / float(m_dest)
         for r in pathway_destroy["reactions"]:
             r["multiplicity"] = int(m_dest * r["multiplicity"])
         for bp in pathway_destroy["branching points"]:
             bp["stoichiometry"] = int(m_dest * bp["stoichiometry"])
     else:
-        new_multiplicty = 1
+        new_multiplicty = int(bp_prod_m)
     
     # If we don't go inside the previous IF, we still return the correct stoechiometry
     # We return the two pathways updated so that merged together the species stoichiometry = 0
@@ -655,7 +605,8 @@ def update_pathway_multiplicity(pathway_prod:dict,pathway_destroy:dict,species:d
     # We return the correct stoichiometry coeff with the pathways
     # print('the stoichiometry prod for',species,'is:',bp_tmp[ind_prod]["stoichiometry"])
     # print('the stoichiometry dest for',species,'is:',bp_tmp[ind_destroy]["stoichiometry"])
-    return bp_tmp[ind_prod]["stoichiometry"],pathway_prod,pathway_destroy
+    # print('      new_multiplicty for ',species,'is:',bp_tmp[ind_destroy]["stoichiometry"])
+    return float(new_multiplicty),pathway_prod,pathway_destroy
 
 
 def clean_branching_points(pathway_one_bp:list,pathway_two_bp:list):
@@ -733,7 +684,13 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
     # we want the stoich of the species in the pathway
     i_comp = d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=species)
     # we want the stoechiometry of the compond to define if it needs a prod or destr to balance it out.
-    mult = pathway["branching points"][i_comp[0]]["stoichiometry"]
+    if i_comp == []:
+        print('WE SHOULD ALWAYS HAVE i_comp!!')
+        print('Error in add_pseudo_reaction_to_pathway_to_0NET')
+        print('SOMETHING IS GOING WRONG IN THE SUBPATHWAYS')
+        exit()
+    else:
+        mult = pathway["branching points"][i_comp[0]]["stoichiometry"]
 
     # we define the flag
     if mult > 0:
