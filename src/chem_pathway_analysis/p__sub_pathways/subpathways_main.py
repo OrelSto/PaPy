@@ -63,6 +63,8 @@ def main_subpathways(pathways:list,list_species_done:list,chemical_species:list)
                     for sub_p in returned_set_SP:
                         o_tools.write_line_chronicle('\n')
                         o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=sub_p,chem_system_data=chemical_system))
+                        o_tools.write_line_chronicle('\n')
+                        o_tools.write_line_chronicle('Constructed with BP: '+str(sub_p["list branching points used"]))
                     o_tools.write_line_chronicle('\n')
                     o_tools.write_line_chronicle('explaining the pathway:')
                     o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=pathway,chem_system_data=chemical_system))

@@ -70,11 +70,16 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
                 D_conc += r["stoichiometry"] * item["rate"] * timestep
                 d_compound += r["stoichiometry"] * item["rate"]
 
+    # NOOOOOO what a DAMN MORONIC MISTAKE
+    # Good job Aurelien, you ARTIFICIALLY produced a NON CONSERVATION
+    # of the ONLY thing you want to conserve!
+    # It came from a good place, like, checking weird low values
+    # BUT NO, you have f_min and t_min to take care of that!
     # Check for low values
-    if (D_conc < 1.0e-16) and (D_conc > -1.0e-16):
-        D_conc = 0.0
-    if D_conc == 0.0:
-        d_compound = 0.0
+    # if (D_conc < 1.0e-16) and (D_conc > -1.0e-16):
+    #     D_conc = 0.0
+    # if D_conc == 0.0:
+    #     d_compound = 0.0
     
     # Create a JSON structure
     chemical_species_data = {

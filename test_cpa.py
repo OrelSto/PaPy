@@ -45,7 +45,7 @@ from src.chem_pathway_analysis import cpa
 # test with Uranus data!
 # record start time
 start = time.time()
-cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-20,t_min=1.0e14,
+cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-24,t_min=1.0e14,
             target_species=[],
             filename_model='reactions_Uranus.txt',
             filename_concentration='concentrations_Uranus.txt',
@@ -63,7 +63,7 @@ cpa.out.pie_output(target_species=['[3]CH2'],act_P_json='ActP_Uranus.json',del_P
 cpa.out.table_Tex(target_species=['[3]CH2'],unit='ppbv\per\hour',act_P_json='ActP_Uranus.json',del_P_json='DelP_Uranus.json',chem_R_json='ChemS_Uranus.json',spec_L_json='SpecL_Uranus.json')
 
 # Test with the data drom ChemPath module
-# cpa.run_cpa(timestep=1.0,rate_threshold=10.0e-11,t_min=10.0,
+# cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-10,t_min=10.0,
 #             target_species=[],
 #             filename_model='user_model_example_article.txt',
 #             filename_concentration='user_concentration_example_article.txt',

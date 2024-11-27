@@ -82,6 +82,8 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
                     o_tools.write_line_chronicle('\n')
                     o_tools.write_pathway_chronicle(pathway=sp,chem_system_data=chemical_system_data)
                     o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Constructed with BP: '+str(sp["list branching points used"]))
+                    o_tools.write_line_chronicle('\n')
         else:
             # print()
             # print('connecting sub-pathways to',s)
@@ -96,6 +98,8 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
                 for sp in set_SP_tmp:
                     o_tools.write_line_chronicle('\n')
                     o_tools.write_pathway_chronicle(pathway=sp,chem_system_data=chemical_system_data)
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Constructed with BP: '+str(sp["list branching points used"]))
                     o_tools.write_line_chronicle('\n')
         
         # We set up final as empty and copy set_SP_tmp
@@ -137,6 +141,8 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
             o_tools.write_line_chronicle('The elementary subpathways is/are:')
             for elem_sp in final_set_SP:
                 o_tools.write_line_chronicle(o_tools.pathway_to_str(pathway=elem_sp,chem_system_data=chemical_system_data))
+                o_tools.write_line_chronicle('\n')
+                o_tools.write_line_chronicle('Constructed with BP: '+str(elem_sp["list branching points used"]))
                 o_tools.write_line_chronicle('\n')
         
         index_list_ranked = ranked_list(final_set_SP=final_set_SP,active_pathways=active_pathways,chemical_system_data=chemical_system_data)
@@ -226,7 +232,14 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
     for item in final_set_SP:
         if item["rate"] > 0:
             # we keep track of the species used as BP from the MAIN MAIN loop
-            item["list branching points used"] = pathway["list branching points used"]
+            # THIS IS WRONG !!!
+            # item["list branching points used"] = pathway["list branching points used"]
+            # WE DONT DO THAT: Why you may ask me?
+            # Because you want to conserve the list of BP used of each elementary pathways
+            # And they might not be the same as the main pathway analyzed
+            # Actually, it is likely that they are not, a simple example would be:
+            #   Combine 1 Sub P of 1 reaction with a Sub of 2 reaction to form a Pathway of 3 reactions
+            #   It is obvious that Sub P 1 has NO BP used sine it's a singular reaction
             returned_set_SP.append(item)
     
     if len(returned_set_SP) == 1:
@@ -292,7 +305,7 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
     # checking if any pathway in set_SP has a zero net prod of species
     # If so, adding it to set_SP_tmp
     # 28/06/2024:
-    # This is v2, I changed things but I do not recall what I did actually
+    # This is v2, I changed things but I do not recall what I actually did
     no_net = True
     for item in set_SP:
         # print('We re looking at SP:',item["reactions"])
@@ -305,6 +318,8 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
                 # print('We have a zero net prod pathway for',species)
                 # print('SP:',item["reactions"])
                 no_net = False
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('Adding one 0 NET Sub P for species '+species)
                 set_SP_tmp.append(item)
             else:
                 # we are in the case where species is present but no net
@@ -316,6 +331,8 @@ def checking_zero_net_SP_v2(set_SP:list,set_SP_tmp:list,species:str):
             # print('Specie',species,'is not present')
             # print('This is an equivalent zero net prod pathway for',species)
             # print('SP:',item["reactions"])
+            if global_var.chronicle_writing:
+                o_tools.write_line_chronicle('Adding one 0 NET Sub P for species '+species)
             set_SP_tmp.append(item)
 
     if no_net:
@@ -387,7 +404,7 @@ def connecting_subpathways(set_SP:list,set_SP_tmp:list,species:str,list_species_
                 # print('with rate of:',new_SP["rate"])
                 # checking if new_SP is already present in set_SP_tmp and if it is an actual 
                 # elementary pathway!
-                adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
+                set_SP_tmp = adding_SP(set_SP=set_SP_tmp,final_set_SP=set_SP,pathway_to_be_checked=new_SP)
                 # if we added new_SP, we have to delete
     # only prod of Sb
     elif (cond_prod and not cond_destroy):

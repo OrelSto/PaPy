@@ -51,7 +51,8 @@ Here's a short list of functionnality:
 * [x] Handling of pseudo-reactions for any physical process, noted as X[transp], X[liq], etc
 * [x] Basic visual outputs
 * [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
-* [x] Selection of species of interest
+* [x] Security checks for rates as outputs
+* [ ] Selection of species of interest
 * [ ] Packaging (install via ```pip``` or ```conda```)
 * [x] Tools for visualization: Pie charts
 * [x] Tools for visualization: Latex Table
