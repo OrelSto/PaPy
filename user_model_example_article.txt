@@ -1,5 +1,5 @@
 H2O2 + OH => HO2 + H2O R 1.0e-9
-OH + OH => H2O2 R 0.5e-9
-H2O2 + O => OH + HO2 R 1.5e-9
-H2O + hv => OH + H R 5.0e-9
-H2O2 + hv => OH + OH R 0.1e-9
+OH + OH => H2O2 R 0.6e-9
+H2O2 + O => OH + HO2 R 1.0e-9
+HO2 + hv => OH + O R 5.0e-9
+HO2 + O => OH + O2 R 1.0e-9

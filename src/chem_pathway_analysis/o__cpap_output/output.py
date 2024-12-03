@@ -341,7 +341,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         # we re gonna sort the pathways in order of importance
         # FOR DESTRUCTION PATHWAYS
         pathway_sorted = {}
-        i = 0
+        j = 0
         for pathway in act_pathways_dest_data_t_specie:
             rate_P_tmp = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
             stoich = rate_P_tmp/rate_sum * 100.0
@@ -351,8 +351,8 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             # We only save Pathways with % above 0.1%
             if stoich >= 0.1:
                 print('stoich',stoich)
-                pathway_sorted.update({i:stoich})
-                i += 1
+                pathway_sorted.update({j:stoich})
+                j += 1
             # If not, then we we will not print it
             else:
                 print('adding pathway with stoich',stoich,' to the P_trash')
@@ -360,7 +360,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
                 P_trash['rate'] += rate_P_tmp
                 P_trash['stoich'] += stoich
                 # we advance the indice also
-                i += 1
+                j += 1
         
         # Now we sort the indices
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
@@ -416,6 +416,8 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             # Adding the text of the pathway
             text = text + ' \n'
             text = text + r'\textbf{P$_{\mathbf{\mathrm{slow}}}$} of '+s+r' rate: '+r'{:0.3e}'.format(P_trash['rate'])
+            text = text + ' \n'
+            text = text + str(i+j) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
             text = text + ' \n'
 
 
@@ -630,7 +632,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
         # Is there P_trash
         if is_P_trash:
             cell1 = r'P$_{slow}$'
-            cell2 = r'Cycles $<$ 0.1 \% '
+            cell2 = r'Cycles $<$ 0.01 \% '
             cell3 = r'{:0.3e}'.format(P_trash['rate'])
             cell4 = r'{:.2f}'.format(P_trash['stoich'])
             text = text + cell1 + r' & ' + cell2 + r' & ' + cell3 + r' & ' + cell4 + r' \\' 

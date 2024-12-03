@@ -44,14 +44,15 @@ from .o__cpap_output import output_tools as o_tools
 from .p__data_management import data_tools as d_tools
 
 
-def init_global_var(chronicle_writing:bool):
+def init_global_var(chronicle_writing:bool,steps_save:bool):
     global_var.chronicle_writing = chronicle_writing
+    global_var.steps_save = steps_save
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing=False) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool) -> None:
 
     # init global var
-    init_global_var(chronicle_writing=chronicle_writing)
+    init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save)
 
     # first test is to convert a given text file into a workable JSON dataset
     if global_var.chronicle_writing:
@@ -77,6 +78,11 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('\n')
 
     active_p,deleted_p = p_init.init_pathways(json_filename="chemical_reaction_system.json")
+
+    if global_var.steps_save:
+        # saving active/deleted pathways before updating the reaction/species rates
+        d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_0.json')
+        d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways_0.json')
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('Updating prod/destr rates for chemical species')

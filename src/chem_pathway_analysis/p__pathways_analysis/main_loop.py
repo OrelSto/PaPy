@@ -34,6 +34,8 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
     # active_p = json.load(ap)
     # deleted_p = json.load(dp)
 
+    step = 0
+
     # We run the BP and Sub-BP routines until we are running out of BP
     # Connecting pathways
     # for species in list_bp:
@@ -52,22 +54,6 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
         # looking for each species from the shortest lived to the longest
         active_p,deleted_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species,chemical_species=chemical_species,deleted_pathways=deleted_p)
 
-        # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
-
-        # # returns JSON object as a dictionary
-        # with open('deleted_pathways.json') as dp:
-        #     deleted_p = json.load(dp)
-
-        # Printing
-        if global_var.chronicle_writing:
-            o_tools.write_line_chronicle('\n')
-            o_tools.write_line_chronicle('#################')
-            o_tools.write_line_chronicle('Cleaning Pathways')
-            o_tools.write_line_chronicle('#################')
-            o_tools.write_line_chronicle('\n')
-        
-        active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
-        
         # Printing
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('\n')
@@ -86,6 +72,19 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             o_tools.write_line_chronicle('Sub Pathways analysis DONE')
             o_tools.write_line_chronicle('##########################')
             o_tools.write_line_chronicle('\n')
+
+        # cleaning pathways that are too slow. Keeping your pathway house tight and clean.
+        # The cleaning of slow Pathways MUST BE DONE AFTER the SubPathways analysis
+        # Indeed, you don't know A PRIOR how new pathways might be deconstruted into EXISTING PATHWAYS
+        # Printing
+        if global_var.chronicle_writing:
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('#################')
+            o_tools.write_line_chronicle('Cleaning Pathways')
+            o_tools.write_line_chronicle('#################')
+            o_tools.write_line_chronicle('\n')
+        
+        active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
 
         # Maybe some checking for conservation properties?
         # Like the distribution of the chemical reaction rates onto the pathways (active & deleted)
@@ -118,7 +117,6 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             o_tools.write_line_chronicle('\n')
         ch.check_flux_conservation_species(chemical_species=chemical_species)
 
-
         # Selecting new Branching Points
         list_bp = bp.list_next_branching_points(t_min=t_min,chemical_species=chemical_species)
         # print('This is list_bp: ',list_bp)
@@ -126,6 +124,13 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
         # print('This is used_species: ',used_species)
         # print('This is not used_species: ',[not c for c in used_species])
         # print('This is list_bp after flagged: ',list_bp)
+
+        # Updating the step
+        step += 1
+        if global_var.steps_save:
+            # saving active/deleted pathways before updating the reaction/species rates
+            d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+str(step)+'_'+species+'.json')
+            d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways_'+str(step)+'_'+species+'.json')
 
 
     # Now that the main loop is over:
@@ -137,6 +142,12 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
         o_tools.write_line_chronicle('################')
         o_tools.write_line_chronicle('END OF MAIN LOOP')
         o_tools.write_line_chronicle('################')
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('################################################')
+        o_tools.write_line_chronicle('list of BP used to construct the active pathways')
+        o_tools.write_line_chronicle('################################################')
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle(' '.join(used_species))
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('We advise the User to check by himslef the values for flux conservation')
         o_tools.write_line_chronicle('\n')
