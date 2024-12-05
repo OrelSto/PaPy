@@ -47,8 +47,13 @@ from src.chem_pathway_analysis import cpa
 
 # test with Uranus data!
 # record start time
-# start = time.time()
-# cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-24,t_min=1.0e14,
+start = time.time()
+# cpa.infos(timestep=1.0,t_min=1.0e14,
+#             filename_model='reactions_Uranus.txt',
+#             filename_concentration='concentrations_Uranus.txt',
+#             chronicle_writing=True,
+#             steps_save=False)
+# cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-8,t_min=1.0e14,
 #             target_species=[],
 #             filename_model='reactions_Uranus.txt',
 #             filename_concentration='concentrations_Uranus.txt',
@@ -67,15 +72,20 @@ from src.chem_pathway_analysis import cpa
 # cpa.out.table_Tex(target_species=['[3]CH2'],unit='ppbv\per\hour',act_P_json='ActP_Uranus.json',del_P_json='DelP_Uranus.json',chem_R_json='ChemS_Uranus.json',spec_L_json='SpecL_Uranus.json')
 
 # Test with the data drom ChemPath module
-# cpa.run_cpa(timestep=1.0,rate_threshold=0.05e-9,t_min=10000.0,
-#             target_species=[],
+# cpa.infos(timestep=1.0,t_min=30.0e4,
 #             filename_model='user_model_example_article.txt',
 #             filename_concentration='user_concentration_example_article.txt',
-#             final_AP_file='ActP_Chempath_example.json',
-#             final_DP_file='DelP_Chempath_example.json',
-#             final_CS_file='ChemS_Chempath_example.json',
-#             final_SL_file='SpecL_Chempath_example.json',
 #             chronicle_writing=True,
 #             steps_save=False)
+cpa.run_cpa(timestep=1.0,rate_threshold=2.0e-10,t_min=30.0e4,
+            target_species=[],
+            filename_model='user_model_example_article.txt',
+            filename_concentration='user_concentration_example_article.txt',
+            final_AP_file='ActP_Chempath_example.json',
+            final_DP_file='DelP_Chempath_example.json',
+            final_CS_file='ChemS_Chempath_example.json',
+            final_SL_file='SpecL_Chempath_example.json',
+            chronicle_writing=True,
+            steps_save=False)
 cpa.out.pie_output(target_species=['HO2','H2O','OH','H2O2'],act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')
-cpa.out.table_Tex(target_species=['HO2','H2O','OH','H2O2'],unit='ppbv\per\hour',act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')
+# cpa.out.table_Tex(target_species=['HO2','H2O','OH','H2O2'],unit='ppbv\per\hour',act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')

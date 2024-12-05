@@ -117,3 +117,52 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
     # shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
     shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
     # shutil.copy2(src='chemical_species.json',dst=final_SL_file)
+
+def infos(timestep:float,t_min:float,filename_model:str,filename_concentration:str,chronicle_writing:bool,steps_save:bool) -> None:
+
+    # init global var
+    init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save)
+
+    # first test is to convert a given text file into a workable JSON dataset
+    if global_var.chronicle_writing:
+        with open('chronicles.txt', 'w') as output_file:
+            output_file.write('Start of the Chemical Pathway Analysis')
+            output_file.write('\n')
+
+        o_tools.write_line_chronicle('######################')
+        o_tools.write_line_chronicle('User Inputs Processing')
+        o_tools.write_line_chronicle('######################')
+        o_tools.write_line_chronicle('\n')
+    
+    i_system.convert_chemical_reaction_file(filename=filename_model)
+    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
+    i_system.adding_pseudo_reactions(chemical_species=chemical_species)
+
+    # 2. We run the initialization
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('#######################')
+        o_tools.write_line_chronicle('Pathways Initialization')
+        o_tools.write_line_chronicle('#######################')
+        o_tools.write_line_chronicle('\n')
+
+    active_p,deleted_p = p_init.init_pathways(json_filename="chemical_reaction_system.json")
+
+    if global_var.steps_save:
+        # saving active/deleted pathways before updating the reaction/species rates
+        d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_0.json')
+        d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways_0.json')
+
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('Updating prod/destr rates for chemical species')
+    
+    chemical_species = up.update_rates_chemical_species(active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species)
+
+    list_bp = bp.list_next_branching_points(t_min=t_min,chemical_species=chemical_species)
+    print(list_bp)
+    
+    if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Here is the sorted list by lifetime of the next species considered as branching points for a fixed minimum timescale of '+'{:0.3e}'.format(t_min)+':')
+        o_tools.write_line_chronicle(' '.join(list_bp))
+        o_tools.write_line_chronicle('\n')

@@ -265,7 +265,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
 
         # Check of the total rate
-        if rate_sum < 1e-20:
+        if rate_sum < 1e-30:
             print('The species ',s,' has no prod or destr rate')
             break
 
@@ -303,13 +303,13 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.1:
-                print('stoich',stoich)
+            if stoich >= 0.01:
+                print('stoich',stoich,'rate',rate_P_tmp)
                 pathway_sorted.update({i:stoich})
                 i += 1
             # If not, then we we will not print it
             else:
-                print('adding pathway with stoich',stoich,' to the P_trash')
+                print('adding P with stoich',stoich,'rate',rate_P_tmp,' to P_trash')
                 is_P_trash = True
                 P_trash['rate'] += rate_P_tmp
                 P_trash['stoich'] += stoich
@@ -349,13 +349,13 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.1:
-                print('stoich',stoich)
+            if stoich >= 0.01:
+                print('stoich',stoich,'rate',rate_P_tmp)
                 pathway_sorted.update({j:stoich})
                 j += 1
             # If not, then we we will not print it
             else:
-                print('adding pathway with stoich',stoich,' to the P_trash')
+                print('adding P with stoich',stoich,'rate',rate_P_tmp,' to P_trash')
                 is_P_trash = True
                 P_trash['rate'] += rate_P_tmp
                 P_trash['stoich'] += stoich
@@ -387,7 +387,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         rate_deleted = 0.0
         for pathway in del_pathways_prod_data_t_specie:
             rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
-        if rate_deleted/rate_sum * 100.0 >= 0.1:
+        if rate_deleted/rate_sum * 100.0 >= 0.01:
             labels.append('P_del prod')
             sizes.append(rate_deleted/rate_sum * 100.0)
             # Adding the text of the pathway
@@ -400,7 +400,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         rate_deleted = 0.0
         for pathway in del_pathways_dest_data_t_specie:
             rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
-        if rate_deleted/rate_sum * 100.0 >= 0.1:
+        if rate_deleted/rate_sum * 100.0 >= 0.01:
             labels.append('P_del destr')
             sizes.append(rate_deleted/rate_sum * 100.0)
             # Adding the text of the pathway
@@ -410,7 +410,8 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             text = text + r'\ce{'+s+r' -> ...}'
             text = text + ' \n'
         
-        if is_P_trash and P_trash['stoich']>=0.01:
+        # if is_P_trash and P_trash['stoich']>=0.01:
+        if is_P_trash:
             labels.append('P_slow')
             sizes.append(P_trash['stoich'])
             # Adding the text of the pathway
@@ -530,7 +531,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.1:
+            if stoich >= 0.01:
                 print('stoich',stoich)
                 pathway_sorted.update({i:stoich})
                 i += 1
@@ -571,7 +572,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.1:
+            if stoich >= 0.01:
                 print('stoich',stoich)
                 pathway_sorted.update({i:stoich})
                 i += 1
