@@ -203,3 +203,4 @@ cython_debug/
 *.tex
 *.aux
 *.pdf
+*.nc

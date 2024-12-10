@@ -98,7 +98,7 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
         "lifetime":0.0,
         "Delta concentration":D_conc,
         "delta":d_compound,
-        "add_del_pbdb":0.0,
+        # "add_del_pbdb":0.0,
         "used_as_BP":False
     }
 
@@ -137,7 +137,7 @@ def convert_concentration_file(filename:str,timestep:float):
             reaction_equation = line.rstrip()
             chemical_species.append(format_line(reaction_equation,reaction_system,timestep))
             if global_var.chronicle_writing:
-                o_tools.write_line_chronicle(chemical_species[-1]["name"]+'     INFO: 1% of the total rate for this species: '+'{:0.3e}'.format(abs(chemical_species[-1]["Delta concentration"]/100.0)))
+                o_tools.write_line_chronicle(chemical_species[-1]["name"]+'     INFO: 1% of the total rate for this species: '+'{:0.3e}'.format(abs(chemical_species[-1]["delta"]/100.0)))
 
     # Write the JSON data to an output file
     with open('chemical_species.json', 'w') as output_file:

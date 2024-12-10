@@ -52,8 +52,11 @@ def save_pathways_to_JSON(pathways:list,filename:str):
 # def D_compound(compound:dict,use_total:bool):
 def D_compound(compound:dict):
     # It's the contribution of prod or consum for the pathways of a specific compound
-    p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"] - compound["add_del_pbdb"]
-    d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"] - compound["add_del_pbdb"]
+    p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"]
+    d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"]
+    # It's the contribution of prod or consum for the pathways of a specific compound
+    # p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"] - compound["add_del_pbdb"]
+    # d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"] - compound["add_del_pbdb"]
     # if use_total:
     #     p = compound["production rate"]["active pathways"] + compound["production rate"]["deleted pathways"]
     #     d = compound["destruction rate"]["active pathways"] + compound["destruction rate"]["deleted pathways"]

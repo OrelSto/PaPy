@@ -81,7 +81,7 @@ def elements_analysis(chem_molecule: str) -> int:
             elements_dict[k] += v * (int(multiplier) - 1)
 
     # Now we change the keys for atoms on different energy state etc
-    changing_keys = {'O[3p]':'O','O[1d]':'O','[3]C':'C','[1]C':'C'}
+    changing_keys = {'O[3p]':'O','O[1d]':'O','O2[Dg]':'O2','N[2D]':'N','[3]C':'C','[1]C':'C'}
     elements_dict = {changing_keys[k] if k in changing_keys else k:v for k,v in elements_dict.items()}
 
     return elements_dict

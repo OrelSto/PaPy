@@ -46,13 +46,13 @@ from src.chem_pathway_analysis import cpa
 #             steps_save=False)
 
 # test with Uranus data!
-# record start time
-start = time.time()
 # cpa.infos(timestep=1.0,t_min=1.0e14,
 #             filename_model='reactions_Uranus.txt',
 #             filename_concentration='concentrations_Uranus.txt',
 #             chronicle_writing=True,
 #             steps_save=False)
+# record start time
+# start = time.time()
 # cpa.run_cpa(timestep=1.0,rate_threshold=1.0e-8,t_min=1.0e14,
 #             target_species=[],
 #             filename_model='reactions_Uranus.txt',
@@ -77,15 +77,66 @@ start = time.time()
 #             filename_concentration='user_concentration_example_article.txt',
 #             chronicle_writing=True,
 #             steps_save=False)
-cpa.run_cpa(timestep=1.0,rate_threshold=2.0e-10,t_min=30.0e4,
-            target_species=[],
-            filename_model='user_model_example_article.txt',
-            filename_concentration='user_concentration_example_article.txt',
-            final_AP_file='ActP_Chempath_example.json',
-            final_DP_file='DelP_Chempath_example.json',
-            final_CS_file='ChemS_Chempath_example.json',
-            final_SL_file='SpecL_Chempath_example.json',
-            chronicle_writing=True,
-            steps_save=False)
-cpa.out.pie_output(target_species=['HO2','H2O','OH','H2O2'],act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')
+# cpa.run_cpa(timestep=1.0,rate_threshold=7.0e-12,t_min=30.0e4,
+#             target_species=[],
+#             filename_model='user_model_example_article.txt',
+#             filename_concentration='user_concentration_example_article.txt',
+#             final_AP_file='ActP_Chempath_example.json',
+#             final_DP_file='DelP_Chempath_example.json',
+#             final_CS_file='ChemS_Chempath_example.json',
+#             final_SL_file='SpecL_Chempath_example.json',
+#             chronicle_writing=True,
+#             steps_save=False)
+# cpa.out.pie_output(target_species=['HO2','H2O','OH','H2O2'],act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')
 # cpa.out.table_Tex(target_species=['HO2','H2O','OH','H2O2'],unit='ppbv\per\hour',act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json')
+
+# Test with the data drom the Venus PCM
+# print('INFOR MOLECULE TEST OF VENUS PCM')
+# cpa.infos(timestep=120.0,t_min=120.0,
+#             filename_model='reactions_VenusPCM_molec.txt',
+#             filename_concentration='concentrations_VenusPCM_molec.txt',
+#             chronicle_writing=True,
+#             steps_save=False)
+# print('INFOR VMR TEST OF VENUS PCM')
+# cpa.infos(timestep=120.0,t_min=120.0,
+#             filename_model='reactions_VenusPCM_vmr.txt',
+#             filename_concentration='concentrations_VenusPCM_vmr.txt',
+#             chronicle_writing=True,
+#             steps_save=False)
+# record start time
+# start = time.time()
+# cpa.run_cpa(timestep=120.0,rate_threshold=1.0e-12,t_min=2,
+#             target_species=[],
+#             filename_model='reactions_VenusPCM_vmr.txt',
+#             filename_concentration='concentrations_VenusPCM_vmr.txt',
+#             final_AP_file='ActP_VenusPCM_example.json',
+#             final_DP_file='DelP_VenusPCM_example.json',
+#             final_CS_file='ChemS_VenusPCM_example.json',
+#             final_SL_file='SpecL_VenusPCM_example.json',
+#             chronicle_writing=True,
+#             steps_save=False)
+# # record end time
+# end = time.time()
+# # print the difference between start 
+# # and end time in milli. secs
+# print("The time of execution of above program is :",(end-start) * 10**3, "ms")
+cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json',slow_percent=2.0)
+# cpa.out.table_Tex(target_species=['SO2'],unit='ppbv\per\hour',act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json')
+# record start time
+# start = time.time()
+# cpa.run_cpa(timestep=120.0,rate_threshold=1.0e8,t_min=120.0,
+#             target_species=[],
+#             filename_model='reactions_VenusPCM_molec.txt',
+#             filename_concentration='concentrations_VenusPCM_molec.txt',
+#             final_AP_file='ActP_VenusPCM_example.json',
+#             final_DP_file='DelP_VenusPCM_example.json',
+#             final_CS_file='ChemS_VenusPCM_example.json',
+#             final_SL_file='SpecL_VenusPCM_example.json',
+#             chronicle_writing=True,
+#             steps_save=False)
+# # record end time
+# end = time.time()
+# # print the difference between start 
+# # and end time in milli. secs
+# print("The time of execution of above program is :",(end-start) * 10**3, "ms")
+# cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json')
