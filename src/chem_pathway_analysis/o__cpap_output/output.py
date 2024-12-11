@@ -300,6 +300,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         # we re gonna sort the pathways in order of importance
         pathway_sorted = {}
         i = 0
+        i_slow = 0
         for pathway in act_pathways_prod_data_t_specie:
             rate_P_tmp = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
             stoich = rate_P_tmp/rate_sum * 100.0
@@ -310,8 +311,8 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             if stoich >= slow_percent:
                 print('stoich',stoich,'rate',rate_P_tmp)
                 pathway_sorted.update({i:stoich})
+            # If not, then we we will not print it 
                 i += 1
-            # If not, then we we will not print it
             else:
                 print('adding P with stoich',stoich,'rate',rate_P_tmp,' to P_trash prod')
                 is_P_trash_prod = True
@@ -319,6 +320,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
                 P_trash_p['stoich'] += stoich
                 # we advance the indice also
                 i += 1
+                i_slow += 1
         
         # Now we sort the indices
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
@@ -347,6 +349,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         # FOR DESTRUCTION PATHWAYS
         pathway_sorted = {}
         j = 0
+        j_slow = 0
         for pathway in act_pathways_dest_data_t_specie:
             rate_P_tmp = abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
             stoich = rate_P_tmp/rate_sum * 100.0
@@ -366,6 +369,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
                 P_trash_d['stoich'] += stoich
                 # we advance the indice also
                 j += 1
+                j_slow += 1
         
         # Now we sort the indices
         ind_pathway_sorted = sorted(pathway_sorted,key=pathway_sorted.get,reverse=True)
@@ -404,7 +408,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             text_prod = text_prod + ' \n'
             text_prod = text_prod + r'\ce{... ->'+s+r'}'
             text_prod = text_prod + ' \n'
-        else:
+        elif stoich < slow_percent and rate_deleted != 0:
             print('adding P del with total stoich',stoich,'rate',rate_deleted,' to P_trash prod')
             is_P_trash_prod = True
             P_trash_p['rate'] += rate_deleted
@@ -425,7 +429,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
             text_destr = text_destr + ' \n'
             text_destr = text_destr + r'\ce{'+s+r' -> ...}'
             text_destr = text_destr + ' \n'
-        else:
+        elif stoich < slow_percent and rate_deleted != 0:
             print('adding P del with total stoich',stoich,'rate',rate_deleted,' to P_trash destr')
             is_P_trash_destr = True
             P_trash_d['rate'] += rate_deleted
@@ -454,15 +458,15 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
 
         if is_P_trash_prod and not is_P_trash_destr:
             text_prod = text_prod + ' \n'
-            text_prod = text_prod + str(i+j) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
+            text_prod = text_prod + str(i_slow+j_slow) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
             text_prod = text_prod + ' \n'
         elif is_P_trash_destr and not is_P_trash_prod:
             text_destr = text_destr + ' \n'
-            text_destr = text_destr + str(i+j) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
+            text_destr = text_destr + str(i_slow+j_slow) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
             text_destr = text_destr + ' \n'
         elif is_P_trash_destr and is_P_trash_prod:
             text_prod = text_prod + ' \n'
-            text_prod = text_prod + str(i+j) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
+            text_prod = text_prod + str(i_slow+j_slow) + r' pathways in \textbf{P$_{\mathbf{\mathrm{slow}}}$}'
             text_prod = text_prod + ' \n'
 
         # fig, ax = plt.subplots(nrows=1,ncols=3)
@@ -491,7 +495,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         plt.show()
 
 
-def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str):
+def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str,slow_percent:float):
 
     header = r"""\documentclass{article}
 \usepackage{makecell} % Required for multiple lines cell
@@ -583,7 +587,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.01:
+            if stoich >= slow_percent:
                 print('stoich',stoich)
                 pathway_sorted.update({i:stoich})
                 i += 1
@@ -624,7 +628,7 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             # Meaning we explain the last 0.1% with pathways
             # FOR THE PIE CHART:
             # We only save Pathways with % above 0.1%
-            if stoich >= 0.01:
+            if stoich >= slow_percent:
                 print('stoich',stoich)
                 pathway_sorted.update({i:stoich})
                 i += 1
@@ -658,34 +662,49 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
         rate_deleted = 0.0
         for pathway in del_pathways_prod_data_t_specie:
             rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
-        if rate_deleted/rate_sum * 100.0 >= 0.1:
+        stoich = rate_deleted/rate_sum * 100.0
+        if stoich >= slow_percent:
             cell1 = r'P$_{del}$ prod'
             cell2 = r'\ce{ ... -> '+s+r'}'
             cell3 = r'{:0.3e}'.format(rate_deleted)
-            cell4 = r'{:.2f}'.format(rate_deleted/rate_sum * 100.0)
+            cell4 = r'{:.2f}'.format(stoich)
             text = text + cell1 + r' & ' + cell2 + r' & ' + cell3 + r' & ' + cell4 + r' \\' 
             text = text + ' \n'
             text = text + r' \hline'
             text = text + ' \n'
+        elif stoich < slow_percent and rate_deleted != 0:
+            # Add to P_slow
+            print('adding del pathway with stoich',stoich,' to the P_trash')
+            is_P_trash = True
+            P_trash['rate'] += rate_deleted
+            P_trash['stoich'] += stoich
+
         
         # DESTRUCTION DELETED RATES
         rate_deleted = 0.0
         for pathway in del_pathways_dest_data_t_specie:
             rate_deleted += abs(pathway["rate"]*pathway["branching points"][d_tools.find_compound_in_merged_list(listing=pathway["branching points"],compound=s)[0]]["stoichiometry"])
-        if rate_deleted/rate_sum * 100.0 >= 0.1:
+        stoich = rate_deleted/rate_sum * 100.0
+        if stoich >= slow_percent:
             cell1 = r'P$_{del}$ destr'
             cell2 = r'\ce{ '+s+r' -> ...}'
             cell3 = r'{:0.3e}'.format(rate_deleted)
-            cell4 = r'{:.2f}'.format(rate_deleted/rate_sum * 100.0)
+            cell4 = r'{:.2f}'.format(stoich)
             text = text + cell1 + r' & ' + cell2 + r' & ' + cell3 + r' & ' + cell4 + r' \\' 
             text = text + ' \n'
             text = text + r' \hline'
             text = text + ' \n'
+        elif stoich < slow_percent and rate_deleted != 0:
+            # Add to P_slow
+            print('adding del pathway with stoich',stoich,' to the P_trash')
+            is_P_trash = True
+            P_trash['rate'] += rate_deleted
+            P_trash['stoich'] += stoich
         
         # Is there P_trash
         if is_P_trash:
             cell1 = r'P$_{slow}$'
-            cell2 = r'Cycles $<$ 0.01 \% '
+            cell2 = r'Cycles $<$ ' + r'{:.2f}'.format(slow_percent) + r' \%'
             cell3 = r'{:0.3e}'.format(P_trash['rate'])
             cell4 = r'{:.2f}'.format(P_trash['stoich'])
             text = text + cell1 + r' & ' + cell2 + r' & ' + cell3 + r' & ' + cell4 + r' \\' 

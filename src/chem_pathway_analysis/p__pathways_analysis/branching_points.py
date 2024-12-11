@@ -4,6 +4,19 @@ from ..p__data_management import data_tools as d_tools
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
 
+def list_chemical_species(chemical_species:list):
+    # empty dict
+    tmp_dict = {}
+    
+    # dict of all CS name:lifetime
+    for item in chemical_species:
+        tmp_dict[item["name"]]=item["lifetime"]
+    
+    # Sort the tmp_dict by their corresponding values
+    sorted_CS = sorted(tmp_dict, key=lambda key: tmp_dict[key])
+
+    return sorted_CS
+
 def list_next_branching_points(t_min:float,chemical_species:list):
     # here we determine the list of species by their lifetime
     # loading the chemical species

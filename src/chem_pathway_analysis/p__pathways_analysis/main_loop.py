@@ -9,22 +9,72 @@ from ..p__sub_pathways import subpathways_main as sub_main
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
 
-def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_species:list):
+def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_species:list,BP_species:str):
     
     # main loop for connecting pathways and stuffs
     # print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
-    list_bp = bp.list_next_branching_points(t_min=t_min,chemical_species=chemical_species)
-    print(list_bp)
-    
+    list_CS = bp.list_chemical_species(chemical_species=chemical_species)
+    print('Here is the list of all the CS in the system: ',list_CS)
+
+    # Test over the potential Chemical species selected as the BP of interest
+    if (BP_species != 'None') and (BP_species not in list_CS):
+        print('You selected BP_species ',BP_species)
+        print('But ',BP_species,' is not present in the chemical system')
+        print(list_CS)
+        print('Please select a chemical species present or put BP_species = str(None)')
+        exit()
+    elif (BP_species != 'None') and (BP_species in list_CS):
+        print('You selected BP_species ',BP_species)
+        print('And ',BP_species,' is present in the chemical system')
+        print(list_CS)
+        print('Since you are interested in ',BP_species)
+        print('The program will override the t_min provided.')
+        print('The program will run until ',BP_species,' is used as Branching Points')
+        # we overide t_min
+        t_min = 1e99
+        # And the list BP will be all the BP until BP_species
+        # we check if BP_species is the last entry
+        if list_CS.index(BP_species) != len(list_CS)-1:
+            list_bp = list_CS[0:list_CS.index(BP_species)+1]
+            # This is the species used as BP
+            used_species = list_CS[list_CS.index(BP_species)+1:len(list_CS)]
+        else:
+            list_bp = list_CS
+            # This is the species used as BP
+            used_species = []
+        print('Here is the list of all The potential BP in the system: ',list_bp)
+    else:
+        list_bp = bp.list_next_branching_points(t_min=t_min,chemical_species=chemical_species)
+        print('Here is the list of all The potential BP in the system: ',list_bp)
+        print('according to t_min: ',t_min)
+        # This is the species used as BP
+        used_species = []
+
     if global_var.chronicle_writing:
+        o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('Here is the sorted list by lifetime of all species present in the system:')
+        o_tools.write_line_chronicle(' '.join(list_CS))
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Here is the sorted list by lifetime of the next species considered as branching points for a fixed minimum timescale of '+'{:0.3e}'.format(t_min)+':')
         o_tools.write_line_chronicle(' '.join(list_bp))
+        if (BP_species != 'None') and (BP_species in list_CS):
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('You selected BP_species '+BP_species)
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('And '+BP_species+' is present in the chemical system')
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle(' '.join(list_CS))
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('Since you are interested in '+BP_species)
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('The program will override the t_min provided.')
+            o_tools.write_line_chronicle('\n')
+            o_tools.write_line_chronicle('The program will run until '+BP_species+' is used as Branching Points')
         o_tools.write_line_chronicle('\n')
+        o_tools.write_line_chronicle('##############################')
         o_tools.write_line_chronicle('Starting the pathways analysis')
-
-    # This is the species used as BP
-    used_species = []
+        o_tools.write_line_chronicle('##############################')
+        o_tools.write_line_chronicle('\n')
 
     # # Opening JSON file
     # ap = open('active_pathways.json')

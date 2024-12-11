@@ -33,7 +33,7 @@ import shutil
 
 from .i__user_model import convert_reaction_system_file as i_system
 from .i__user_model import convert_concentration_file as i_concentration
-from .i__user_model import check_target_species as i_ts
+# from .i__user_model import check_target_species as i_ts
 from .p__initialization import init_pathways as p_init
 from .p__data_management import data_update as up
 from .p__data_management import global_var
@@ -49,7 +49,7 @@ def init_global_var(chronicle_writing:bool,steps_save:bool):
     global_var.steps_save = steps_save
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool) -> None:
 
     # init global var
     init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save)
@@ -104,7 +104,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,target_species:list,
         o_tools.write_line_chronicle('#################')
         o_tools.write_line_chronicle('\n')
     
-    active_p,deleted_p,chemical_species = ml.main_loop(t_min=t_min,f_min=rate_threshold,active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species)
+    active_p,deleted_p,chemical_species = ml.main_loop(t_min=t_min,f_min=rate_threshold,active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species,BP_species=BP_species)
 
     # 4. main loop done. Outputs time!!!
     # out.text_output(target_species=target_species)
