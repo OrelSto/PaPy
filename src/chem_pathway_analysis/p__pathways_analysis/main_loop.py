@@ -43,6 +43,27 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             # This is the species used as BP
             used_species = []
         print('Here is the list of all The potential BP in the system: ',list_bp)
+
+        # Now we check that the f_min is not override by rate_threshold_BP_auto
+        if global_var.rate_threshold_BP_auto > 0.0:
+            # We override f_min to fit the percentage of BP_Species rate given by the user
+            print('We override f_min to fit the percentage of BP_Species rate given by the user')
+            if global_var.rate_threshold_BP_auto <= 100.0:
+                f_min = global_var.rate_threshold_BP_auto * d_tools.get_compound_dict(compound=BP_species,chemical_species=chemical_species)["delta"]/100.0
+                f_min = abs(f_min)
+                print('f_min is set to: ',f_min)
+                print('Representing ',global_var.rate_threshold_BP_auto,' percent of ',BP_species,' total rate')
+                if global_var.chronicle_writing:
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('We override f_min to fit the percentage of BP_Species rate given by the user')
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('f_min is override and set to: '+'{:0.3e}'.format(f_min))
+                    o_tools.write_line_chronicle('\n')
+                    o_tools.write_line_chronicle('Representing '+'{:0.2f}'.format(global_var.rate_threshold_BP_auto)+' percent of '+BP_species+' total rate')
+            else:
+                print('rate_threshold_BP_auto cannot be > 100.0')
+                print('rate_threshold_BP_auto should be in the range ]0.0,100.0] when BP_species is not set to None')
+                exit()
     else:
         list_bp = bp.list_next_branching_points(t_min=t_min,chemical_species=chemical_species)
         print('Here is the list of all The potential BP in the system: ',list_bp)

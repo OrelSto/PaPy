@@ -21,7 +21,7 @@ from src.chem_pathway_analysis import cpa
 
 # test article to see if P4 is deleted!
 # cpa.run_cpa(timestep=1.0,rate_threshold=0.2e-9,t_min=1.0e4,
-#             target_species=['O2','O3','O'],
+#             BP_species='None',
 #             filename_model='user_model_example.txt',
 #             filename_concentration='user_concentration_example.txt',
 #             final_AP_file='ActP_Lehmann2004_P4del.json',
@@ -29,8 +29,9 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_Lehmann2004_P4del.json',
 #             final_SL_file='SpecL_Lehmann2004_P4del.json',
 #             chronicle_writing=True,
-#             steps_save=False)
-# cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004_P4del.json',del_P_json='DelP_Lehmann2004_P4del.json',chem_R_json='ChemS_Lehmann2004_P4del.json',spec_L_json='SpecL_Lehmann2004_P4del.json')
+#             steps_save=False,
+#             rate_threshold_BP_auto=-1.0)
+# cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004_P4del.json',del_P_json='DelP_Lehmann2004_P4del.json',chem_R_json='ChemS_Lehmann2004_P4del.json',spec_L_json='SpecL_Lehmann2004_P4del.json',slow_percent=0.1)
 # cpa.out.table_Tex(target_species=['O2','O3','O'],unit='ppbv\per\hour',act_P_json='ActP_Lehmann2004_P4del.json',del_P_json='DelP_Lehmann2004_P4del.json',chem_R_json='ChemS_Lehmann2004_P4del.json',spec_L_json='SpecL_Lehmann2004_P4del.json')
 
 # Test for another simple chemical model that includes Cl and ClO O3 destruction catalysis
@@ -104,23 +105,23 @@ from src.chem_pathway_analysis import cpa
 #             chronicle_writing=True,
 #             steps_save=False)
 # record start time
-start = time.time()
-cpa.run_cpa(timestep=120.0,rate_threshold=1.0e-12,t_min=3,
-            BP_species='None',
-            filename_model='reactions_VenusPCM_vmr.txt',
-            filename_concentration='concentrations_VenusPCM_vmr.txt',
-            final_AP_file='ActP_VenusPCM_example.json',
-            final_DP_file='DelP_VenusPCM_example.json',
-            final_CS_file='ChemS_VenusPCM_example.json',
-            final_SL_file='SpecL_VenusPCM_example.json',
-            chronicle_writing=True,
-            steps_save=False)
-# record end time
-end = time.time()
-# print the difference between start 
-# and end time in milli. secs
-print("The time of execution of above program is :",(end-start) * 10**3, "ms")
-cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json',slow_percent=1.0)
+# start = time.time()
+# cpa.run_cpa(timestep=120.0,rate_threshold=1.0e-15,t_min=1,
+#             BP_species='H2O',
+#             filename_model='reactions_VenusPCM_vmr.txt',
+#             filename_concentration='concentrations_VenusPCM_vmr.txt',
+#             final_AP_file='ActP_VenusPCM_example.json',
+#             final_DP_file='DelP_VenusPCM_example.json',
+#             final_CS_file='ChemS_VenusPCM_example.json',
+#             final_SL_file='SpecL_VenusPCM_example.json',
+#             chronicle_writing=True,
+#             steps_save=False)
+# # record end time
+# end = time.time()
+# # print the difference between start 
+# # and end time in milli. secs
+# print("The time of execution of above program is :",(end-start) * 10**3, "ms")
+# cpa.out.pie_output(target_species=['H2O','H2SO4'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json',slow_percent=1.0)
 # cpa.out.table_Tex(target_species=['SO2'],unit='ppbv\per\hour',act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json',slow_percent=1.0)
 # record start time
 # start = time.time()

@@ -118,7 +118,7 @@ def target_species_output(target_specie:str) -> None:
         # Parse the JSON data and store it in a variable
         chem_system_data = json.load(chem_system_file)
     
-    t_species,_ = d_tools.get_compound_dict(compound=target_specie)
+    t_species = d_tools.get_compound_dict(compound=target_specie)
     
     with open('simple_output_'+target_specie+'.txt', 'w') as simple_output_file:
 
@@ -728,3 +728,55 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
             table_file.write(text)
         # os.system("pdflatex table_"+s+".tex")
     
+
+def list_pathways_Tex(list_P_json:str,chem_R_json:str,filename_sav:str):
+    # A simple table with the pathways written in a nice form
+    header = r"""\documentclass{article}
+\usepackage{makecell} % Required for multiple lines cell
+\usepackage[version=4]{mhchem}
+\usepackage{siunitx}
+\usepackage{longtable}
+"""
+    # We start the text
+    text = ''
+    text = text + header
+    # Before everything we init the text to print the pathways
+    text = text + r'\begin{document}'
+    text = text + ' \n'
+    text = text + r'\begin{longtable}{ | c | c | }'
+    text = text + ' \n'
+    text = text + r' \hline'
+    text = text + ' \n'
+    text = text + r'Pathway & Cycle \\'
+    text = text + ' \n'
+    text = text + r' \hline'
+    text = text + ' \n'
+
+    # NOW we start to deal with the results!
+    with open(list_P_json, 'r') as active_pathways_file:
+        # Parse the JSON data and store it in a variable
+        active_pathways_data = json.load(active_pathways_file)
+
+    with open(chem_R_json, 'r') as chem_system_file:
+            # Parse the JSON data and store it in a variable
+            chem_system_data = json.load(chem_system_file)
+
+    ind = 0
+    for pathway in active_pathways_data:
+        cell1 = r'P'+str(ind)
+        cell2 = o_tools.pathway_to_latex_cell(pathway=pathway,chem_system_data=chem_system_data)
+        text = text + cell1 + r' & ' + cell2 + r' \\' 
+        text = text + ' \n'
+        text = text + r' \hline'
+        text = text + ' \n'
+        ind += 1
+
+    # End of table
+    text = text + r'\end{longtable}'
+    text = text + ' \n'
+    text = text + r'\end{document}'
+
+    # saving file:
+    with open(filename_sav,'w') as table_file:
+        table_file.write(text)
+    # os.system("pdflatex table_"+s+".tex")

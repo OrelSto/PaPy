@@ -159,7 +159,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
 
 
         # 3. Now we have new_pathways. We need the pathways (prod or destr) that end up explaining the contribution of Delta concentration of branching poing species
-        species_dict,_ = d_tools.get_compound_dict(species,chemical_species)
+        species_dict = d_tools.get_compound_dict(species,chemical_species)
         if species_dict["Delta concentration"] != 0.0:
             if species_dict["Delta concentration"] > 0.0:
                 # we have the productive case
@@ -212,7 +212,7 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
         # No prod and destr at the same time !!
         # We need the pathways (prod or destr) that end up explaining the contribution of Delta concentration of branching poing species
 
-        species_dict,_ = d_tools.get_compound_dict(species,chemical_species)
+        species_dict = d_tools.get_compound_dict(species,chemical_species)
         if species_dict["Delta concentration"] != 0.0:
             # if species_dict["Delta concentration"] > 0.0:
             if cond_prod :

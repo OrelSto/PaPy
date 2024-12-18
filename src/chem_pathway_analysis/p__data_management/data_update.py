@@ -260,7 +260,7 @@ def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_sp
 
     # 3. Merging the pathways into a new one
     # we check 0 values for D_compound
-    compound_dict,_ = d_tools.get_compound_dict(compound=species,chemical_species=chemical_species)
+    compound_dict = d_tools.get_compound_dict(compound=species,chemical_species=chemical_species)
     D_b = d_tools.D_compound(compound_dict)
     if D_b != 0.0:
         # prod and/or destr != 0, hence rate to be distributed
@@ -380,7 +380,7 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_spe
     # self explanatory ... connecting pathway to the change in species concentration
     # It means we merge two pathways that are connected via a species that the one produce and the latter destroys
     pathway_tmp = copy.deepcopy(pathway)
-    species_dict,_ = d_tools.get_compound_dict(species,chemical_species)
+    species_dict = d_tools.get_compound_dict(species,chemical_species)
     list_bp_used = pathway_tmp["list branching points used"]
     # we don't add a species since this is not a "full" connection
     # Meaning that there is only a prod/destr part of the connection.
@@ -434,7 +434,7 @@ def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs
     
     pathway_tmp = copy.deepcopy(pathway)
     rate_p = pathway_tmp["rate"]
-    species_dict,_ = d_tools.get_compound_dict(species,cs)
+    species_dict = d_tools.get_compound_dict(species,cs)
     rate_deleted_destr_species = species_dict["destruction rate"]["deleted pathways"]
     rate_deleted_prod_species = species_dict["production rate"]["deleted pathways"]
     D_species = d_tools.D_compound(species_dict)

@@ -78,11 +78,13 @@ def get_compound_dict(compound:str,chemical_species:list):
     # cs.close()
 
     # iterate and return the correct dict
-    ind = 0
+    # ind = 0
     for s in chemical_species:
         if s["name"] == compound:
-            return s,int(ind)
-        ind += 1
+            # Commenting this line: Returning the index is not used anymore in the code
+            # return s,int(ind)
+            return s
+        # ind += 1
 
 def get_compound_dict_from_results(compound:str,SpecL:str):
     # return the dict of a specified compound
@@ -299,13 +301,14 @@ def is_pathway_in_list(pathway_to_be_checked:dict,list_of_pathways:list):
     p_2b_checked_reactions = sorted(p_2b_checked_reactions, key=lambda x:list(x.keys())[0])
     r_2b_checked_against = [[{r["index"]:r["multiplicity"]} for r in p["reactions"]] for p in list_of_pathways]
     # we sort each element of the list
-    for p in r_2b_checked_against:
-        p = sorted(p, key=lambda x:list(x.keys())[0])
-
-    if (p_2b_checked_reactions in r_2b_checked_against):
-        return True
-    else:
-        return False
+    for p_2b_checked_against in r_2b_checked_against:
+        p_2b_checked_against = sorted(p_2b_checked_against, key=lambda x:list(x.keys())[0])
+        # We check if the pathways reactions are the same
+        if p_2b_checked_reactions == p_2b_checked_against:
+            # If it is we return True
+            return True
+    # Nothing fits ... return False
+    return False
 
 
 def find_pathway_in_list(pathway_to_be_found:dict,list_of_pathways:list):

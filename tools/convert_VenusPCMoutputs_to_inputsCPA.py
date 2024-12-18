@@ -47,7 +47,6 @@ def convert(lat:float,lon:float,alt:float,filename:str,unit:str,file_reactions:s
     elif unit == 'molec':
         # convert to #.cm-3
         convert_to_unit = pres*1e-6*scc.N_A/(scc.R*temp)
-        print('convert_to_unit:',convert_to_unit[0,30,48,0])
     else:
         convert_to_unit = 1.0
     
@@ -137,12 +136,11 @@ def convert(lat:float,lon:float,alt:float,filename:str,unit:str,file_reactions:s
 
     # Inputs rates are in molec.cm-3.s-1
     if unit == 'vmr':
-        # ppmv.hr-1
+        # vmr.hr-1
         convert_time = 3600.0
-        # ppmv.s-1
+        # vmr.s-1
         # convert_time = 1.0
         convert_to_rates_unit = convert_time * (pres*1e-6*scc.N_A) / (scc.R*temp)
-        print('convert_to_rates_unit:',convert_to_rates_unit[0,30,48,0])
     elif unit == 'molec':
         convert_time = 3600.0
         convert_to_rates_unit = convert_time * 1.0
@@ -154,162 +152,318 @@ def convert(lat:float,lon:float,alt:float,filename:str,unit:str,file_reactions:s
     # photodissociations
     # No need to convert to units of concentrations since it's in s-1
     k_phot_o2_o=deepcopy(f.variables["k_phot_o2_o"].data)*o2*convert_time
+    k_phot_o2_o=np.nan_to_num(k_phot_o2_o,posinf=0.0,neginf=0.0)
     k_phot_o2_o1d=deepcopy(f.variables["k_phot_o2_o1d"].data)*o2*convert_time
+    k_phot_o2_o1d=np.nan_to_num(k_phot_o2_o1d,posinf=0.0,neginf=0.0)
     k_phot_co2_o=deepcopy(f.variables["k_phot_co2_o"].data)*co2*convert_time
+    k_phot_co2_o=np.nan_to_num(k_phot_co2_o,posinf=0.0,neginf=0.0)
     k_phot_co2_o1d=deepcopy(f.variables["k_phot_co2_o1d"].data)*co2*convert_time
+    k_phot_co2_o1d=np.nan_to_num(k_phot_co2_o1d,posinf=0.0,neginf=0.0)
     k_phot_o3_o1d=deepcopy(f.variables["k_phot_o3_o1d"].data)*o3*convert_time
+    k_phot_o3_o1d=np.nan_to_num(k_phot_o3_o1d,posinf=0.0,neginf=0.0)
     k_phot_o3_o=deepcopy(f.variables["k_phot_o3_o"].data)*o3*convert_time
+    k_phot_o3_o=np.nan_to_num(k_phot_o3_o,posinf=0.0,neginf=0.0)
     k_phot_h2=deepcopy(f.variables["k_phot_h2"].data)*h2*convert_time
+    k_phot_h2=np.nan_to_num(k_phot_h2,posinf=0.0,neginf=0.0)
     k_phot_h2o=deepcopy(f.variables["k_phot_h2o"].data)*h2o*convert_time
+    k_phot_h2o=np.nan_to_num(k_phot_h2o,posinf=0.0,neginf=0.0)
     k_phot_ho2=deepcopy(f.variables["k_phot_ho2"].data)*ho2*convert_time
+    k_phot_ho2=np.nan_to_num(k_phot_ho2,posinf=0.0,neginf=0.0)
     k_phot_h2o2=deepcopy(f.variables["k_phot_h2o2"].data)*h2o2*convert_time
+    k_phot_h2o2=np.nan_to_num(k_phot_h2o2,posinf=0.0,neginf=0.0)
     k_phot_hcl=deepcopy(f.variables["k_phot_hcl"].data)*hcl*convert_time
+    k_phot_hcl=np.nan_to_num(k_phot_hcl,posinf=0.0,neginf=0.0)
     k_phot_cl2=deepcopy(f.variables["k_phot_cl2"].data)*cl2*convert_time
+    k_phot_cl2=np.nan_to_num(k_phot_cl2,posinf=0.0,neginf=0.0)
     k_phot_hocl=deepcopy(f.variables["k_phot_hocl"].data)*hocl*convert_time
+    k_phot_hocl=np.nan_to_num(k_phot_hocl,posinf=0.0,neginf=0.0)
     k_phot_so2=deepcopy(f.variables["k_phot_so2"].data)*so2*convert_time
+    k_phot_so2=np.nan_to_num(k_phot_so2,posinf=0.0,neginf=0.0)
     k_phot_so=deepcopy(f.variables["k_phot_so"].data)*so*convert_time
+    k_phot_so=np.nan_to_num(k_phot_so,posinf=0.0,neginf=0.0)
     k_phot_so3=deepcopy(f.variables["k_phot_so3"].data)*so3*convert_time
+    k_phot_so3=np.nan_to_num(k_phot_so3,posinf=0.0,neginf=0.0)
     k_phot_s2=deepcopy(f.variables["k_phot_s2"].data)*s2*convert_time
+    k_phot_s2=np.nan_to_num(k_phot_s2,posinf=0.0,neginf=0.0)
     k_phot_clo=deepcopy(f.variables["k_phot_clo"].data)*clo*convert_time
+    k_phot_clo=np.nan_to_num(k_phot_clo,posinf=0.0,neginf=0.0)
     k_phot_ocs=deepcopy(f.variables["k_phot_ocs"].data)*ocs*convert_time
+    k_phot_ocs=np.nan_to_num(k_phot_ocs,posinf=0.0,neginf=0.0)
     k_phot_cocl2=deepcopy(f.variables["k_phot_cocl2"].data)*cocl2*convert_time
+    k_phot_cocl2=np.nan_to_num(k_phot_cocl2,posinf=0.0,neginf=0.0)
     k_phot_h2so4=deepcopy(f.variables["k_phot_h2so4"].data)*h2so4*convert_time
+    k_phot_h2so4=np.nan_to_num(k_phot_h2so4,posinf=0.0,neginf=0.0)
     k_phot_no2=deepcopy(f.variables["k_phot_no2"].data)*no2*convert_time
+    k_phot_no2=np.nan_to_num(k_phot_no2,posinf=0.0,neginf=0.0)
     k_phot_no=deepcopy(f.variables["k_phot_no"].data)*no*convert_time
+    k_phot_no=np.nan_to_num(k_phot_no,posinf=0.0,neginf=0.0)
     k_phot_n2=deepcopy(f.variables["k_phot_n2"].data)*n2*convert_time
+    k_phot_n2=np.nan_to_num(k_phot_n2,posinf=0.0,neginf=0.0)
     # Neutral chemistry
     k_4_a001=deepcopy(f.variables["k_4_a001"].data)*o*o2*convert_to_rates_unit
+    k_4_a001=np.nan_to_num(k_4_a001,posinf=0.0,neginf=0.0)
     k_3_a002=deepcopy(f.variables["k_3_a002"].data)*o**2*convert_to_rates_unit
+    k_3_a002=np.nan_to_num(k_3_a002,posinf=0.0,neginf=0.0)
     k_4_a003=deepcopy(f.variables["k_4_a003"].data)*o*o3*convert_to_rates_unit
+    k_4_a003=np.nan_to_num(k_4_a003,posinf=0.0,neginf=0.0)
     k_phot_b001=deepcopy(f.variables["k_phot_b001"].data)*o1d*convert_time
+    k_phot_b001=np.nan_to_num(k_phot_b001,posinf=0.0,neginf=0.0)
     k_4_b002=deepcopy(f.variables["k_4_b002"].data)*o1d*h2o*convert_to_rates_unit
+    k_4_b002=np.nan_to_num(k_4_b002,posinf=0.0,neginf=0.0)
     k_4_b003=deepcopy(f.variables["k_4_b003"].data)*o1d*h2*convert_to_rates_unit
+    k_4_b003=np.nan_to_num(k_4_b003,posinf=0.0,neginf=0.0)
     k_phot_b004=deepcopy(f.variables["k_phot_b004"].data)*o1d*convert_time
+    k_phot_b004=np.nan_to_num(k_phot_b004,posinf=0.0,neginf=0.0)
     k_4_b005=deepcopy(f.variables["k_4_b005"].data)*o1d*o3*convert_to_rates_unit
+    k_4_b005=np.nan_to_num(k_4_b005,posinf=0.0,neginf=0.0)
     k_4_b006=deepcopy(f.variables["k_4_b006"].data)*o1d*o3*convert_to_rates_unit
+    k_4_b006=np.nan_to_num(k_4_b006,posinf=0.0,neginf=0.0)
     k_4_c001=deepcopy(f.variables["k_4_c001"].data)*o*ho2*convert_to_rates_unit
+    k_4_c001=np.nan_to_num(k_4_c001,posinf=0.0,neginf=0.0)
     k_3_c002=deepcopy(f.variables["k_3_c002"].data)*o*oh*convert_to_rates_unit
+    k_3_c002=np.nan_to_num(k_3_c002,posinf=0.0,neginf=0.0)
     k_4_c003=deepcopy(f.variables["k_4_c003"].data)*h*o3*convert_to_rates_unit
+    k_4_c003=np.nan_to_num(k_4_c003,posinf=0.0,neginf=0.0)
     k_4_c004=deepcopy(f.variables["k_4_c004"].data)*h*ho2*convert_to_rates_unit
+    k_4_c004=np.nan_to_num(k_4_c004,posinf=0.0,neginf=0.0)
     k_4_c005=deepcopy(f.variables["k_4_c005"].data)*h*ho2*convert_to_rates_unit
+    k_4_c005=np.nan_to_num(k_4_c005,posinf=0.0,neginf=0.0)
     k_4_c006=deepcopy(f.variables["k_4_c006"].data)*h*ho2*convert_to_rates_unit
+    k_4_c006=np.nan_to_num(k_4_c006,posinf=0.0,neginf=0.0)
     k_4_c007=deepcopy(f.variables["k_4_c007"].data)*oh*ho2*convert_to_rates_unit
+    k_4_c007=np.nan_to_num(k_4_c007,posinf=0.0,neginf=0.0)
     k_3_c008=deepcopy(f.variables["k_3_c008"].data)*ho2**2*convert_to_rates_unit
+    k_3_c008=np.nan_to_num(k_3_c008,posinf=0.0,neginf=0.0)
     k_4_c009=deepcopy(f.variables["k_4_c009"].data)*oh*h2o2*convert_to_rates_unit
+    k_4_c009=np.nan_to_num(k_4_c009,posinf=0.0,neginf=0.0)
     k_4_c010=deepcopy(f.variables["k_4_c010"].data)*oh*h2*convert_to_rates_unit
+    k_4_c010=np.nan_to_num(k_4_c010,posinf=0.0,neginf=0.0)
     k_4_c011=deepcopy(f.variables["k_4_c011"].data)*h*o2*convert_to_rates_unit
+    k_4_c011=np.nan_to_num(k_4_c011,posinf=0.0,neginf=0.0)
     k_4_c012=deepcopy(f.variables["k_4_c012"].data)*o*h2o2*convert_to_rates_unit
+    k_4_c012=np.nan_to_num(k_4_c012,posinf=0.0,neginf=0.0)
     k_3_c013=deepcopy(f.variables["k_3_c013"].data)*oh**2*convert_to_rates_unit
+    k_3_c013=np.nan_to_num(k_3_c013,posinf=0.0,neginf=0.0)
     k_4_c014=deepcopy(f.variables["k_4_c014"].data)*oh*o3*convert_to_rates_unit
+    k_4_c014=np.nan_to_num(k_4_c014,posinf=0.0,neginf=0.0)
     k_4_c015=deepcopy(f.variables["k_4_c015"].data)*ho2*o3*convert_to_rates_unit
+    k_4_c015=np.nan_to_num(k_4_c015,posinf=0.0,neginf=0.0)
     k_3_c016=deepcopy(f.variables["k_3_c016"].data)*ho2**2*convert_to_rates_unit
+    k_3_c016=np.nan_to_num(k_3_c016,posinf=0.0,neginf=0.0)
     k_3_c017=deepcopy(f.variables["k_3_c017"].data)*oh**2*convert_to_rates_unit
+    k_3_c017=np.nan_to_num(k_3_c017,posinf=0.0,neginf=0.0)
     k_3_c018=deepcopy(f.variables["k_3_c018"].data)*h**2*convert_to_rates_unit
+    k_3_c018=np.nan_to_num(k_3_c018,posinf=0.0,neginf=0.0)
     k_4_d001=deepcopy(f.variables["k_4_d001"].data)*no2*o*convert_to_rates_unit
+    k_4_d001=np.nan_to_num(k_4_d001,posinf=0.0,neginf=0.0)
     k_4_d002=deepcopy(f.variables["k_4_d002"].data)*no*o3*convert_to_rates_unit
+    k_4_d002=np.nan_to_num(k_4_d002,posinf=0.0,neginf=0.0)
     k_4_d003=deepcopy(f.variables["k_4_d003"].data)*no*ho2*convert_to_rates_unit
+    k_4_d003=np.nan_to_num(k_4_d003,posinf=0.0,neginf=0.0)
     k_4_d004=deepcopy(f.variables["k_4_d004"].data)*n*no*convert_to_rates_unit
+    k_4_d004=np.nan_to_num(k_4_d004,posinf=0.0,neginf=0.0)
     k_4_d005=deepcopy(f.variables["k_4_d005"].data)*n*o2*convert_to_rates_unit
+    k_4_d005=np.nan_to_num(k_4_d005,posinf=0.0,neginf=0.0)
     k_4_d006=deepcopy(f.variables["k_4_d006"].data)*no2*h*convert_to_rates_unit
+    k_4_d006=np.nan_to_num(k_4_d006,posinf=0.0,neginf=0.0)
     k_4_d007=deepcopy(f.variables["k_4_d007"].data)*n*o*convert_to_rates_unit
+    k_4_d007=np.nan_to_num(k_4_d007,posinf=0.0,neginf=0.0)
     k_4_d008=deepcopy(f.variables["k_4_d008"].data)*n*ho2*convert_to_rates_unit
+    k_4_d008=np.nan_to_num(k_4_d008,posinf=0.0,neginf=0.0)
     k_4_d009=deepcopy(f.variables["k_4_d009"].data)*n*oh*convert_to_rates_unit
+    k_4_d009=np.nan_to_num(k_4_d009,posinf=0.0,neginf=0.0)
     k_phot_d010=deepcopy(f.variables["k_phot_d010"].data)*n2d*convert_time
+    k_phot_d010=np.nan_to_num(k_phot_d010,posinf=0.0,neginf=0.0)
     k_phot_d011=deepcopy(f.variables["k_phot_d011"].data)*n2d*convert_time
+    k_phot_d011=np.nan_to_num(k_phot_d011,posinf=0.0,neginf=0.0)
     k_4_d012=deepcopy(f.variables["k_4_d012"].data)*n2d*co2*convert_to_rates_unit
+    k_4_d012=np.nan_to_num(k_4_d012,posinf=0.0,neginf=0.0)
     k_4_d013=deepcopy(f.variables["k_4_d013"].data)*n*o*convert_to_rates_unit
+    k_4_d013=np.nan_to_num(k_4_d013,posinf=0.0,neginf=0.0)
     k_phot_d014=deepcopy(f.variables["k_phot_d014"].data)*n2d*convert_time
+    k_phot_d014=np.nan_to_num(k_phot_d014,posinf=0.0,neginf=0.0)
     k_4_d015=deepcopy(f.variables["k_4_d015"].data)*no*o*convert_to_rates_unit
+    k_4_d015=np.nan_to_num(k_4_d015,posinf=0.0,neginf=0.0)
     k_4_d016=deepcopy(f.variables["k_4_d016"].data)*no2*o*convert_to_rates_unit
+    k_4_d016=np.nan_to_num(k_4_d016,posinf=0.0,neginf=0.0)
     k_3_d017=deepcopy(f.variables["k_3_d017"].data)*no3*no*convert_to_rates_unit
+    k_3_d017=np.nan_to_num(k_3_d017,posinf=0.0,neginf=0.0)
     k_4_d018=deepcopy(f.variables["k_4_d018"].data)*no3*o*convert_to_rates_unit
+    k_4_d018=np.nan_to_num(k_4_d018,posinf=0.0,neginf=0.0)
     k_4_d019=deepcopy(f.variables["k_4_d019"].data)*no*cl*convert_to_rates_unit
+    k_4_d019=np.nan_to_num(k_4_d019,posinf=0.0,neginf=0.0)
     k_4_d020=deepcopy(f.variables["k_4_d020"].data)*clno*cl*convert_to_rates_unit
+    k_4_d020=np.nan_to_num(k_4_d020,posinf=0.0,neginf=0.0)
     k_4_d021=deepcopy(f.variables["k_4_d021"].data)*clno*o*convert_to_rates_unit
+    k_4_d021=np.nan_to_num(k_4_d021,posinf=0.0,neginf=0.0)
     k_4_d022=deepcopy(f.variables["k_4_d022"].data)*no*clo*convert_to_rates_unit
+    k_4_d022=np.nan_to_num(k_4_d022,posinf=0.0,neginf=0.0)
     k_phot_d023=deepcopy(f.variables["k_phot_d023"].data)*no3*convert_time
+    k_phot_d023=np.nan_to_num(k_phot_d023,posinf=0.0,neginf=0.0)
     k_phot_d024=deepcopy(f.variables["k_phot_d024"].data)*no3*convert_time
+    k_phot_d024=np.nan_to_num(k_phot_d024,posinf=0.0,neginf=0.0)
     k_phot_d025=deepcopy(f.variables["k_phot_d025"].data)*clno*convert_time
+    k_phot_d025=np.nan_to_num(k_phot_d025,posinf=0.0,neginf=0.0)
     k_4_d026=deepcopy(f.variables["k_4_d026"].data)*so*no2*convert_to_rates_unit
+    k_4_d026=np.nan_to_num(k_4_d026,posinf=0.0,neginf=0.0)
     k_4_e001=deepcopy(f.variables["k_4_e001"].data)*co*oh*convert_to_rates_unit
+    k_4_e001=np.nan_to_num(k_4_e001,posinf=0.0,neginf=0.0)
     k_4_e002=deepcopy(f.variables["k_4_e002"].data)*co*o*convert_to_rates_unit
+    k_4_e002=np.nan_to_num(k_4_e002,posinf=0.0,neginf=0.0)
     k_4_f001=deepcopy(f.variables["k_4_f001"].data)*hcl*o1d*convert_to_rates_unit
+    k_4_f001=np.nan_to_num(k_4_f001,posinf=0.0,neginf=0.0)
     k_4_f002=deepcopy(f.variables["k_4_f002"].data)*hcl*o1d*convert_to_rates_unit
+    k_4_f002=np.nan_to_num(k_4_f002,posinf=0.0,neginf=0.0)
     k_4_f003=deepcopy(f.variables["k_4_f003"].data)*hcl*o*convert_to_rates_unit
+    k_4_f003=np.nan_to_num(k_4_f003,posinf=0.0,neginf=0.0)
     k_4_f004=deepcopy(f.variables["k_4_f004"].data)*hcl*oh*convert_to_rates_unit
+    k_4_f004=np.nan_to_num(k_4_f004,posinf=0.0,neginf=0.0)
     k_4_f005=deepcopy(f.variables["k_4_f005"].data)*clo*o*convert_to_rates_unit
+    k_4_f005=np.nan_to_num(k_4_f005,posinf=0.0,neginf=0.0)
     k_4_f006=deepcopy(f.variables["k_4_f006"].data)*clo*oh*convert_to_rates_unit
+    k_4_f006=np.nan_to_num(k_4_f006,posinf=0.0,neginf=0.0)
     k_4_f007=deepcopy(f.variables["k_4_f007"].data)*clo*oh*convert_to_rates_unit
+    k_4_f007=np.nan_to_num(k_4_f007,posinf=0.0,neginf=0.0)
     k_4_f008=deepcopy(f.variables["k_4_f008"].data)*clo*h2*convert_to_rates_unit
+    k_4_f008=np.nan_to_num(k_4_f008,posinf=0.0,neginf=0.0)
     k_4_f009=deepcopy(f.variables["k_4_f009"].data)*clo*o3*convert_to_rates_unit
+    k_4_f009=np.nan_to_num(k_4_f009,posinf=0.0,neginf=0.0)
     k_4_f010=deepcopy(f.variables["k_4_f010"].data)*clo*ho2*convert_to_rates_unit
+    k_4_f010=np.nan_to_num(k_4_f010,posinf=0.0,neginf=0.0)
     k_4_f011=deepcopy(f.variables["k_4_f011"].data)*clo*ho2*convert_to_rates_unit
+    k_4_f011=np.nan_to_num(k_4_f011,posinf=0.0,neginf=0.0)
     k_4_f012=deepcopy(f.variables["k_4_f012"].data)*clo*h2o2*convert_to_rates_unit
+    k_4_f012=np.nan_to_num(k_4_f012,posinf=0.0,neginf=0.0)
     k_4_f013=deepcopy(f.variables["k_4_f013"].data)*clo*co*convert_to_rates_unit
+    k_4_f013=np.nan_to_num(k_4_f013,posinf=0.0,neginf=0.0)
     k_phot_f014=deepcopy(f.variables["k_phot_f014"].data)*clco*convert_time
+    k_phot_f014=np.nan_to_num(k_phot_f014,posinf=0.0,neginf=0.0)
     k_4_f015=deepcopy(f.variables["k_4_f015"].data)*clco*o2*convert_to_rates_unit
+    k_4_f015=np.nan_to_num(k_4_f015,posinf=0.0,neginf=0.0)
     k_4_f016a=deepcopy(f.variables["k_4_f016a"].data)*clco3*0.5*cl*0.5*convert_to_rates_unit
+    k_4_f016a=np.nan_to_num(k_4_f016a,posinf=0.0,neginf=0.0)
     k_4_f016b=deepcopy(f.variables["k_4_f016b"].data)*clco3*0.5*cl*0.5*convert_to_rates_unit
+    k_4_f016b=np.nan_to_num(k_4_f016b,posinf=0.0,neginf=0.0)
     k_4_f017a=deepcopy(f.variables["k_4_f017a"].data)*clco3*0.5*o*0.5*convert_to_rates_unit
+    k_4_f017a=np.nan_to_num(k_4_f017a,posinf=0.0,neginf=0.0)
     k_4_f017b=deepcopy(f.variables["k_4_f017b"].data)*clco3*0.5*o*0.5*convert_to_rates_unit
+    k_4_f017b=np.nan_to_num(k_4_f017b,posinf=0.0,neginf=0.0)
     k_4_f018=deepcopy(f.variables["k_4_f018"].data)*clo*ho2*convert_to_rates_unit
+    k_4_f018=np.nan_to_num(k_4_f018,posinf=0.0,neginf=0.0)
     k_4_f019=deepcopy(f.variables["k_4_f019"].data)*oh*hocl*convert_to_rates_unit
+    k_4_f019=np.nan_to_num(k_4_f019,posinf=0.0,neginf=0.0)
     k_4_f020=deepcopy(f.variables["k_4_f020"].data)*o*hocl*convert_to_rates_unit
+    k_4_f020=np.nan_to_num(k_4_f020,posinf=0.0,neginf=0.0)
     k_3_f021=deepcopy(f.variables["k_3_f021"].data)*cl*cl*convert_to_rates_unit
+    k_3_f021=np.nan_to_num(k_3_f021,posinf=0.0,neginf=0.0)
     k_4_f022=deepcopy(f.variables["k_4_f022"].data)*clco*o*convert_to_rates_unit
+    k_4_f022=np.nan_to_num(k_4_f022,posinf=0.0,neginf=0.0)
     k_4_f023=deepcopy(f.variables["k_4_f023"].data)*cl2*o1d*convert_to_rates_unit
+    k_4_f023=np.nan_to_num(k_4_f023,posinf=0.0,neginf=0.0)
     k_4_f024=deepcopy(f.variables["k_4_f024"].data)*cl2*h*convert_to_rates_unit
+    k_4_f024=np.nan_to_num(k_4_f024,posinf=0.0,neginf=0.0)
     k_4_f025=deepcopy(f.variables["k_4_f025"].data)*cl*clco*convert_to_rates_unit
+    k_4_f025=np.nan_to_num(k_4_f025,posinf=0.0,neginf=0.0)
     k_3_f026=deepcopy(f.variables["k_3_f026"].data)*clco*clco*convert_to_rates_unit
+    k_3_f026=np.nan_to_num(k_3_f026,posinf=0.0,neginf=0.0)
     k_4_f027=deepcopy(f.variables["k_4_f027"].data)*cl*so2*convert_to_rates_unit
+    k_4_f027=np.nan_to_num(k_4_f027,posinf=0.0,neginf=0.0)
     k_4_f028=deepcopy(f.variables["k_4_f028"].data)*clso2*o*convert_to_rates_unit
+    k_4_f028=np.nan_to_num(k_4_f028,posinf=0.0,neginf=0.0)
     k_4_f029=deepcopy(f.variables["k_4_f029"].data)*clso2*h*convert_to_rates_unit
+    k_4_f029=np.nan_to_num(k_4_f029,posinf=0.0,neginf=0.0)
     k_3_f030=deepcopy(f.variables["k_3_f030"].data)*clso2*clso2*convert_to_rates_unit
+    k_3_f030=np.nan_to_num(k_3_f030,posinf=0.0,neginf=0.0)
     k_4_f031=deepcopy(f.variables["k_4_f031"].data)*cl*o*convert_to_rates_unit
+    k_4_f031=np.nan_to_num(k_4_f031,posinf=0.0,neginf=0.0)
     k_4_f032=deepcopy(f.variables["k_4_f032"].data)*cl2*o*convert_to_rates_unit
+    k_4_f032=np.nan_to_num(k_4_f032,posinf=0.0,neginf=0.0)
     k_4_f033=deepcopy(f.variables["k_4_f033"].data)*clco*oh*convert_to_rates_unit
+    k_4_f033=np.nan_to_num(k_4_f033,posinf=0.0,neginf=0.0)
     k_4_f034=deepcopy(f.variables["k_4_f034"].data)*cl2*oh*convert_to_rates_unit
+    k_4_f034=np.nan_to_num(k_4_f034,posinf=0.0,neginf=0.0)
     k_4_f035=deepcopy(f.variables["k_4_f035"].data)*clco*o*convert_to_rates_unit
+    k_4_f035=np.nan_to_num(k_4_f035,posinf=0.0,neginf=0.0)
     k_4_f036=deepcopy(f.variables["k_4_f036"].data)*clco*cl2*convert_to_rates_unit
+    k_4_f036=np.nan_to_num(k_4_f036,posinf=0.0,neginf=0.0)
     k_4_f037=deepcopy(f.variables["k_4_f037"].data)*hcl*h*convert_to_rates_unit
+    k_4_f037=np.nan_to_num(k_4_f037,posinf=0.0,neginf=0.0)
     k_4_f038=deepcopy(f.variables["k_4_f038"].data)*clco*h*convert_to_rates_unit
+    k_4_f038=np.nan_to_num(k_4_f038,posinf=0.0,neginf=0.0)
     k_4_f039=deepcopy(f.variables["k_4_f039"].data)*cl*h*convert_to_rates_unit
+    k_4_f039=np.nan_to_num(k_4_f039,posinf=0.0,neginf=0.0)
     k_4_g001=deepcopy(f.variables["k_4_g001"].data)*s*o2*convert_to_rates_unit
+    k_4_g001=np.nan_to_num(k_4_g001,posinf=0.0,neginf=0.0)
     k_4_g002=deepcopy(f.variables["k_4_g002"].data)*s*o3*convert_to_rates_unit
+    k_4_g002=np.nan_to_num(k_4_g002,posinf=0.0,neginf=0.0)
     k_4_g003=deepcopy(f.variables["k_4_g003"].data)*so*o2*convert_to_rates_unit
+    k_4_g003=np.nan_to_num(k_4_g003,posinf=0.0,neginf=0.0)
     k_4_g004=deepcopy(f.variables["k_4_g004"].data)*so*o3*convert_to_rates_unit
+    k_4_g004=np.nan_to_num(k_4_g004,posinf=0.0,neginf=0.0)
     k_4_g005=deepcopy(f.variables["k_4_g005"].data)*so*oh*convert_to_rates_unit
+    k_4_g005=np.nan_to_num(k_4_g005,posinf=0.0,neginf=0.0)
     k_4_g006=deepcopy(f.variables["k_4_g006"].data)*s*oh*convert_to_rates_unit
+    k_4_g006=np.nan_to_num(k_4_g006,posinf=0.0,neginf=0.0)
     k_4_g007=deepcopy(f.variables["k_4_g007"].data)*so*o*convert_to_rates_unit
+    k_4_g007=np.nan_to_num(k_4_g007,posinf=0.0,neginf=0.0)
     k_4_g008=deepcopy(f.variables["k_4_g008"].data)*so*ho2*convert_to_rates_unit
+    k_4_g008=np.nan_to_num(k_4_g008,posinf=0.0,neginf=0.0)
     k_4_g009=deepcopy(f.variables["k_4_g009"].data)*so2*o*convert_to_rates_unit
+    k_4_g009=np.nan_to_num(k_4_g009,posinf=0.0,neginf=0.0)
     k_4_g010=deepcopy(f.variables["k_4_g010"].data)*s*o*convert_to_rates_unit
+    k_4_g010=np.nan_to_num(k_4_g010,posinf=0.0,neginf=0.0)
     k_4_g011=deepcopy(f.variables["k_4_g011"].data)*so3*h2o*convert_to_rates_unit
+    k_4_g011=np.nan_to_num(k_4_g011,posinf=0.0,neginf=0.0)
     k_4_g012=deepcopy(f.variables["k_4_g012"].data)*so*clo*convert_to_rates_unit
+    k_4_g012=np.nan_to_num(k_4_g012,posinf=0.0,neginf=0.0)
     k_4_g013=deepcopy(f.variables["k_4_g013"].data)*so*so3*convert_to_rates_unit
+    k_4_g013=np.nan_to_num(k_4_g013,posinf=0.0,neginf=0.0)
     k_4_g014=deepcopy(f.variables["k_4_g014"].data)*so3*o*convert_to_rates_unit
+    k_4_g014=np.nan_to_num(k_4_g014,posinf=0.0,neginf=0.0)
     k_3_g015=deepcopy(f.variables["k_3_g015"].data)*so*so*convert_to_rates_unit
+    k_3_g015=np.nan_to_num(k_3_g015,posinf=0.0,neginf=0.0)
     k_phot_g016=deepcopy(f.variables["k_phot_g016"].data)*s2o2*convert_time
+    k_phot_g016=np.nan_to_num(k_phot_g016,posinf=0.0,neginf=0.0)
     k_4_g017a=deepcopy(f.variables["k_4_g017a"].data)*clco3*0.5*so*0.5*convert_to_rates_unit
+    k_4_g017a=np.nan_to_num(k_4_g017a,posinf=0.0,neginf=0.0)
     k_4_g017b=deepcopy(f.variables["k_4_g017b"].data)*clco3*0.5*so*0.5*convert_to_rates_unit
+    k_4_g017b=np.nan_to_num(k_4_g017b,posinf=0.0,neginf=0.0)
     k_4_g018=deepcopy(f.variables["k_4_g018"].data)*s*co*convert_to_rates_unit
+    k_4_g018=np.nan_to_num(k_4_g018,posinf=0.0,neginf=0.0)
     k_4_g019=deepcopy(f.variables["k_4_g019"].data)*clco*so*convert_to_rates_unit
+    k_4_g019=np.nan_to_num(k_4_g019,posinf=0.0,neginf=0.0)
     k_4_g020=deepcopy(f.variables["k_4_g020"].data)*so2*oh*convert_to_rates_unit
+    k_4_g020=np.nan_to_num(k_4_g020,posinf=0.0,neginf=0.0)
     k_4_g021=deepcopy(f.variables["k_4_g021"].data)*hso3*o2*convert_to_rates_unit
+    k_4_g021=np.nan_to_num(k_4_g021,posinf=0.0,neginf=0.0)
     k_3_g022=deepcopy(f.variables["k_3_g022"].data)*s*s*convert_to_rates_unit
+    k_3_g022=np.nan_to_num(k_3_g022,posinf=0.0,neginf=0.0)
     k_4_g023=deepcopy(f.variables["k_4_g023"].data)*s2*o*convert_to_rates_unit
+    k_4_g023=np.nan_to_num(k_4_g023,posinf=0.0,neginf=0.0)
     k_4_g024=deepcopy(f.variables["k_4_g024"].data)*s*ocs*convert_to_rates_unit
+    k_4_g024=np.nan_to_num(k_4_g024,posinf=0.0,neginf=0.0)
     k_4_g025=deepcopy(f.variables["k_4_g025"].data)*ocs*o*convert_to_rates_unit
+    k_4_g025=np.nan_to_num(k_4_g025,posinf=0.0,neginf=0.0)
     k_4_g026=deepcopy(f.variables["k_4_g026"].data)*s*so3*convert_to_rates_unit
+    k_4_g026=np.nan_to_num(k_4_g026,posinf=0.0,neginf=0.0)
     k_4_g027=deepcopy(f.variables["k_4_g027"].data)*s*ho2*convert_to_rates_unit
+    k_4_g027=np.nan_to_num(k_4_g027,posinf=0.0,neginf=0.0)
     k_4_g028=deepcopy(f.variables["k_4_g028"].data)*s*clo*convert_to_rates_unit
+    k_4_g028=np.nan_to_num(k_4_g028,posinf=0.0,neginf=0.0)
     k_phot_g029=deepcopy(f.variables["k_phot_g029"].data)*h2so4*convert_time
+    k_phot_g029=np.nan_to_num(k_phot_g029,posinf=0.0,neginf=0.0)
     k_4_g030=deepcopy(f.variables["k_4_g030"].data)*so3*ocs*convert_to_rates_unit
+    k_4_g030=np.nan_to_num(k_4_g030,posinf=0.0,neginf=0.0)
     k_4_g031a=deepcopy(f.variables["k_4_g031a"].data)*s2o2*0.5*ocs*0.5*convert_to_rates_unit
+    k_4_g031a=np.nan_to_num(k_4_g031a,posinf=0.0,neginf=0.0)
     k_4_g031b=deepcopy(f.variables["k_4_g031b"].data)*s2o2*0.5*ocs*0.5*convert_to_rates_unit
+    k_4_g031b=np.nan_to_num(k_4_g031b,posinf=0.0,neginf=0.0)
     k_3_g032=deepcopy(f.variables["k_3_g032"].data)*so*so*convert_to_rates_unit
+    k_3_g032=np.nan_to_num(k_3_g032,posinf=0.0,neginf=0.0)
     k_phot_j001=deepcopy(f.variables["k_phot_j001"].data)*o2dg*convert_time
+    k_phot_j001=np.nan_to_num(k_phot_j001,posinf=0.0,neginf=0.0)
     k_phot_j002=deepcopy(f.variables["k_phot_j002"].data)*o2dg*convert_time
+    k_phot_j002=np.nan_to_num(k_phot_j002,posinf=0.0,neginf=0.0)
 
     rates=[]
     k_phot_o2_o = interp_3D_Venus(k_phot_o2_o,lon,lat,alt,f)
@@ -707,43 +861,16 @@ def interp_3D_Venus(variable:list,lon:float,lat:float,alt:float,file:object) -> 
     # print(lon_dim)
     # print(len(lon_dim))
 
+    # print(variable[0,:,:,:].shape)
+    # staph()
     fit_points = [np.array(alt_dim), np.array(lat_dim), np.array(lon_dim)]
-    interp = RegularGridInterpolator(fit_points, variable[0])
+    interp = RegularGridInterpolator(fit_points, variable[0,:,:,:])
     
     # we return the interpolated value of variable at lon,lat,alt and time=first timestep
-    # return interp(np.array([alt,lat,lon]),method='cubic')
+    ut, vt, wt = np.meshgrid(np.array([alt]), np.array([lat]), np.array([lon]),indexing='xy')
+    test_point = np.array([ut.ravel(), vt.ravel(), wt.ravel()]).T
 
-    print(str(variable[0,34,48,0]))
-    return variable[0,34,48,0]
-# def F(u, v):
-#     return u * np.cos(u * v) + v * np.sin(u * v)
+    # WARNING !!! method='cubic' DOES NOT WORK
+    # In a sense that it will give weird values! negatives and stuffs
+    return interp(test_point,method='slinear')[0]
 
-
-# fit_points = [np.linspace(0, 3, 8), np.linspace(0, 3, 11)]
-# values = F(*np.meshgrid(*fit_points, indexing='ij'))
-# ut, vt = np.meshgrid(np.linspace(0, 3, 80), np.linspace(0, 3, 80), indexing='ij')
-# true_values = F(ut, vt)
-# test_points = np.array([ut.ravel(), vt.ravel()]).T
-# print(test_points)
-# interp = RegularGridInterpolator(fit_points, values)
-# print(interp(np.array([0.,0.]),method='cubic'))
-# print(values.shape)
-# fig, axes = plt.subplots(2, 3, figsize=(10, 6))
-# axes = axes.ravel()
-# fig_index = 0
-# for method in ['linear', 'nearest', 'slinear', 'cubic', 'quintic']:
-#     im = interp(test_points, method=method).reshape(80, 80)
-#     axes[fig_index].imshow(im)
-#     axes[fig_index].set_title(method)
-#     axes[fig_index].axis("off")
-#     fig_index += 1
-# axes[fig_index].imshow(true_values)
-# axes[fig_index].set_title("True values")
-# fig.tight_layout()
-
-# # fig.show() does not show anything and you egt stuck at error
-# # qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
-# # plt.show() does show the plots but you still have
-# # qt.qpa.plugin: Could not find the Qt platform plugin "wayland" in ""
-# # in the terminal
-# plt.show()

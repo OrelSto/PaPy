@@ -44,15 +44,49 @@ from .o__cpap_output import output_tools as o_tools
 from .p__data_management import data_tools as d_tools
 
 
-def init_global_var(chronicle_writing:bool,steps_save:bool):
+def init_global_var(chronicle_writing:bool,steps_save:bool,rate_threshold_BP_auto:float):
     global_var.chronicle_writing = chronicle_writing
     global_var.steps_save = steps_save
+    global_var.rate_threshold_BP_auto = rate_threshold_BP_auto
 
 
-def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool) -> None:
+def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool,rate_threshold_BP_auto:float) -> None:
+    """run_cpa _summary_
 
+    _extended_summary_
+
+    Parameters
+    ----------
+    timestep : float
+        _description_
+    rate_threshold : float
+        _description_
+    t_min : float
+        _description_
+    BP_species : str
+        _description_
+    filename_model : str
+        _description_
+    filename_concentration : str
+        _description_
+    final_AP_file : str
+        _description_
+    final_DP_file : str
+        _description_
+    final_CS_file : str
+        _description_
+    final_SL_file : str
+        _description_
+    chronicle_writing : bool
+        _description_
+    steps_save : bool
+        _description_
+    rate_threshold_BP_auto : float
+        _description_
+    """
+    
     # init global var
-    init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save)
+    init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save,rate_threshold_BP_auto=rate_threshold_BP_auto)
 
     # first test is to convert a given text file into a workable JSON dataset
     if global_var.chronicle_writing:
