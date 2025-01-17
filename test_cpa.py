@@ -141,3 +141,6 @@ from src.chem_pathway_analysis import cpa
 # # and end time in milli. secs
 # print("The time of execution of above program is :",(end-start) * 10**3, "ms")
 # cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json')
+
+# test with an input in altitude from Venus PCM
+cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_SO2_65.json',del_P_json='DelP_VenusPCM_SO2_65.json',chem_R_json='ChemS_VenusPCM_SO2_65.json',spec_L_json='SpecL_VenusPCM_SO2_65.json',slow_percent=5.0)

@@ -7,6 +7,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 
+# from mplcursors import cursor
 from matplotlib import gridspec
 from matplotlib import rcParams
 rcParams['text.usetex'] = True
@@ -42,11 +43,9 @@ for z in altitude:
 total_end = time.time()
 print("The total time of execution of above program is :",(total_end-total_start), "s")
 
-
 # for z in altitude:
-#     print(z)
-#     cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',del_P_json='DelP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',chem_R_json='ChemS_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',spec_L_json='SpecL_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',slow_percent=1.0)
-
+    # print(z)
+    # cpa.out.pie_output(target_species=[BP_species],act_P_json='ActP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',del_P_json='DelP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',chem_R_json='ChemS_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',spec_L_json='SpecL_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',slow_percent=1.0)
 
 # A new for loop over altitude where we exploit the saved pathways state for each altitude
 pathways_contrib = []
@@ -55,6 +54,7 @@ meaningful_pathways_used = []
 mask_pathways_used = []
 p_slow = []
 deltas_C = []
+deleted_pathways_contrib = []
 slow_percent = 5.0
 
 print('ADDING THE DELTA C FOR',BP_species)
@@ -79,14 +79,35 @@ for z in altitude:
                 # Adding a new pathway!
                 pathways_used.append(p)
 
-print('SO we have a total of ',len(pathways_used),' in pathways_used')
+print('So we have a total of ',len(pathways_used),' in pathways_used')
+
+# Looking for the contribution of deleted pathways
+for z in altitude:
+    t_species,_ = cpa.d_tools.get_compound_dict_from_results(compound=BP_species,SpecL='SpecL_VenusPCM_'+BP_species+'_'+str(int(z))+'.json')
+    # The rate_sum for a species is the sum of its prod and destr
+    rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+    del_p_contrib = 0.0
+    with open('DelP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json', 'r') as deleted_pathways_file:
+        # Parse the JSON data and store it in a variable
+        deleted_pathways_data = json.load(deleted_pathways_file)
+    for p in deleted_pathways_data:
+        ind = cpa.d_tools.find_compound_in_merged_list(listing=p["branching points"],compound=BP_species)
+        if ind:
+            # We must have the stoich coeff
+            k = abs(p["branching points"][ind[0]]["stoichiometry"])
+            # And we add the percent contribution
+            del_p_contrib += 100.0 * k * p["rate"] / rate_sum
+    
+    deleted_pathways_contrib.append(del_p_contrib)
+
 
 print('ADDING THE CONTRIBUTIONS FOR',BP_species)
 for p in pathways_used:
     p_percent = []
-    p_slow_contrib = 0.0
+    p_slow_contrib = []
     for z in altitude:
         t_species,_ = cpa.d_tools.get_compound_dict_from_results(compound=BP_species,SpecL='SpecL_VenusPCM_'+BP_species+'_'+str(int(z))+'.json')
+        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
 
         with open('ActP_VenusPCM_'+BP_species+'_'+str(int(z))+'.json', 'r') as active_pathways_file:
             # Parse the JSON data and store it in a variable
@@ -105,21 +126,27 @@ for p in pathways_used:
             # We must have the stoich coeff
             k = abs(pathway["branching points"][ind]["stoichiometry"])
             # And we add the percent contribution
-            p_contrib = 100.0 * k * pathway["rate"] / abs(t_species["delta"])
+            p_contrib = 100.0 * k * pathway["rate"] / rate_sum
             # print('We have the contribution: ',p_contrib)
             if p_contrib >= slow_percent :
                 p_percent.append(p_contrib)
+                p_slow_contrib.append(0.0)
             else:
                 p_percent.append(0.0)
-                p_slow_contrib += p_contrib
+                p_slow_contrib.append(p_contrib)
         # if not, adding 0.0
         else:
             # print('We DONT have pathway in active_pathways_data at ',z,' km')
             p_percent.append(0.0)
+            p_slow_contrib.append(0.0)
     # Adding this pathway to the array of pathways
     pathways_contrib.append(p_percent)
     # Adding this pathway to the array of pathways
     p_slow.append(p_slow_contrib)
+
+# Summing all the p_slow at each altitude
+p_slow = np.array(p_slow)
+p_slow = np.sum(p_slow,axis=0)
 
 # So, now we have all the pathways but not sorted
 # We can sort them by their maximum contribution
@@ -147,7 +174,13 @@ cpa.d_tools.save_pathways_to_JSON(pathways=meaningful_pathways_used,filename='Me
 
 print('We have ',len(meaningful_pathways_used),' meaningful pathways with more than ',slow_percent,' % contribution over ',len(pathways_used),'pathways used in the range of altitudes')
 
+# Saving the meaningful pathways into a tex table
+cpa.out.list_pathways_Tex(list_P_json='MeaningfulPathways_'+BP_species+'.json',chem_R_json='ChemS_VenusPCM_'+BP_species+'_50.json',filename_sav=BP_species+'_meaningful_pathways.tex')
+
+##############
 # Now the plot
+##############
+
 fig = plt.figure()
 gs = gridspec.GridSpec(1, 2, width_ratios=[1, 1])
 ax0 = plt.subplot(gs[0])
@@ -164,8 +197,8 @@ for p in pathways_contrib[mask_pathways_used]:
     ax1.plot(p,altitude,label=r'P'+str(ind))
     ind += 1
 
-
-ax1.plot(p,altitude,'k',label=r'P_slow')
+ax1.plot(p_slow,altitude,'--k',label=r'P_low',alpha=0.6,lw=1.0)
+ax1.plot(deleted_pathways_contrib,altitude,'k',label=r'P_del',alpha=0.6,lw=1.0)
 
 ax1.set_xlabel(r'Contribution \%')
 ax1.set_ylabel(r'altitude (km)')
@@ -195,7 +228,4 @@ ax0.set_ylabel(r'altitude (km)')
 fig.suptitle(r'\ce{'+BP_species+r'} results')
 
 plt.show()
-
-# Saving the meaningful pathways into a tex table
-cpa.out.list_pathways_Tex(list_P_json='MeaningfulPathways_'+BP_species+'.json',chem_R_json='ChemS_VenusPCM_'+BP_species+'_50.json',filename_sav='SO2_meaningful_pathways.tex')
 
