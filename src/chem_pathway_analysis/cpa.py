@@ -1,34 +1,3 @@
-"""
-Module Name
-read_reaction_system
-
-A brief description of what this module does or provides.
-
-Detailed Description:
-- Provide additional details about the module's functionality.
-- Mention any key classes, functions, or variables defined in the module.
-- Explain the module's role in the larger project or system.
-
-Usage:
-- Describe how to import this module.
-- Provide examples of how to use the module's features or classes.
-- Mention any common use cases.
-
-Dependencies:
-- List any external libraries or modules that this module depends on.
-- Include version requirements if necessary.
-
-Author:
-- Your name or the name of the module's author.
-
-License:
-- Specify the module's licensing information if applicable.
-
-Note:
-- Include any important notes, warnings, or considerations.
-- This module is part of the sub-package i__user_model from CPAP
-
-"""
 import shutil
 
 from .i__user_model import convert_reaction_system_file as i_system
@@ -51,40 +20,40 @@ def init_global_var(chronicle_writing:bool,steps_save:bool,rate_threshold_BP_aut
 
 
 def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filename_model:str,filename_concentration:str,final_AP_file:str,final_DP_file:str,final_CS_file:str,final_SL_file:str,chronicle_writing:bool,steps_save:bool,rate_threshold_BP_auto:float) -> None:
-    """run_cpa _summary_
+    """run_cpa Running the Chemical Pathways Analysis
 
     _extended_summary_
 
     Parameters
     ----------
     timestep : float
-        _description_
+        This is the timestep where the average chemical rates and concentrations are evaluated. Must be in the same time dimension/unit that the chemical rates.
     rate_threshold : float
-        _description_
+        This is the minimum chemical rate considered as significant. Chemical pathways with rates lower than rate_threshold will be discarded. It can be override if the User specify a species of interest with BP_species.
     t_min : float
-        _description_
+        This is the minimum lifetime for a chemical species to be considered. All species with a lifetime greater than t_min will be considered long-lived then not used as branching points. Must be in the same time dimension/unit that the chemical rates. This can be override using BP_species.
     BP_species : str
-        _description_
+        This is where the User can specify one chemical species present in filename_concentration as a target. This means that the CPA will run until BP_species is used as a branching point. It overrides the value of t_min, t_min being reassign as the lifetime of BP_species.
     filename_model : str
-        _description_
+        The name and local location of the file containing the chemical reactions and their rates.
     filename_concentration : str
-        _description_
+        The name and local location of the file containing the chemical species and their concentration.
     final_AP_file : str
-        _description_
+        _The name of the output JSON file containing the final Active Pathways
     final_DP_file : str
-        _description_
+        _The name of the output JSON file containing the final Deleted Pathways
     final_CS_file : str
-        _description_
+        _The name of the output JSON file containing the final Chemical System
     final_SL_file : str
-        _description_
+        _The name of the output JSON file containing the final Species List
     chronicle_writing : bool
-        _description_
+        Boolean flag that led the User save a file name chronicles.txt. This file contain each step done by the CPA algorithm and can help the User to better understand the inner working of the program or to debug it.
     steps_save : bool
         _description_
     rate_threshold_BP_auto : float
-        _description_
+        If BP_species is specified, the User can override rate_threshold and use rate_threshold_BP_auto instead, as a percentage of BP_species total rate. Meaning that the minimal rate for a pathway considered will be expressed as a percentage of the total rate of BP_species.
     """
-    
+
     # init global var
     init_global_var(chronicle_writing=chronicle_writing,steps_save=steps_save,rate_threshold_BP_auto=rate_threshold_BP_auto)
 
@@ -147,10 +116,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filen
     d_tools.save_pathways_to_JSON(pathways=active_p,filename=final_AP_file)
     d_tools.save_pathways_to_JSON(pathways=deleted_p,filename=final_DP_file)
     d_tools.save_pathways_to_JSON(pathways=chemical_species,filename=final_SL_file)
-    # shutil.copy2(src='active_pathways.json',dst=final_AP_file)
-    # shutil.copy2(src='deleted_pathways.json',dst=final_DP_file)
     shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
-    # shutil.copy2(src='chemical_species.json',dst=final_SL_file)
 
 def infos(timestep:float,t_min:float,filename_model:str,filename_concentration:str,chronicle_writing:bool,steps_save:bool) -> None:
 

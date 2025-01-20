@@ -174,6 +174,7 @@ cpa.d_tools.save_pathways_to_JSON(pathways=meaningful_pathways_used,filename='Me
 
 print('We have ',len(meaningful_pathways_used),' meaningful pathways with more than ',slow_percent,' % contribution over ',len(pathways_used),'pathways used in the range of altitudes')
 
+# OPTIONAL:
 # Saving the meaningful pathways into a tex table
 cpa.out.list_pathways_Tex(list_P_json='MeaningfulPathways_'+BP_species+'.json',chem_R_json='ChemS_VenusPCM_'+BP_species+'_50.json',filename_sav=BP_species+'_meaningful_pathways.tex')
 
@@ -214,6 +215,7 @@ lim_up = 10.0 ** math.ceil(math.log10(max(deltas_C)))
 lim_down = - 10.0 ** math.ceil(math.log10(abs(min(deltas_C))))
 ax0.set_xlim(lim_down,lim_up)
 # ax0.set_xscale('symlog',linthresh=max(lim_up,abs(lim_down))/100.0)
+# Adaptative symlog limits for plots. A range of 3 orders of mag from the maximum value
 lin_threshold = min(np.abs(np.array(deltas_C)))
 lthresh_cond = max(lim_up,abs(lim_down))/1000.0
 if lin_threshold > lthresh_cond:
