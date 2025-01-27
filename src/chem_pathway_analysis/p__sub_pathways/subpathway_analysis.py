@@ -10,16 +10,16 @@ from ..p__data_management import global_var
 
 # This is where we analyze the pathway to determine if it is a combination of subpathways
 
-def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list,chemical_species:list):
+def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list,chemical_species:list,chemical_system_data:list):
 
     # print('The PATHWAY STUDIED IS:',pathway['reactions'])
     # we open the chemical reaction file to clean pseudo-reaction later
-    # Opening JSON file
-    cs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system_data = json.load(cs)
-    # closing file
-    cs.close()
+    # # Opening JSON file
+    # cs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system_data = json.load(cs)
+    # # closing file
+    # cs.close()
 
     # Just trying to check if we can just work with the species done by being the species listed as BP used
     species_done = pathway['list branching points used']
@@ -33,7 +33,7 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
     # we initliaze the set of sub-pathways to the individual reactions present in the pathway
     # set_SP_init is our base to work with the sub-pathways. We'll construct the final set of SP building combination of the initial reactions defined in set_SP_init
     # set_SP_init = sub_pathway_set_init(pathway=pathway,first_specie=species_done[0])
-    set_SP_init,pathway = sub_pathway_set_init(pathway=pathway,list_species=species_done)
+    set_SP_init,pathway = sub_pathway_set_init(pathway=pathway,list_species=species_done,chemical_system=chemical_system_data)
     # print('we have set_SP_init',set_SP_init)
     # print('The PATHWAY STUDIED AFTER INIT IS:',pathway['reactions'])
     if global_var.chronicle_writing:
@@ -259,19 +259,19 @@ def subpathway_analysis(pathway:dict,active_pathways:list,list_species_done:list
     return returned_set_SP,flag_continue
 
 # def sub_pathway_set_init(pathway:dict,first_specie:str):
-def sub_pathway_set_init(pathway:dict,list_species:list) -> list:
-    # we open the chemical reaction file to retrieve the actual reaction
-    # Opening JSON file
-    cs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system = json.load(cs)
-    # closing file
-    cs.close()
+def sub_pathway_set_init(pathway:dict,list_species:list,chemical_system:list) -> list:
+    # # we open the chemical reaction file to retrieve the actual reaction
+    # # Opening JSON file
+    # cs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system = json.load(cs)
+    # # closing file
+    # cs.close()
 
     # We want to add to pathway, which is the initial pathway studied, the pseudo_react
     for s in list_species:
         # print('adding pseudo-reactions for species ',s,' to the pathway studied for sub-pathways')
-        pathway = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=pathway,species=s)
+        pathway = data.add_pseudo_reaction_to_pathway_to_0NET(pathway=pathway,species=s,chemical_system_data=chemical_system)
 
     set_SP = []
     for r in pathway["reactions"]:

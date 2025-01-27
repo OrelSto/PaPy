@@ -68,9 +68,9 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filen
         o_tools.write_line_chronicle('######################')
         o_tools.write_line_chronicle('\n')
     
-    i_system.convert_chemical_reaction_file(filename=filename_model)
-    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
-    i_system.adding_pseudo_reactions(chemical_species=chemical_species)
+    chem_s = i_system.convert_chemical_reaction_file(filename=filename_model)
+    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep,reaction_system=chem_s)
+    chem_s = i_system.adding_pseudo_reactions(chemical_species=chemical_species,chemical_system=chem_s)
 
     # 2. We run the initialization
     if global_var.chronicle_writing:
@@ -80,7 +80,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filen
         o_tools.write_line_chronicle('#######################')
         o_tools.write_line_chronicle('\n')
 
-    active_p,deleted_p = p_init.init_pathways(json_filename="chemical_reaction_system.json")
+    active_p,deleted_p = p_init.init_pathways(chemical_system=chem_s)
 
     if global_var.steps_save:
         # saving active/deleted pathways before updating the reaction/species rates
@@ -107,7 +107,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filen
         o_tools.write_line_chronicle('#################')
         o_tools.write_line_chronicle('\n')
     
-    active_p,deleted_p,chemical_species = ml.main_loop(t_min=t_min,f_min=rate_threshold,active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species,BP_species=BP_species)
+    active_p,deleted_p,chemical_species,chem_s = ml.main_loop(t_min=t_min,f_min=rate_threshold,active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species,chemical_system=chem_s,BP_species=BP_species)
 
     # 4. main loop done. Outputs time!!!
     # out.text_output(target_species=target_species)
@@ -116,7 +116,7 @@ def run_cpa(timestep:float,rate_threshold:float,t_min:float,BP_species:str,filen
     d_tools.save_pathways_to_JSON(pathways=active_p,filename=final_AP_file)
     d_tools.save_pathways_to_JSON(pathways=deleted_p,filename=final_DP_file)
     d_tools.save_pathways_to_JSON(pathways=chemical_species,filename=final_SL_file)
-    shutil.copy2(src='chemical_reaction_system.json',dst=final_CS_file)
+    d_tools.save_pathways_to_JSON(pathways=chem_s,filename=final_CS_file)
 
 def infos(timestep:float,t_min:float,filename_model:str,filename_concentration:str,chronicle_writing:bool,steps_save:bool) -> None:
 
@@ -134,9 +134,9 @@ def infos(timestep:float,t_min:float,filename_model:str,filename_concentration:s
         o_tools.write_line_chronicle('######################')
         o_tools.write_line_chronicle('\n')
     
-    i_system.convert_chemical_reaction_file(filename=filename_model)
-    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep)
-    i_system.adding_pseudo_reactions(chemical_species=chemical_species)
+    chem_s = i_system.convert_chemical_reaction_file(filename=filename_model)
+    chemical_species = i_concentration.convert_concentration_file(filename=filename_concentration,timestep=timestep,reaction_system=chem_s)
+    chem_s = i_system.adding_pseudo_reactions(chemical_species=chemical_species,chemical_system=chem_s)
 
     # 2. We run the initialization
     if global_var.chronicle_writing:

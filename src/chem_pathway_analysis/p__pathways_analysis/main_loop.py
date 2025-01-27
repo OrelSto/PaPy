@@ -9,7 +9,7 @@ from ..p__sub_pathways import subpathways_main as sub_main
 from ..p__data_management import global_var
 from ..o__cpap_output import output_tools as o_tools
 
-def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_species:list,BP_species:str):
+def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_species:list,chemical_system:list,BP_species:str):
     
     # main loop for connecting pathways and stuffs
     # print('Here is the list of the next species considered as branching points for a fixed minimum timescale of ',t_min)
@@ -123,7 +123,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
         # We add the current BP to the used list to update list_bp
         used_species.append(species)
         # looking for each species from the shortest lived to the longest
-        active_p,deleted_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species,chemical_species=chemical_species,deleted_pathways=deleted_p)
+        active_p,deleted_p = bp.connecting_pathways(active_pathways=active_p,species=species,list_species_done=used_species,chemical_species=chemical_species,deleted_pathways=deleted_p,chemical_system=chemical_system)
 
         # Printing
         if global_var.chronicle_writing:
@@ -134,7 +134,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             o_tools.write_line_chronicle('\n')
         
         # After saving, SUB-PATHWAYS analysis !!
-        active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species,chemical_species=chemical_species)
+        active_p = sub_main.main_subpathways(pathways=active_p,list_species_done=used_species,chemical_species=chemical_species,chemical_system=chemical_system)
 
         # Printing
         if global_var.chronicle_writing:
@@ -155,7 +155,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             o_tools.write_line_chronicle('#################')
             o_tools.write_line_chronicle('\n')
         
-        active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min)
+        active_p,deleted_p = bp.cleaning_slow_pathways(active_pathways=active_p,deleted_pathways=deleted_p,f_min=f_min,chemical_system=chemical_system)
 
         # Maybe some checking for conservation properties?
         # Like the distribution of the chemical reaction rates onto the pathways (active & deleted)
@@ -177,7 +177,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
         chemical_species = up.update_rates_chemical_species(active_p=active_p,deleted_p=deleted_p,chemical_species=chemical_species)
 
         # Updating the chemical reaction system
-        up.update_rates_reaction_system(deleted_p=deleted_p)
+        chemical_system = up.update_rates_reaction_system(deleted_p=deleted_p,chemical_system=chemical_system)
 
         # Checking species flux conservation
         if global_var.chronicle_writing:
@@ -206,7 +206,7 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
 
     # Now that the main loop is over:
     # We check that the rates are conserved:
-    ch.check_rates(active_pathways=active_p,deleted_pathways=deleted_p,)
+    # ch.check_rates(active_pathways=active_p,deleted_pathways=deleted_p,)
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
@@ -231,5 +231,5 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
 
     print('END OF MAIN LOOP')
 
-    return active_p,deleted_p,chemical_species
+    return active_p,deleted_p,chemical_species,chemical_system
 

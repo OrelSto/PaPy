@@ -54,14 +54,14 @@ def format_first_pathway(reaction:list,index:int):
     }
     return pathway_data
 
-def init_pathways(json_filename:str):
+def init_pathways(chemical_system:list):
 
     # Empty list of active pathways
     active_pathways = []
     deleted_pathways = []
 
-    # We save the JSON stucture into a dict
-    chemical_system = read_chemical_system(json_filename=json_filename)
+    # # We save the JSON stucture into a dict
+    # chemical_system = read_chemical_system(json_filename=json_filename)
 
     
     # Then, we go through the chemical system and save the initial reactions as pathways

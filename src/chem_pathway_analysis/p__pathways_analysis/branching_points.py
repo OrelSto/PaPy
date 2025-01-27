@@ -48,13 +48,13 @@ def list_next_branching_points(t_min:float,chemical_species:list):
     return sorted_keys
 
 
-def connecting_pathways(active_pathways:list,species:str,list_species_done:list,chemical_species:list,deleted_pathways:list):
-    # Opening JSON file
-    crs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system = json.load(crs)
-    # closing file
-    crs.close()
+def connecting_pathways(active_pathways:list,species:str,list_species_done:list,chemical_species:list,deleted_pathways:list,chemical_system:list):
+    # # Opening JSON file
+    # crs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system = json.load(crs)
+    # # closing file
+    # crs.close()
 
     # we connect pathways that are producing species to pathways that are consuming species
     # list of pathways that produce species
@@ -93,13 +93,13 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
             o_tools.write_line_chronicle('\n')
             o_tools.write_line_chronicle('Going through the prod part for: '+species)
         for p_from in list_pathways_prod:
-            deleted_pathways = data.update_pathway_rate_from_deleted_p(pathway=active_pathways[p_from],species=species,case_flag='prod',cs=chemical_species,deleted_p=deleted_pathways)
+            deleted_pathways = data.update_pathway_rate_from_deleted_p(pathway=active_pathways[p_from],species=species,case_flag='prod',cs=chemical_species,deleted_p=deleted_pathways,chemical_system=chemical_system)
     if cond_destroy:
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('\n')
             o_tools.write_line_chronicle('Going through the destr part for: '+species)
         for p_to in list_pathways_destroy:
-            deleted_pathways = data.update_pathway_rate_from_deleted_p(pathway=active_pathways[p_to],species=species,case_flag='destr',cs=chemical_species,deleted_p=deleted_pathways)
+            deleted_pathways = data.update_pathway_rate_from_deleted_p(pathway=active_pathways[p_to],species=species,case_flag='destr',cs=chemical_species,deleted_p=deleted_pathways,chemical_system=chemical_system)
 
     if (cond_prod and cond_destroy):
         # Writing some stuff in chronicles
@@ -268,14 +268,14 @@ def connecting_pathways(active_pathways:list,species:str,list_species_done:list,
         return active_pathways,deleted_pathways
 
 
-def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float):
+def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:float,chemical_system:list):
     
-    # Opening JSON file
-    crs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system = json.load(crs)
-    # closing file
-    crs.close()
+    # # Opening JSON file
+    # crs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system = json.load(crs)
+    # # closing file
+    # crs.close()
 
     # we iterate through active pathways to check if rate < f_min
     list_to_remove = []
@@ -310,8 +310,8 @@ def cleaning_slow_pathways(active_pathways:list,deleted_pathways:list,f_min:floa
     for item in list_to_remove:
         active_pathways.remove(item)
     
-    # Closing the reaction file
-    crs.close()
+    # # Closing the reaction file
+    # crs.close()
 
     return active_pathways,deleted_pathways
 

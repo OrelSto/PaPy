@@ -255,14 +255,14 @@ def is_there_a_pseudo_reaction(pathway:list,chemical_system_data:list):
     return False
 
 
-def find_index_pseudo_reaction(species:str,flag:str):
+def find_index_pseudo_reaction(species:str,flag:str,chemical_system_data:list):
     # We want to find the index of a pseudo_reaction and return it
     # first we open the JSON chemical system file
-    cs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system_data = json.load(cs)
-    # closing file
-    cs.close()
+    # cs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system_data = json.load(cs)
+    # # closing file
+    # cs.close()
 
     # loop over it
     # Iterate through the list

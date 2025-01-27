@@ -10,13 +10,13 @@ from ..p__data_management import global_var
 # 1. reading the active_pathways.json
 # 2. looping through the pathways and initialze the set of sub-pathways
 
-def main_subpathways(pathways:list,list_species_done:list,chemical_species:list):
-    # Opening JSON file
-    crs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    chemical_system = json.load(crs)
-    # closing file
-    crs.close()
+def main_subpathways(pathways:list,list_species_done:list,chemical_species:list,chemical_system:list):
+    # # Opening JSON file
+    # crs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # chemical_system = json.load(crs)
+    # # closing file
+    # crs.close()
 
     active_pathways_data_tmp = copy.deepcopy(pathways)
 
@@ -42,7 +42,7 @@ def main_subpathways(pathways:list,list_species_done:list,chemical_species:list)
             if global_var.chronicle_writing:
                 o_tools.write_line_chronicle('The pathway has at least than 3 reactions. Looking for subpathways!')
 
-            returned_set_SP,flag_update = sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data_tmp,list_species_done=list_species_done,chemical_species=chemical_species)
+            returned_set_SP,flag_update = sub.subpathway_analysis(pathway=pathway,active_pathways=active_pathways_data_tmp,list_species_done=list_species_done,chemical_species=chemical_species,chemical_system_data=chemical_system)
             # with that returned_set_SP, we have to clean the active pathways data.
             # First we remove the actual pathway since it is no longer needed
             # we check the list of reactions and not the entire item because "rate" key is changing !

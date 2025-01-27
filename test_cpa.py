@@ -7,7 +7,7 @@ from src.chem_pathway_analysis import cpa
 # this is a stupid way to test the package but it works
 # Next line is the example of lehmann 2004
 # cpa.run_cpa(timestep=1.0,rate_threshold=1e-12,t_min=1.0e4,
-#             target_species=['O2','O3','O'],
+#             BP_species='None',
 #             filename_model='user_model_example.txt',
 #             filename_concentration='user_concentration_example.txt',
 #             final_AP_file='ActP_Lehmann2004.json',
@@ -15,8 +15,9 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_Lehmann2004.json',
 #             final_SL_file='SpecL_Lehmann2004.json',
 #             chronicle_writing=True,
-#             steps_save=True)
-# cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json')
+#             steps_save=False,
+#             rate_threshold_BP_auto=1.0)
+# cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json',slow_percent=1.0)
 # cpa.out.table_Tex(target_species=['O2','O3','O'],unit='ppbv\per\hour',act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json')
 
 # test article to see if P4 is deleted!
@@ -143,4 +144,4 @@ from src.chem_pathway_analysis import cpa
 # cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_example.json',del_P_json='DelP_VenusPCM_example.json',chem_R_json='ChemS_VenusPCM_example.json',spec_L_json='SpecL_VenusPCM_example.json')
 
 # test with an input in altitude from Venus PCM
-cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_SO2_65.json',del_P_json='DelP_VenusPCM_SO2_65.json',chem_R_json='ChemS_VenusPCM_SO2_65.json',spec_L_json='SpecL_VenusPCM_SO2_65.json',slow_percent=5.0)
+# cpa.out.pie_output(target_species=['SO2'],act_P_json='ActP_VenusPCM_SO2_65.json',del_P_json='DelP_VenusPCM_SO2_65.json',chem_R_json='ChemS_VenusPCM_SO2_65.json',spec_L_json='SpecL_VenusPCM_SO2_65.json',slow_percent=5.0)

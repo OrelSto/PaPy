@@ -230,22 +230,24 @@ def convert_chemical_reaction_file(filename:str):
         if global_var.chronicle_writing:
             o_tools.write_line_chronicle('Conversion of '+filename+' to JSON chemical system format complete.')
             o_tools.write_line_chronicle('Saved as chemical_reaction_system.json')
+    
+    return chemical_system
 
 
-def adding_pseudo_reactions(chemical_species:list):
+def adding_pseudo_reactions(chemical_species:list,chemical_system:list):
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Addition of pseudo-reactions')
     # This routine adds 2 pseudo-reactions (prod and destruction) for each species in the system
     # Opening JSON file
     # cs = open('chemical_species.json')
-    crs = open('chemical_reaction_system.json')
-    # returns JSON object as a dictionary
-    # chemical_species = json.load(cs)
-    chemical_system = json.load(crs)
+    # crs = open('chemical_reaction_system.json')
+    # # returns JSON object as a dictionary
+    # # chemical_species = json.load(cs)
+    # chemical_system = json.load(crs)
     # closing files
     # cs.close()
-    crs.close()
+    # crs.close()
     chemical_pseudo_reaction_system = []
     for item in chemical_species:
         chemical_pseudo_reaction_system.append(d_tools.format_pseudo_reaction(species=item["name"],flag='prod'))
@@ -258,3 +260,5 @@ def adding_pseudo_reactions(chemical_species:list):
     
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('Addition complete')
+    
+    return chemical_system

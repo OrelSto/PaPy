@@ -104,7 +104,7 @@ def format_line(reaction_equation:str,reaction_system:list,timestep:float):
 
     return chemical_species_data
 
-def convert_concentration_file(filename:str,timestep:float):
+def convert_concentration_file(filename:str,timestep:float,reaction_system:list):
     """convert_concentration_file _summary_
 
     _extended_summary_
@@ -114,14 +114,14 @@ def convert_concentration_file(filename:str,timestep:float):
     filename : str
         _description_
     """
-    # Opening JSON file
-    reactions = open('chemical_reaction_system.json')
+    # # Opening JSON file
+    # reactions = open('chemical_reaction_system.json')
 
-    # returns JSON object as a dictionary
-    reaction_system = json.load(reactions)
+    # # returns JSON object as a dictionary
+    # reaction_system = json.load(reactions)
 
-    # closing the file
-    reactions.close()
+    # # closing the file
+    # reactions.close()
 
     # Empty list of all reactions
     chemical_species = []

@@ -195,7 +195,7 @@ def update_rates_chemical_species(active_p:list,deleted_p:list,chemical_species:
     return chemical_species_tmp
 
 
-def update_rates_reaction_system(deleted_p:list):
+def update_rates_reaction_system(deleted_p:list,chemical_system:list):
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
@@ -203,14 +203,14 @@ def update_rates_reaction_system(deleted_p:list):
         o_tools.write_line_chronicle('Updating the rates of reaction system')
         o_tools.write_line_chronicle('\n')
 
-    # Opening JSON file
-    crs = open('chemical_reaction_system.json')
+    # # Opening JSON file
+    # crs = open('chemical_reaction_system.json')
 
-    # returns JSON object as a dictionary
-    chemical_system = json.load(crs)
+    # # returns JSON object as a dictionary
+    # chemical_system = json.load(crs)
 
-    # closing file
-    crs.close()
+    # # closing file
+    # crs.close()
 
     # TODO CHANGE THE LOOP INSIDE CODE TO ADAPT IT TO THE REACTION SYSTEM
     # updating the rates
@@ -230,13 +230,15 @@ def update_rates_reaction_system(deleted_p:list):
 
     # Now we save it
     # Write the JSON data to an output file
-    with open('chemical_reaction_system.json', 'w') as output_file:
-        json.dump(chemical_system, output_file, indent=2)
+    # with open('chemical_reaction_system.json', 'w') as output_file:
+    #     json.dump(chemical_system, output_file, indent=2)
 
     if global_var.chronicle_writing:
         o_tools.write_line_chronicle('\n')
         o_tools.write_line_chronicle('Updating rates in chemical_reaction_system.json complete.')
         o_tools.write_line_chronicle('**************************************')
+    
+    return chemical_system
 
 
 def connect_two_pathway(pathway_prod:dict,pathway_destr:dict,species:str,list_species_done:list,building_SP:bool,chemical_species:list):
@@ -421,16 +423,16 @@ def connect_pathway_to_Dbp(pathway:dict,species:str,flag_update:str,chemical_spe
     return new_pathway
 
 
-def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs:list,deleted_p:list):
+def update_pathway_rate_from_deleted_p(pathway:dict,species:str,case_flag:int,cs:list,deleted_p:list,chemical_system:list):
     # This routine update the rate of pathway according to the rate of the deleted pathways affecting species
 
-    if global_var.chronicle_writing:
-        # Opening JSON file
-        crs = open('chemical_reaction_system.json')
-        # returns JSON object as a dictionary
-        chemical_system = json.load(crs)
-        # closing file
-        crs.close()
+    # if global_var.chronicle_writing:
+    #     # Opening JSON file
+    #     crs = open('chemical_reaction_system.json')
+    #     # returns JSON object as a dictionary
+    #     chemical_system = json.load(crs)
+    #     # closing file
+    #     crs.close()
     
     pathway_tmp = copy.deepcopy(pathway)
     rate_p = pathway_tmp["rate"]
@@ -678,7 +680,7 @@ def clean_pathways_of_pseudo_reaction(set_pathways:list,chemical_system_data:lis
     return set_pathways
 
 
-def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
+def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str,chemical_system_data:list):
     # we want to add a pseudo_reaction to an existing pathway
 
     # we want the stoich of the species in the pathway
@@ -708,7 +710,7 @@ def add_pseudo_reaction_to_pathway_to_0NET(pathway:dict,species:str):
     if flag != 0:
         # print('Adding a ',flag,' pseudo-reaction for specie ',species)
         # Then, get the index of the pseudo reaction to add
-        index = d_tools.find_index_pseudo_reaction(species=species,flag=flag)
+        index = d_tools.find_index_pseudo_reaction(species=species,flag=flag,chemical_system_data=chemical_system_data)
 
         # Now we add an entry to the reaction index
         new_react = {
