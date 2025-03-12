@@ -16,7 +16,7 @@ from src.chem_pathway_analysis import cpa
 
 altitude = np.linspace(45,80,36)
 
-BP_species = 'SO2'
+BP_species = 'O3'
 
 total_start = time.time()
 for z in altitude:
@@ -33,7 +33,7 @@ for z in altitude:
                 final_SL_file='SpecL_VenusPCM_'+BP_species+'_'+str(int(z))+'.json',
                 chronicle_writing=False,
                 steps_save=False,
-                rate_threshold_BP_auto=0.1)
+                rate_threshold_BP_auto=1.0)
     # record end time
     end = time.time()
     # print the difference between start 

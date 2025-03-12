@@ -780,3 +780,39 @@ def list_pathways_Tex(list_P_json:str,chem_R_json:str,filename_sav:str):
     with open(filename_sav,'w') as table_file:
         table_file.write(text)
     # os.system("pdflatex table_"+s+".tex")
+
+
+def save_prod_pathways_JSON(target_s:str,act_P_json:str,del_P_json:str):
+
+    with open(act_P_json, 'r') as active_pathways_file:
+        # Parse the JSON data and store it in a variable
+        active_pathways_data = json.load(active_pathways_file)
+    # We set up the list of pathways acting on target_specie
+    act_pathways_prod_data_t_specie = []
+    for pathway in active_pathways_data:
+        # if (target_specie in pathway["list branching points used"]) and (d_tools.find_compound_in_merged_list(pathway["branching points"],target_specie)):
+        # species does not have to be in "list branching points used"
+        if (d_tools.find_compound_in_merged_list(pathway["branching points"],target_s)):
+            ind = d_tools.find_compound_in_merged_list(pathway["branching points"],target_s)[0]
+            # Then we check if this is a pathway with prod or destr of target specie
+            k = pathway["branching points"][ind]["stoichiometry"]
+            if k > 0:
+                act_pathways_prod_data_t_specie.append(pathway)
+
+    with open(del_P_json, 'r') as deleted_pathways_file:
+        # Parse the JSON data and store it in a variable
+        deleted_pathways_data = json.load(deleted_pathways_file)
+    # We set up the list of pathways acting on target_s
+    del_pathways_prod_data_t_specie = []
+
+    for pathway in deleted_pathways_data:
+        if (d_tools.find_compound_in_merged_list(pathway["branching points"],target_s)):
+            ind = d_tools.find_compound_in_merged_list(pathway["branching points"],target_s)[0]
+            # Then we check if this is a pathway with prod or destr of target specie
+            k = pathway["branching points"][ind]["stoichiometry"]
+            if k > 0:
+                del_pathways_prod_data_t_specie.append(pathway)
+
+    # copying results files
+    d_tools.save_pathways_to_JSON(pathways=act_pathways_prod_data_t_specie,filename="productionP_AP_"+target_s+".json")
+    d_tools.save_pathways_to_JSON(pathways=del_pathways_prod_data_t_specie,filename="productionP_DP_"+target_s+".json")

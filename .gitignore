@@ -202,5 +202,7 @@ cython_debug/
 *.json
 *.tex
 *.aux
+*.fls
+*.fdb_latexmk
 *.pdf
 *.nc

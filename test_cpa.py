@@ -16,22 +16,22 @@ from src.chem_pathway_analysis import cpa
 #             final_SL_file='SpecL_Lehmann2004.json',
 #             chronicle_writing=True,
 #             steps_save=False,
-#             rate_threshold_BP_auto=1.0)
+#             rate_threshold_BP_auto=-1.0)
 # cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json',slow_percent=1.0)
 # cpa.out.table_Tex(target_species=['O2','O3','O'],unit='ppbv\per\hour',act_P_json='ActP_Lehmann2004.json',del_P_json='DelP_Lehmann2004.json',chem_R_json='ChemS_Lehmann2004.json',spec_L_json='SpecL_Lehmann2004.json')
 
 # test article to see if P4 is deleted!
-# cpa.run_cpa(timestep=1.0,rate_threshold=0.2e-9,t_min=1.0e4,
-#             BP_species='None',
-#             filename_model='user_model_example.txt',
-#             filename_concentration='user_concentration_example.txt',
-#             final_AP_file='ActP_Lehmann2004_P4del.json',
-#             final_DP_file='DelP_Lehmann2004_P4del.json',
-#             final_CS_file='ChemS_Lehmann2004_P4del.json',
-#             final_SL_file='SpecL_Lehmann2004_P4del.json',
-#             chronicle_writing=True,
-#             steps_save=False,
-#             rate_threshold_BP_auto=-1.0)
+cpa.run_cpa(timestep=1.0,rate_threshold=0.2e-9,t_min=1.0e4,
+            BP_species='None',
+            filename_model='user_model_example.txt',
+            filename_concentration='user_concentration_example.txt',
+            final_AP_file='ActP_Lehmann2004_P4del.json',
+            final_DP_file='DelP_Lehmann2004_P4del.json',
+            final_CS_file='ChemS_Lehmann2004_P4del.json',
+            final_SL_file='SpecL_Lehmann2004_P4del.json',
+            chronicle_writing=True,
+            steps_save=False,
+            rate_threshold_BP_auto=-1.0)
 # cpa.out.pie_output(target_species=['O2','O3','O'],act_P_json='ActP_Lehmann2004_P4del.json',del_P_json='DelP_Lehmann2004_P4del.json',chem_R_json='ChemS_Lehmann2004_P4del.json',spec_L_json='SpecL_Lehmann2004_P4del.json',slow_percent=0.1)
 # cpa.out.table_Tex(target_species=['O2','O3','O'],unit='ppbv\per\hour',act_P_json='ActP_Lehmann2004_P4del.json',del_P_json='DelP_Lehmann2004_P4del.json',chem_R_json='ChemS_Lehmann2004_P4del.json',spec_L_json='SpecL_Lehmann2004_P4del.json')
 
@@ -39,13 +39,15 @@ from src.chem_pathway_analysis import cpa
 # This model is under dev since I have no clue of the real rates and proper concentration fo Cl and ClO
 # cpa.run_cpa(timestep=100.0,rate_threshold=1e-11,t_min=1.0e4,
 #             filename_model='user_model_O3destruction_example.txt',
+#             BP_species='None',
 #             filename_concentration='user_concentration_O3destruction_example.txt',
 #             final_AP_file='ActP_O3_Cl_example.json',
 #             final_DP_file='DelP_O3_Cl_example.json',
 #             final_CS_file='ChemS_O3_Cl_example.json',
 #             final_SL_file='SpecL_O3_Cl_example.json',
 #             chronicle_writing=True,
-#             steps_save=False)
+#             steps_save=False,
+#             rate_threshold_BP_auto=-1.0)
 
 # test with Uranus data!
 # cpa.infos(timestep=1.0,t_min=1.0e14,
@@ -64,7 +66,8 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_Uranus.json',
 #             final_SL_file='SpecL_Uranus.json',
 #             chronicle_writing=True,
-#             steps_save=False)
+#             steps_save=False,
+#             rate_threshold_BP_auto=-1.0)
 # # record end time
 # end = time.time()
 # # print the difference between start 
@@ -80,7 +83,7 @@ from src.chem_pathway_analysis import cpa
 #             chronicle_writing=True,
 #             steps_save=False)
 # cpa.run_cpa(timestep=1.0,rate_threshold=7.0e-12,t_min=30.0e4,
-#             target_species=[],
+#             BP_species='None',
 #             filename_model='user_model_example_article.txt',
 #             filename_concentration='user_concentration_example_article.txt',
 #             final_AP_file='ActP_Chempath_example.json',
@@ -88,7 +91,8 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_Chempath_example.json',
 #             final_SL_file='SpecL_Chempath_example.json',
 #             chronicle_writing=True,
-#             steps_save=False)
+#             steps_save=False,
+#             rate_threshold_BP_auto=-1.0)
 # cpa.out.pie_output(target_species=['HO2','H2O','OH','H2O2'],act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json',slow_percent=0.02)
 # cpa.out.table_Tex(target_species=['HO2','H2O','OH','H2O2'],unit='ppbv\per\hour',act_P_json='ActP_Chempath_example.json',del_P_json='DelP_Chempath_example.json',chem_R_json='ChemS_Chempath_example.json',spec_L_json='SpecL_Chempath_example.json',slow_percent=0.02)
 
@@ -116,7 +120,8 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_VenusPCM_example.json',
 #             final_SL_file='SpecL_VenusPCM_example.json',
 #             chronicle_writing=True,
-#             steps_save=False)
+#             steps_save=False,
+#             rate_threshold_BP_auto=0.1)
 # # record end time
 # end = time.time()
 # # print the difference between start 
@@ -127,7 +132,7 @@ from src.chem_pathway_analysis import cpa
 # record start time
 # start = time.time()
 # cpa.run_cpa(timestep=120.0,rate_threshold=1.0e8,t_min=120.0,
-#             target_species=[],
+#             BP_species='None',
 #             filename_model='reactions_VenusPCM_molec.txt',
 #             filename_concentration='concentrations_VenusPCM_molec.txt',
 #             final_AP_file='ActP_VenusPCM_example.json',
@@ -135,7 +140,8 @@ from src.chem_pathway_analysis import cpa
 #             final_CS_file='ChemS_VenusPCM_example.json',
 #             final_SL_file='SpecL_VenusPCM_example.json',
 #             chronicle_writing=True,
-#             steps_save=False)
+#             steps_save=False,
+#             rate_threshold_BP_auto=-1.0)
 # # record end time
 # end = time.time()
 # # print the difference between start 
