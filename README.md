@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This is a Chemical Pathway Analysis package for Python.
-Reproduction of the method described in Lehmann, 2004.
+This is PaPy, a Chemical Pathway Analysis package for Python.
+Based on the algorithm described in Lehmann, 2004.
 
 ### Basic install and running example
 
@@ -52,12 +52,11 @@ Here's a short list of functionnality:
 * [x] Basic visual outputs
 * [ ] Security checks of the correct distribution of each reaction rate through pathways/sub-pathways
 * [x] Security checks for rates as outputs
-* [ ] Selection of species of interest
+* [x] Selection of species of interest
 * [ ] Packaging (install via ```pip``` or ```conda```)
 * [x] Tools for visualization: Pie charts
 * [x] Tools for visualization: Latex Table
-* [ ] Tools for visualization: Links, Step Progression
-* [ ] Rate evaluation for steady-state (info)
+* [x] Rate evaluation for steady-state (info)
 * [ ] Flagging the unused reactions
 * [ ] Flagging the long-lived species according to the timestep
 
