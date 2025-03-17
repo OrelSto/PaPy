@@ -198,7 +198,7 @@ def target_species_output(target_specie:str) -> None:
         simple_output_file.write(' \n')
 
 
-def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str,slow_percent:float):
+def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str,slow_percent:float,special_case:str):
     """pie_output _summary_
 
     _extended_summary_
@@ -266,7 +266,13 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         t_species,_ = d_tools.get_compound_dict_from_results(compound=s,SpecL=spec_L_json)
 
         # The rate_sum for a species is the sum of its prod and destr
-        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+        match special_case:
+            case 'total':
+                rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+            case 'prod':
+                rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"]
+            case 'destr':
+                rate_sum = t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
 
         # Check of the total rate
         if rate_sum < 1e-30:
@@ -495,7 +501,7 @@ def pie_output(target_species:list,act_P_json:str,del_P_json:str,chem_R_json:str
         plt.show()
 
 
-def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str,slow_percent:float):
+def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_json:str,spec_L_json:str,slow_percent:float,special_case:str):
 
     header = r"""\documentclass{article}
 \usepackage{makecell} % Required for multiple lines cell
@@ -569,7 +575,13 @@ def table_Tex(target_species:list,unit:str,act_P_json:str,del_P_json:str,chem_R_
         print(t_species)
 
         # The rate_sum for a species is the sum of its prod and destr
-        rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+        match special_case:
+            case 'total':
+                rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"] + t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
+            case 'prod':
+                rate_sum = t_species["production rate"]["active pathways"] + t_species["production rate"]["deleted pathways"]
+            case 'destr':
+                rate_sum = t_species["destruction rate"]["active pathways"] + t_species["destruction rate"]["deleted pathways"]
 
         # Check of the total rate
         if rate_sum < 1e-20:

@@ -202,6 +202,8 @@ def main_loop(t_min:float,f_min:float,active_p:list,deleted_p:list,chemical_spec
             # saving active/deleted pathways before updating the reaction/species rates
             d_tools.save_pathways_to_JSON(pathways=active_p,filename='active_pathways_'+str(step)+'_'+species+'.json')
             d_tools.save_pathways_to_JSON(pathways=deleted_p,filename='deleted_pathways_'+str(step)+'_'+species+'.json')
+            d_tools.save_pathways_to_JSON(pathways=chemical_species,filename='chemical_species_'+str(step)+'_'+species+'.json')
+            d_tools.save_pathways_to_JSON(pathways=chemical_system,filename='chemical_system_'+str(step)+'_'+species+'.json')
 
 
     # Now that the main loop is over:
