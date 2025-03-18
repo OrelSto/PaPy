@@ -1,8 +1,36 @@
-# Chemical Pathways analysis Package
+# PaPy: A Chemical Pathways analysis Solver Package
+
+## How to cite:
+Anyone using this module should cite it alongside Lehmann's work.
+
+@article{lehmann_pathways_2004,
+  title    = {An {Algorithm} for the {Determination} of {All} {Significant} {Pathways} in {Chemical} {Reaction} {Systems}},
+  volume   = {47},
+  issn     = {1573-0662},
+  url      = {https://doi.org/10.1023/B:JOCH.0000012284.28801.b1},
+  doi      = {10.1023/B:JOCH.0000012284.28801.b1},
+  author   = {Lehmann, Ralph},
+  month    = jan,
+  year     = {2004},
+  pages    = {45--78}
+}
+
+@misc{PaPy_module,
+  author    = {Stolzenbach, Aurélien},
+  title     = {{PaPy, a Python module for chemical pathwys analysis based on Lehmann's algorithm}},
+  month     = mar,
+  year      = 2025,
+  publisher = {Zenodo},
+  version   = {0.9},
+  doi       = {placeholder},
+  url       = {placeholder},
+  type      = {Sofware},
+  note      = {Version 0.9}
+}
 
 ## Introduction
 
-This is a Chemical Pathway Analysis package for Python.
+This is a Chemical Pathway Analysis solver package for Python.
 Based on the algorithm described in Lehmann, 2004.
 
 ### Basic install and running example
